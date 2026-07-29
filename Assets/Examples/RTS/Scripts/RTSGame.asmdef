@@ -1,0 +1,21 @@
+{
+    "name": "RTSGame",
+    "rootNamespace": "",
+    "references": [
+        "Atomic.Elements",
+        "Atomic.Entities",
+        "Unity.Burst",
+        "Unity.Mathematics",
+        "Modules.SpatialStructures",
+        "Unity.Collections"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

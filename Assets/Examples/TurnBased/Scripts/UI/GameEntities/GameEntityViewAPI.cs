@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class GameEntityViewAPI
     {
         public static readonly ValueKey<IGameEntity, Transform> Transform = new(nameof(Transform));

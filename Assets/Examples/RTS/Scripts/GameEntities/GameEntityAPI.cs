@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RTSGame
 {
-    [GenerateEntityExtensionsAPI(Unsafe = true)]
+    [EntityExtensionsAPI(Unsafe = true)]
     public static partial class GameEntityAPI
     {
         public static readonly TagKey<IGameEntity> Damageable = new(nameof(Damageable));

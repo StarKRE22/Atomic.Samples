@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Game.Gameplay
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class GameEntityAPI
     {
         public static readonly ValueKey<IGameEntity, IValue<GameEntityType>> EntityType = new(nameof(EntityType));

@@ -10,9 +10,17 @@ namespace Atomic.Events
     /// for the event bus type declared in each key's first generic argument.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class GenerateEventExtensionsAPIAttribute : Attribute
+    public sealed class EventExtensionsAPIAttribute : Attribute
     {
-        public GenerateEventExtensionsAPIAttribute()
+        /// <summary>
+        /// When <c>true</c>, all event fields generate
+        /// <c>SubscribeUnsafe</c>, <c>UnsubscribeUnsafe</c>, and <c>InvokeUnsafe</c>
+        /// calls instead of the safe variants.
+        /// Individual fields can override this with <c>[Unsafe]</c>.
+        /// </summary>
+        public bool Unsafe { get; set; }
+
+        public EventExtensionsAPIAttribute()
         {
         }
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Game.Gameplay
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class GameContextAPI
     {
         public static readonly ValueKey<IGameContext, IReactiveVariable<GameState>> GameState = new(nameof(GameState));

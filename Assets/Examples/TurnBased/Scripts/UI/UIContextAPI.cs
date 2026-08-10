@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class UIContextAPI
     {
         public static readonly ValueKey<Camera> Camera = new(nameof(Camera));

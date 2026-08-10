@@ -3,7 +3,7 @@ using Atomic.Entities;
 
 namespace RTSGame
 {
-    [GenerateEntityExtensionsAPI(Unsafe = true)]
+    [EntityExtensionsAPI(Unsafe = true)]
     public static partial class PlayerContextAPI
     {
         public static readonly ValueKey<IPlayerContext, IValue<TeamType>> Team = new(nameof(Team));

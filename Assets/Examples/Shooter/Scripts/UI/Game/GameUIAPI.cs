@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShooterGame.UI
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class GameUIAPI
     {
         public static readonly ValueKey<IGameUI, Transform> PopupTransform = new(nameof(PopupTransform));

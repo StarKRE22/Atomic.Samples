@@ -64,12 +64,13 @@ namespace Atomic.Events
             {
                 _debugEventsCache.Clear();
 
-                IReadOnlyDictionary<int, Delegate> events = _eventBus?.Events;
-                if (events == null)
+                if (_eventBus == null)
                     return _debugEventsCache;
 
-                foreach ((int key, Delegate del) in events)
+                foreach (KeyValuePair<int, Delegate> pair in _eventBus.GetEvents())
                 {
+                    int key = pair.Key;
+                    Delegate del = pair.Value;
                     string name = EventKeyStore.IdToName(key);
                     int subscriptions = del.GetInvocationList().Length;
                     _debugEventsCache.Add(new DebugEvent(name, key, subscriptions));

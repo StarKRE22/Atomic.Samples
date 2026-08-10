@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ShooterGame.UI
 {
-    [GenerateEntityExtensionsAPI]
+    [EntityExtensionsAPI]
     public static partial class MenuUIAPI
     {
         public static readonly ValueKey<IMenuUI, IDictionary<Type, (ScreenView, IEntityBehaviour)>> Screens =

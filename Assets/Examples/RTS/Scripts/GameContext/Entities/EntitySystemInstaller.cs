@@ -51,13 +51,13 @@ namespace RTSGame
             context.AddEntityWorld(entityWorld);
             context.AddEntitySpace(new SpatialGrid2D<IGameEntity>(sizeX, sizeY, cellSize));
 
-            context.AddFixedSystem(new UnitPrioritySystem(context, _unitPrioritySettings));
-            context.AddFixedSystem(new AttackTargetSystem(context, _attackTargetSettings));
-            context.AddFixedSystem(new DetectTargetSystem(context, _detectTargetSettings));
-            context.AddFixedSystem(new MoveUnitSystem(context, _moveUnitSettings));
-            context.AddFixedSystem(new FireUnitsSystem(context, _fireUnitsSettings));
-            context.AddFixedSystem(new ProjectileMoveSystem(context, _projectileMoveSettings));
-            context.AddFixedSystem(new ProjectileLifetimeSystem(context, _projectileLifetimeSettings));
+            context.AddFixedTickSystem(new UnitPrioritySystem(context, _unitPrioritySettings));
+            context.AddFixedTickSystem(new AttackTargetSystem(context, _attackTargetSettings));
+            context.AddFixedTickSystem(new DetectTargetSystem(context, _detectTargetSettings));
+            context.AddFixedTickSystem(new MoveUnitSystem(context, _moveUnitSettings));
+            context.AddFixedTickSystem(new FireUnitsSystem(context, _fireUnitsSettings));
+            context.AddFixedTickSystem(new ProjectileMoveSystem(context, _projectileMoveSettings));
+            context.AddFixedTickSystem(new ProjectileLifetimeSystem(context, _projectileLifetimeSettings));
 
             entityWorld.BindTo(context);
         }

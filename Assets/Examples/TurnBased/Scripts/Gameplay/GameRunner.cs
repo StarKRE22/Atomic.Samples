@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Atomic.Entities;
 using Atomic.Infrastructure;
 using Game.Gameplay;
@@ -17,6 +18,7 @@ namespace Game
         public static GameRunner Instance { get; private set; }
 
         public IGameContext GameContext => _gameContext;
+
 
         [SerializeField]
         private GameContextFactory _gameFactory;

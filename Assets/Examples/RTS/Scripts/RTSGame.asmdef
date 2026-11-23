@@ -8,7 +8,7 @@
         "Atomic.Entities.Infrastructure",
         "Unity.Burst",
         "Unity.Mathematics",
-        "Modules.SpatialStructures",
+        "Modules.Spatial",
         "Unity.Collections"
     ],
     "includePlatforms": [],

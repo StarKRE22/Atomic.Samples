@@ -33,7 +33,7 @@ namespace RTSGame
             entity.AddAttackerTag();
            
             entity.AddTeam(new ReactiveVariable<TeamType>());
-            entity.AddBehaviour(new SpatialGridBehaviour(gameContext));
+            entity.AddBehaviour(new EntitySpaceBehaviour(gameContext));
             entity.AddUpdatePriority(new ReactiveVariable<UpdatePriority>(UpdatePriority.High));
             
             _transformInstaller.Install(entity);

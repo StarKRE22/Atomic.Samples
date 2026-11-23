@@ -1,6 +1,6 @@
 using System.Buffers;
 using Atomic.Entities;
-using Modules.SpatialStructures;
+using Modules.Spatial;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -65,10 +65,10 @@ namespace RTSGame
                 TeamType teamType = self.GetTeam().Value;
                 float radius = self.GetDetectionRadius().Value;
 
-                SpatialGrid2D<IGameEntity> spatialHash = gameContext.GetEntitySpace();
+                ISpatialDataStructure2D<IGameEntity> spatialHash = gameContext.GetEntitySpace();
 
                 Vector2 center = new Vector2(selfPos.x, selfPos.z);
-                int enemyCount = spatialHash.QueryRadius(center, radius, s_buffer);
+                int enemyCount = spatialHash.QueryCircle(center, radius, s_buffer);
                 
                 for (int i = 0; i < enemyCount; i++)
                 {

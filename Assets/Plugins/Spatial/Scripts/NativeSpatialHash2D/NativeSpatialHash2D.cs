@@ -3,13 +3,14 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
+using UnityEngine;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 
 namespace Modules.Spatial
 {
     [NativeContainer]
-    public struct NativeSpatialHash2D<T> : IDisposable where T : unmanaged, IEquatable<T>
+    public partial struct NativeSpatialHash2D<T> : IDisposable where T : unmanaged, IEquatable<T>
     {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
         private AtomicSafetyHandle m_Safety;

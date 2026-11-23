@@ -1,7 +1,7 @@
 using System;
 using Atomic.Entities;
 using Atomic.Infrastructure;
-using Modules.SpatialStructures;
+using Modules.Spatial;
 using UnityEngine;
 
 namespace RTSGame
@@ -35,9 +35,11 @@ namespace RTSGame
                 new Args<IGameContext>(context)
             ));
             context.AddEntityWorld(entityWorld);
-            context.AddEntitySpace(new SpatialGrid2D<IGameEntity>(sizeX, sizeY, cellSize));
+            UniformGrid2D<IGameEntity> grid = new UniformGrid2D<IGameEntity>(sizeX, sizeY, cellSize);
+            context.AddGizmosBehaviour(() => grid.DrawGizmosXZ());
+            context.AddEntitySpace(grid);
+            
             context.BindWorld(entityWorld);
-
             context.BindFixedTickSystem(new UnitPrioritySystem(context, _unitPrioritySettings));
             context.BindFixedTickSystem(new AttackTargetSystem(context));
             context.BindFixedTickSystem(new DetectTargetSystem(context));

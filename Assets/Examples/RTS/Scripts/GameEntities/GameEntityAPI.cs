@@ -1,7 +1,5 @@
 using Atomic.Elements;
 using Atomic.Entities;
-using Modules.SpatialStructures;
-using System;
 using Atomic.Infrastructure;
 using UnityEngine;
 

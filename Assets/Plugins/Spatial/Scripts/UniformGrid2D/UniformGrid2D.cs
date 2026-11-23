@@ -6,6 +6,8 @@ namespace Modules.Spatial
 {
     public partial class UniformGrid2D<T> : ISpatialDataStructure2D<T>
     {
+        private const float GIZMOS_Y_OFFSET = 0.05f;
+
         private struct Handle
         {
             public int cellIndex;
@@ -147,6 +149,36 @@ namespace Modules.Spatial
 
             index = x + _sizeX * y;
             return true;
+        }
+
+        public void DrawGizmosXZ()
+        {
+            for (int x = 0; x < _sizeX; x++)
+            for (int y = 0; y < _sizeY; y++)
+            {
+                int count = this.GetCount(x, y);
+
+                Vector3 center = new Vector3(
+                    _offsetX + (x + 0.5f) * _cellSize,
+                    GIZMOS_Y_OFFSET,
+                    _offsetY + (y + 0.5f) * _cellSize
+                );
+
+                Vector3 size = new Vector3(
+                    _cellSize,
+                    0.01f,
+                    _cellSize
+                );
+
+                float t = Mathf.Clamp01(count / 10f);
+
+                Gizmos.color = Color.Lerp(Color.green, Color.red, t);
+
+                Gizmos.DrawCube(center, size);
+
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(center, size);
+            }
         }
     }
 }

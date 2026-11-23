@@ -82,6 +82,24 @@ namespace Atomic.Entities
 #if UNITY_EDITOR
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WhenGizmos(this IGizmosSource source, Action action) => source.OnGizmosDraw += action;
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void AddGizmosBehaviour(this IEntity source, Action action) => source.AddBehaviour(new GizmosBehaviour(action));
+
+        private sealed class GizmosBehaviour : IEntityGizmos
+        {
+            private readonly Action _action;
+
+            public GizmosBehaviour(Action action)
+            {
+                _action = action;
+            }
+
+            void IEntityGizmos.DrawGizmos(IEntity entity)
+            {
+                _action.Invoke();
+            }
+        }
 #endif
     }
 }

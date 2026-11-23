@@ -106,7 +106,7 @@ namespace Atomic.Infrastructure
             _priorityTime = _cooldown;
 
             foreach (ITracker<T> tracker in _trackers)
-                tracker.SetTrigger(this.UpdatePriority);
+                tracker.SetTrigger(this.RecalculatePriority);
         }
 
         // ==================== UPDATE ====================
@@ -162,17 +162,17 @@ namespace Atomic.Infrastructure
             if (_priorityTime > 0)
                 return;
 
-            this.UpdatePriorities();
+            this.RecalculatePriorities();
             _priorityTime = _cooldown;
         }
 
-        protected void UpdatePriorities()
+        protected void RecalculatePriorities()
         {
             foreach (T entity in _store)
-                this.UpdatePriority(entity);
+                this.RecalculatePriority(entity);
         }
 
-        protected void UpdatePriority(T entity)
+        protected void RecalculatePriority(T entity)
         {
             UpdatePriority priority = this.EvaluatePriority(entity);
 

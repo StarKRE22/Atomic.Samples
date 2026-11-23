@@ -8,7 +8,7 @@ namespace Atomic.Entities
     /// and generates strongly-typed behaviour interfaces for that entity type,
     /// one for each lifecycle variant in <see cref="Atomic.Entities"/>.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class EntityDomainBehavioursAttribute : Attribute
     {
         /// <summary>

@@ -1,0 +1,25 @@
+{
+    "name": "Atomic.Entites.Infrastructure.Tests.Performance",
+    "rootNamespace": "Atomic.Entities.Infrastructure",
+    "references": [
+        "Atomic.Entities",
+        "Atomic.Entities.Infrastructure",
+        "Atomic.Entities.Substitutions",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.PerformanceTesting"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -21,7 +21,7 @@ namespace Atomic.Entities
     /// Global registry responsible for tracking and managing all <see cref="IEntity"/> instances.
     /// Provides unique ID assignment, lookup, and name-based search utilities.
     /// </summary>
-    public sealed class EntityRegistry : IReadOnlyEntityCollection<IEntity>
+    public sealed class EntityRegistry : IReadOnlyCollection<IEntity>
     {
         private const int UNDEFINED_INDEX = -1;
 

@@ -4,6 +4,7 @@
     "references": [
         "Atomic.Elements",
         "Atomic.Entities",
+        "Atomic.Entities.Infrastructure",
         "Unity.Burst",
         "Unity.Mathematics",
         "Modules.SpatialStructures",

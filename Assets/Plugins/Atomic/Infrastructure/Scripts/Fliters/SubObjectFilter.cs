@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 #endif
 
-namespace Atomic.Entities
+namespace Atomic.Infrastructure
 {
     /// <summary>
     /// Represents a dynamic, type-safe view (filter) over an existing entity collection,
-    /// selecting entities of type <typeparamref name="T"/> from a source of type <typeparamref name="E"/>.
+    /// selecting entities of type <typeparamref name="T"/> from a source of type <typeparamref name="B"/>.
     /// </summary>
     /// <typeparam name="T">The derived entity type to include in the filter.</typeparam>
-    /// <typeparam name="E">The base entity type that the source collection exposes.</typeparam>
+    /// <typeparam name="B">The base entity type that the source collection exposes.</typeparam>
     /// <remarks>
     /// <para>
-    /// The <see cref="DerivedEntityFilter{E,B}"/> observes a source collection of entities
+    /// The <see cref="SubEntityFilter{T,E}"/> observes a source collection of entities
     /// and maintains a live subset of entities that match the given <paramref name="predicate"/>.
     /// </para>
     /// <para>
@@ -28,29 +28,23 @@ namespace Atomic.Entities
     /// <seealso cref="IReadOnlyEntityCollection{TEntity}"/>
     /// <seealso cref="IEntityTracker{E}"/>
     /// <seealso cref="EntityCollection{TEntity}"/>
-    public class DerivedEntityFilter<T, E> : IReadOnlyEntityCollection<T>, IDisposable
-        where E : IEntity
-        where T : E
+    public class SubObjectFilter<T, B> : IReadOnlyObjectCollection<T>, IDisposable where T : B
     {
-        /// <inheritdoc/>
         public event Action OnStateChanged;
 
-        /// <inheritdoc/>
         public event Action<T> OnAdded;
 
-        /// <inheritdoc/>
         public event Action<T> OnRemoved;
 
-        /// <inheritdoc/>
         public int Count => this.state.Count;
 
 #if ODIN_INSPECTOR
         [ShowInInspector]
 #endif
-        private readonly EntityCollection<T> state;
-        private readonly IReadOnlyEntityCollection<E> source;
+        private readonly ObjectCollection<T> state;
+        private readonly IReadOnlyObjectCollection<B> source;
         private readonly Predicate<T> predicate;
-        private readonly IEntityTracker<T>[] triggers;
+        private readonly ITracker<T>[] triggers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter{E}"/> class.
@@ -59,15 +53,15 @@ namespace Atomic.Entities
         /// <param name="predicate">The predicate used to determine filter inclusion.</param>
         /// <param name="triggers">Optional triggers used to re-evaluate entities when their state changes.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        public DerivedEntityFilter(
-            IReadOnlyEntityCollection<E> source,
+        public SubObjectFilter(
+            IReadOnlyObjectCollection<B> source,
             Predicate<T> predicate,
-            params IEntityTracker<T>[] triggers
+            params ITracker<T>[] triggers
         )
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
             this.predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
-            this.state = new EntityCollection<T>();
+            this.state = new ObjectCollection<T>();
             this.triggers = triggers;
 
             for (int i = 0, count = triggers.Length; i < count; i++)
@@ -76,7 +70,7 @@ namespace Atomic.Entities
             this.source.OnAdded += this.Observe;
             this.source.OnRemoved += this.Unobserve;
 
-            foreach (E entity in this.source)
+            foreach (B entity in this.source)
                 this.Observe(entity);
         }
 
@@ -105,7 +99,7 @@ namespace Atomic.Entities
         /// <inheritdoc/>
         public bool Contains(T entity) => this.state.Contains(entity);
 
-        public EntityCollection<T>.Enumerator GetEnumerator() => this.state.GetEnumerator();
+        public ObjectCollection<T>.Enumerator GetEnumerator() => this.state.GetEnumerator();
 
         /// <inheritdoc/>
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => this.state.GetEnumerator();
@@ -113,11 +107,11 @@ namespace Atomic.Entities
         /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
-        private void Observe(E baseEntity)
+        private void Observe(B baseEntity)
         {
             if (baseEntity is not T entity)
                 return;
-            
+
             for (int i = 0, count = this.triggers.Length; i < count; i++)
                 this.triggers[i].Track(entity);
 
@@ -128,7 +122,7 @@ namespace Atomic.Entities
             }
         }
 
-        private void Unobserve(E baseEntity)
+        private void Unobserve(B baseEntity)
         {
             if (baseEntity is not T entity)
                 return;

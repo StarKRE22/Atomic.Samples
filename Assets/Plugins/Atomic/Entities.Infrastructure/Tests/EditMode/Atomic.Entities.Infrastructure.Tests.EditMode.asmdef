@@ -3,6 +3,7 @@
     "rootNamespace": "Atomic.Entities.Infrastructure",
     "references": [
         "Atomic.Entities",
+        "Atomic.Infrastructure",
         "Atomic.Entities.Infrastructure",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

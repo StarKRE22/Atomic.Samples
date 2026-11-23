@@ -3,11 +3,12 @@
     "rootNamespace": "Atomic.Entities.Infrastructure",
     "references": [
         "Atomic.Entities",
+        "Atomic.Infrastructure",
         "Atomic.Entities.Infrastructure",
         "Atomic.Entities.Substitutions",
         "Atomic.Entities.Infrastructure.Substitutions",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

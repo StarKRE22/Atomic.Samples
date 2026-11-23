@@ -3,7 +3,7 @@ using System;
 namespace Atomic.Entities
 {
     /// <summary>
-    /// Represents a convenience specialization of <see cref="DerivedEntityFilter{E,B}"/> 
+    /// Represents a convenience specialization of <see cref="SubEntityFilter{T,E}"/> 
     /// for filtering entities directly from an <see cref="IReadOnlyEntityCollection{IEntity}"/>.
     /// </summary>
     /// <typeparam name="T">
@@ -12,7 +12,7 @@ namespace Atomic.Entities
     /// </typeparam>
     /// <remarks>
     /// <para>
-    /// This class is a shorthand for creating a <see cref="DerivedEntityFilter{E,B}"/> 
+    /// This class is a shorthand for creating a <see cref="SubEntityFilter{T,E}"/> 
     /// where the base type parameter <typeparamref name="B"/> is fixed to <see cref="IEntity"/>.
     /// </para>
     /// <para>
@@ -33,12 +33,12 @@ namespace Atomic.Entities
     /// }
     /// </code>
     /// </example>
-    /// <seealso cref="DerivedEntityFilter{E,B}"/>
+    /// <seealso cref="SubEntityFilter{T,E}"/>
     /// <seealso cref="IEntity"/>
     /// <seealso cref="IEntityTracker{E}"/>
-    public class DerivedEntityFilter<T> : DerivedEntityFilter<T, IEntity> where T : IEntity
+    public class SubEntityFilter<T> : SubEntityFilter<T, IEntity> where T : IEntity
     {
-        public DerivedEntityFilter(
+        public SubEntityFilter(
             IReadOnlyEntityCollection<IEntity> source,
             Predicate<T> predicate,
             params IEntityTracker<T>[] triggers

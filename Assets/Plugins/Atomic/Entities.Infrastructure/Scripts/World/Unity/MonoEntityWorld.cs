@@ -21,7 +21,19 @@ namespace Atomic.Entities
             string name = null,
             bool scanEntities = true,
             bool useUnityLifecycle = true
-        ) => Create<MonoEntityWorld>(name, scanEntities, useUnityLifecycle);
+        )
+        {
+            GameObject go = new GameObject();
+            go.SetActive(false);
+
+            MonoEntityWorld world = go.AddComponent<MonoEntityWorld>();
+            world.Name = name;
+            world.collectOnAwake = scanEntities;
+            world.useUnityLifecycle = useUnityLifecycle;
+
+            go.SetActive(true);
+            return world;
+        }
     }
 }
 #endif

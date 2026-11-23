@@ -61,7 +61,7 @@ namespace Atomic.Entities
 
             //Act & Assert:
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new DerivedEntityFilter<WarriorEntity, IEntity>(null, predicate));
+                _ = new SubEntityFilter<WarriorEntity, IEntity>(null, predicate));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Atomic.Entities
 
             //Act & Assert:
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new DerivedEntityFilter<WarriorEntity, IEntity>(source, null));
+                _ = new SubEntityFilter<WarriorEntity, IEntity>(source, null));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Atomic.Entities
             var trigger2 = new DerivedTrackerTestDouble<WarriorEntity>();
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger1, trigger2);
 
             //Assert:
@@ -103,7 +103,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             //Assert:
@@ -120,7 +120,7 @@ namespace Atomic.Entities
             source.Add(mage);
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -136,7 +136,7 @@ namespace Atomic.Entities
             source.Add(weakWarrior);
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             //Assert:
@@ -149,7 +149,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             var warrior = new WarriorEntity("Bob");
@@ -175,7 +175,7 @@ namespace Atomic.Entities
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
 
             //Act:
-            _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            _ = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             //Assert:
@@ -196,7 +196,7 @@ namespace Atomic.Entities
             source.Add(warrior2);
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             //Assert:
@@ -215,7 +215,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             var warrior = new WarriorEntity("Alex", 10);
@@ -233,7 +233,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             WarriorEntity added = null;
@@ -253,7 +253,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             bool stateChanged = false;
@@ -271,7 +271,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             bool addedFired = false;
@@ -292,7 +292,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 10);
 
             bool addedFired = false;
@@ -313,7 +313,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 10);
 
             bool stateChanged = false;
@@ -331,7 +331,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             var w1 = new WarriorEntity("W1", 1);
@@ -362,7 +362,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             Assert.AreEqual(1, filter.Count);
@@ -383,7 +383,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             WarriorEntity removed = null;
@@ -404,7 +404,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             bool stateChanged = false;
@@ -425,7 +425,7 @@ namespace Atomic.Entities
             var weakWarrior = new WarriorEntity("Weakling", 1);
             source.Add(weakWarrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 10);
 
             bool removedFired = false;
@@ -446,7 +446,7 @@ namespace Atomic.Entities
             var weakWarrior = new WarriorEntity("Weakling", 1);
             source.Add(weakWarrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 10);
 
             bool stateChanged = false;
@@ -467,7 +467,7 @@ namespace Atomic.Entities
             var mage = new MageEntity("Gandalf");
             source.Add(mage);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             bool removedFired = false;
@@ -490,7 +490,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            _ = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             Assert.AreEqual(1, trigger.Tracked.Count);
@@ -511,7 +511,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -529,7 +529,7 @@ namespace Atomic.Entities
             source.Add(new MageEntity("M2"));
 
             //Act:
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -543,7 +543,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             Assert.AreEqual(1, filter.Count);
@@ -562,7 +562,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             Assert.AreEqual(1, filter.Count);
@@ -587,7 +587,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -604,7 +604,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -617,7 +617,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -631,7 +631,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             source.Add(new WarriorEntity("W1", 10));
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -650,7 +650,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -666,7 +666,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -682,7 +682,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -700,7 +700,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             source.Add(new WarriorEntity("W1", 10));
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -723,7 +723,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -738,7 +738,7 @@ namespace Atomic.Entities
             var weakWarrior = new WarriorEntity("Weakling", 1);
             source.Add(weakWarrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             //Assert:
@@ -750,7 +750,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             var orphan = new WarriorEntity("Orphan", 10);
@@ -767,7 +767,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             filter.Dispose();
@@ -790,7 +790,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             var results = new List<WarriorEntity>();
@@ -814,7 +814,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             var array = new WarriorEntity[4];
@@ -834,7 +834,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             var results = new List<WarriorEntity>();
@@ -860,7 +860,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -880,7 +880,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -903,7 +903,7 @@ namespace Atomic.Entities
             source.Add(warrior);
             source.Add(mage);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -925,7 +925,7 @@ namespace Atomic.Entities
             var w1 = new WarriorEntity("W1", 10);
             source.Add(w1);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act:
@@ -951,7 +951,7 @@ namespace Atomic.Entities
             source.Add(new WarriorEntity("W1", 10));
             source.Add(new WarriorEntity("W2", 20));
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             Assert.AreEqual(2, filter.Count);
@@ -968,7 +968,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
             filter.Dispose();
 
@@ -991,7 +991,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("W1", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             filter.Dispose();
@@ -1018,7 +1018,7 @@ namespace Atomic.Entities
             source.Add(w2);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             Assert.AreEqual(2, trigger.Tracked.Count);
@@ -1035,7 +1035,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Act & Assert:
@@ -1058,7 +1058,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 1);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             Assert.AreEqual(0, filter.Count);
@@ -1084,7 +1084,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             Assert.AreEqual(1, filter.Count);
@@ -1110,7 +1110,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             bool addedFired = false;
@@ -1137,7 +1137,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 1);
             source.Add(warrior);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 10);
 
             bool removedFired = false;
@@ -1159,7 +1159,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5, trigger);
 
             Assert.AreEqual(0, filter.Count);
@@ -1182,7 +1182,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5, trigger);
 
             Assert.AreEqual(1, filter.Count);
@@ -1205,7 +1205,7 @@ namespace Atomic.Entities
             //Arrange:
             var source = new EntityCollection();
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             var warrior = new WarriorEntity("Alex", 10);
@@ -1226,7 +1226,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            _ = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             Assert.IsTrue(trigger.Tracked.Contains(warrior));
@@ -1244,7 +1244,7 @@ namespace Atomic.Entities
             //Arrange:
             var source = new EntityCollection();
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
             var mage = new MageEntity("Gandalf");
@@ -1270,7 +1270,7 @@ namespace Atomic.Entities
             var removedLog = new List<string>();
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power >= 5, trigger);
 
             filter.OnAdded += e => addedLog.Add(e.Name);
@@ -1312,7 +1312,7 @@ namespace Atomic.Entities
             source.Add(w3);
             source.Add(mage);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             //Assert initial state:
@@ -1350,7 +1350,7 @@ namespace Atomic.Entities
             source.Add(warrior);
 
             var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0, trigger);
 
             Assert.AreEqual(1, filter.Count);
@@ -1399,7 +1399,7 @@ namespace Atomic.Entities
 
                 //Act & Assert:
                 Assert.Throws<ArgumentNullException>(() =>
-                    _ = new DerivedEntityFilter<WarriorEntity>(null, predicate));
+                    _ = new SubEntityFilter<WarriorEntity>(null, predicate));
             }
 
             [Test]
@@ -1410,7 +1410,7 @@ namespace Atomic.Entities
 
                 //Act & Assert:
                 Assert.Throws<ArgumentNullException>(() =>
-                    _ = new DerivedEntityFilter<WarriorEntity>(source, null));
+                    _ = new SubEntityFilter<WarriorEntity>(source, null));
             }
 
             [Test]
@@ -1422,7 +1422,7 @@ namespace Atomic.Entities
                 source.Add(warrior);
 
                 //Act:
-                var filter = new DerivedEntityFilter<WarriorEntity>(
+                var filter = new SubEntityFilter<WarriorEntity>(
                     source, e => e.Power > 5);
 
                 //Assert:
@@ -1438,7 +1438,7 @@ namespace Atomic.Entities
                 source.Add(new MageEntity("Gandalf"));
 
                 //Act:
-                var filter = new DerivedEntityFilter<WarriorEntity>(source, e => true);
+                var filter = new SubEntityFilter<WarriorEntity>(source, e => true);
 
                 //Assert:
                 Assert.AreEqual(0, filter.Count);
@@ -1449,7 +1449,7 @@ namespace Atomic.Entities
             {
                 //Arrange:
                 var source = new EntityCollection();
-                var filter = new DerivedEntityFilter<WarriorEntity>(source, e => true);
+                var filter = new SubEntityFilter<WarriorEntity>(source, e => true);
 
                 WarriorEntity added = null;
                 filter.OnAdded += e => added = e;
@@ -1472,7 +1472,7 @@ namespace Atomic.Entities
                 var warrior = new WarriorEntity("Alex", 10);
                 source.Add(warrior);
 
-                var filter = new DerivedEntityFilter<WarriorEntity>(source, e => true);
+                var filter = new SubEntityFilter<WarriorEntity>(source, e => true);
 
                 WarriorEntity removed = null;
                 filter.OnRemoved += e => removed = e;
@@ -1494,7 +1494,7 @@ namespace Atomic.Entities
                 source.Add(warrior);
 
                 var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
-                var filter = new DerivedEntityFilter<WarriorEntity>(
+                var filter = new SubEntityFilter<WarriorEntity>(
                     source, e => e.Power > 5, trigger);
 
                 Assert.AreEqual(0, filter.Count);
@@ -1515,7 +1515,7 @@ namespace Atomic.Entities
                 var source = new EntityCollection();
                 source.Add(new WarriorEntity("W1", 10));
 
-                var filter = new DerivedEntityFilter<WarriorEntity>(
+                var filter = new SubEntityFilter<WarriorEntity>(
                     source, e => true);
 
                 Assert.AreEqual(1, filter.Count);
@@ -1544,7 +1544,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             var warrior = new WarriorEntity("Alex", 10);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             source.Add(warrior);
@@ -1571,7 +1571,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
 
             Assert.AreEqual(2, filter.Count);
@@ -1591,7 +1591,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             source.Add(new WarriorEntity("W1", 10));
 
-            var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             filter.Dispose();
@@ -1615,9 +1615,9 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var strongFilter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var strongFilter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
-            var allFilter = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var allFilter = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => true);
 
             //Assert:
@@ -1634,9 +1634,9 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var filter1 = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter1 = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5);
-            var filter2 = new DerivedEntityFilter<WarriorEntity, IEntity>(
+            var filter2 = new SubEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0);
 
             WarriorEntity added1 = null;

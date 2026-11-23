@@ -56,7 +56,7 @@ namespace Atomic.Entities
         /// <summary>
         /// Initializes singleton instance.
         /// </summary>
-        private protected override void Awake()
+        protected override void Awake()
         {
             if (_instance != null && _instance != this)
             {
@@ -79,7 +79,7 @@ namespace Atomic.Entities
         /// <summary>
         /// Clears singleton reference when destroyed.
         /// </summary>
-        private protected override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 

@@ -1,4 +1,5 @@
 using System;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -19,7 +20,7 @@ namespace Atomic.Entities
         public EntityFilter(
             IReadOnlyEntityCollection<IEntity> source,
             Predicate<IEntity> predicate,
-            params IEntityTracker<IEntity>[] triggers
+            params ITracker<IEntity>[] triggers
         ) : base(source, predicate, triggers)
         {
         }

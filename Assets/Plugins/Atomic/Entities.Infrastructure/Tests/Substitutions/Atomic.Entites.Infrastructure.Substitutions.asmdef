@@ -3,7 +3,8 @@
     "rootNamespace": "Atomic.Entities.Infrastructure",
     "references": [
         "Atomic.Entities",
-        "Atomic.Entities.Infrastructure"
+        "Atomic.Entities.Infrastructure",
+        "Atomic.Infrastructure"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

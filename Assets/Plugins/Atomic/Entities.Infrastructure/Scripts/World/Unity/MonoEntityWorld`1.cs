@@ -1,9 +1,11 @@
 #if UNITY_5_3_OR_NEWER
-using System;
+using System.Collections.Generic;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Atomic.Entities
 {
+    
     /// <summary>
     /// A Unity-compatible world manager for scene-based entities of type <typeparamref name="E"/>.
     /// </summary>
@@ -16,29 +18,37 @@ namespace Atomic.Entities
     /// Attach this component to a GameObject in the scene to automatically scan and manage entities of type <typeparamref name="E"/>.
     /// </example>
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Worlds/MonoEntityWorld%601.md")]
-    public abstract partial class MonoEntityWorld<E> : MonoBehaviour, IEntityWorld<E> where E : IEntity
+    public abstract class MonoEntityWorld<E> : MonoObjectWorld<E>, IEntityWorld<E> where E : IEntity
     {
-        private readonly EntityWorld<E> _world = new();
+        protected override ObjectWorld<E> Inner => _inner;
 
-        private bool isStarted;
+        private readonly EntityWorld<E> _inner = new();
 
-        /// <inheritdoc />
-        public event Action OnStateChanged
+        private new void CopyTo(E[] array, int arrayIndex)
         {
-            add => _world.OnStateChanged += value;
-            remove => _world.OnStateChanged -= value;
+            _inner.CopyTo(array, arrayIndex);
         }
 
-        /// <inheritdoc />
-        public string Name
+        void IEntityCollection<E>.CopyTo(E[] array, int arrayIndex)
         {
-            get => this.name;
-            set => this.name = value;
+            CopyTo(array, arrayIndex);
         }
+
         
-        public E this[int index] => _world[index];
-        
-        public bool TryGetAt(int index, out E entity) => _world.TryGetAt(index, out entity);
+        void ICollection<E>.CopyTo(E[] array, int arrayIndex)
+        {
+            CopyTo(array, arrayIndex);
+        }
+
+        void IReadOnlyObjectCollection<E>.CopyTo(E[] array, int arrayIndex)
+        {
+            CopyTo(array, arrayIndex);
+        }
+
+        void IObjectCollection<E>.CopyTo(E[] array, int arrayIndex)
+        {
+            CopyTo(array, arrayIndex);
+        }
     }
 }
 #endif

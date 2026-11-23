@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using Atomic.Infrastructure;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -13,58 +12,14 @@ namespace Atomic.Entities
     /// Provides lifecycle management including, enabling, updating, and disposing all entities in the collection.
     /// </summary>
     /// <typeparam name="E">The specific type of entity managed by this world. Must implement <see cref="IEntity"/>.</typeparam>
-    public class EntityWorld<E> : EntityCollection<E>, IEntityWorld<E> where E : IEntity
+    public class EntityWorld<E> : ObjectWorld<E>, IEntityWorld<E> where E : IEntity
     {
-        /// <inheritdoc/>
-        public event Action OnEnabled;
-
-        /// <inheritdoc/>
-        public event Action OnDisabled;
-
-        /// <inheritdoc/>
-        public event Action<float> OnTicked;
-
-        /// <inheritdoc/>
-        public event Action<float> OnFixedTicked;
-
-        /// <inheritdoc/>
-        public event Action<float> OnLateTicked;
-
-        /// <inheritdoc/>
-#if ODIN_INSPECTOR
-        [ShowInInspector]
-#endif
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
-
-        /// <summary>
-        /// Indicates whether the world is enabled.
-        /// </summary>
-
-#if ODIN_INSPECTOR
-        [ShowInInspector]
-#endif
-        public bool Enabled => _enabled;
-
-        private string _name;
-        private bool _enabled;
-
-        /// <summary>
-        /// Initializes an empty <see cref="EntityWorld{E}"/> instance with no name.
-        /// </summary>
-        public EntityWorld() => _name = string.Empty;
-
         /// <summary>
         /// Initializes a new <see cref="EntityWorld{E}"/> with the specified entities and an empty name.
         /// </summary>
         /// <param name="entities">Entities to prepopulate the world with.</param>
-        public EntityWorld(params E[] entities)
+        public EntityWorld(params E[] entities) : base(entities)
         {
-            _name = string.Empty;
-            this.AddRange(entities);
         }
 
         /// <summary>
@@ -72,10 +27,8 @@ namespace Atomic.Entities
         /// </summary>
         /// <param name="name">The name of the world.</param>
         /// <param name="entities">Entities to prepopulate the world with.</param>
-        public EntityWorld(string name = null, params E[] entities)
+        public EntityWorld(string name = null, params E[] entities) : base(name, entities)
         {
-            _name = name;
-            this.AddRange(entities);
         }
 
         /// <summary>
@@ -83,114 +36,18 @@ namespace Atomic.Entities
         /// </summary>
         /// <param name="name">The name of the world.</param>
         /// <param name="entities">The enumerable collection of entities to add.</param>
-        public EntityWorld(string name, IEnumerable<E> entities)
+        public EntityWorld(string name, IEnumerable<E> entities) : base(name, entities)
         {
-            _name = name;
-            this.AddRange(entities);
         }
 
-        /// <inheritdoc/>
-        public void Enable()
-        {
-            if (_enabled)
-                return;
+        protected override void Enable(E obj) => obj.Enable();
 
-            for (int i = 0; i < _count; i++)
-                _slots[_order[i]].value.Enable();
+        protected override void Disable(E obj) => obj.Disable();
 
-            _enabled = true;
+        protected override void Tick(E obj, float deltaTime) => obj.Tick(deltaTime);
 
-            this.NotifyAboutStateChanged();
-            this.OnEnabled?.Invoke();
-        }
+        protected override void FixedTick(E obj, float deltaTime) => obj.FixedTick(deltaTime);
 
-        /// <inheritdoc/>
-        public void Disable()
-        {
-            if (!_enabled)
-                return;
-
-            for (int i = 0; i < _count; i++)
-                _slots[_order[i]].value.Disable();
-
-            _enabled = false;
-
-            this.NotifyAboutStateChanged();
-            this.OnDisabled?.Invoke();
-        }
-
-        /// <inheritdoc/>
-        public void Tick(float deltaTime)
-        {
-            if (!_enabled)
-                return;
-
-            for (int i = 0; i < _count; i++)
-                _slots[_order[i]].value.Tick(deltaTime);
-
-            this.OnTicked?.Invoke(deltaTime);
-        }
-
-        /// <inheritdoc/>
-        public void FixedTick(float deltaTime)
-        {
-            if (!_enabled)
-                return;
-
-            for (int i = 0; i < _count; i++)
-                _slots[_order[i]].value.FixedTick(deltaTime);
-
-            this.OnFixedTicked?.Invoke(deltaTime);
-        }
-
-        /// <inheritdoc/>
-        public void LateTick(float deltaTime)
-        {
-            if (!_enabled)
-                return;
-
-            for (int i = 0; i < _count; i++)
-                _slots[_order[i]].value.LateTick(deltaTime);
-
-            this.OnLateTicked?.Invoke(deltaTime);
-        }
-
-        /// <summary>
-        /// Enables added entity if world is enabled.
-        /// </summary>
-        /// <param name="entity">Added entity</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected override void OnAdd(E entity)
-        {
-            if (_enabled) entity.Enable();
-        }
-
-        /// <summary>
-        /// Disables removed entity if world is enabled. 
-        /// </summary>
-        /// <param name="entity">Removed entity</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected override void OnRemove(E entity)
-        {
-            if (_enabled) entity.Disable();
-        }
-
-        /// <summary>
-        /// Disables this state, clear all entities and release all events
-        /// </summary>
-        public override void Dispose()
-        {
-            if (_enabled)
-                this.Disable();
-
-            base.Dispose();
-
-            //Unsubscribe events:
-            this.OnEnabled = null;
-            this.OnDisabled = null;
-            this.OnTicked = null;
-            this.OnFixedTicked = null;
-            this.OnLateTicked = null;
-        }
+        protected override void LateTick(E obj, float deltaTime) => obj.LateTick(deltaTime);
     }
 }

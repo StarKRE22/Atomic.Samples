@@ -10,7 +10,7 @@ namespace Atomic.Entities
 
         public readonly HashSet<IEntity> Tracked = new();
 
-        public void SetAction(Action<IEntity> action)
+        public void SetTrigger(Action<IEntity> action)
         {
             SetActionCalled = true;
             Action = action;

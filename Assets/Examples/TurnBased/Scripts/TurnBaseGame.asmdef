@@ -5,6 +5,7 @@
         "Atomic.Elements",
         "Atomic.Entities",
         "Atomic.Entities.Infrastructure",
+        "Atomic.Infrastructure",
         "Unity.Mathematics",
         "Unity.Burst",
         "Unity.TextMeshPro",

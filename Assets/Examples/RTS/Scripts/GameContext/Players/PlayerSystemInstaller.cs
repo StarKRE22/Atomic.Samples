@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame

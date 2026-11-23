@@ -1,4 +1,5 @@
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -6,25 +7,27 @@ namespace RTSGame
     public sealed class WarriorBaker : GameEntityBaker
     {
         [SerializeField]
-        private LifeEntityBaker _lifeBaker; 
-        
+        private LifeEntityBaker _lifeBaker;
+
         [SerializeField]
         private MoveEntityBaker _moveBaker;
 
         [SerializeField]
         private CombatEntityBaker _combatBaker;
-        
+
         [SerializeField]
         private TeamEntityBaker _teamBaker;
 
         [SerializeField]
         private TransformEntityBaker _transformBaker;
-        
-        protected void OnValidate()
+
+        protected override void OnValidate()
         {
             _teamBaker.OnValidate();
+
+            base.OnValidate();
         }
-        
+
         protected override void Override(IGameEntity entity, Args<IGameContext> args)
         {
             entity.Install(_moveBaker);

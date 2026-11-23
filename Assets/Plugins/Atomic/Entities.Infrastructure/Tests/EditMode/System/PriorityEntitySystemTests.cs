@@ -29,7 +29,7 @@ namespace Atomic.Entities.Tests
         public int TrackCallCount { get; private set; }
         public int UntrackCallCount { get; private set; }
 
-        public void SetAction(Action<Entity> action)
+        public void SetTrigger(Action<Entity> action)
         {
             SetActionCalled = true;
             CapturedAction = action;

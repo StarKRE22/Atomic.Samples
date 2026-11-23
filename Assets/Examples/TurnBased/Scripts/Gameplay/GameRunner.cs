@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using Game.Gameplay;
 
 #if ODIN_INSPECTOR

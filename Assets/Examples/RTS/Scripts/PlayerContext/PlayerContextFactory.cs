@@ -1,5 +1,6 @@
 using Atomic.Elements;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -12,11 +13,13 @@ namespace RTSGame
     {
         private const string PLAYER_CONTEXT_NAME_FORMAT = "PlayerContext {0}";
 
-        protected override IPlayerContext Create(int tagCapacity,
+        protected override IPlayerContext Create(
+            int tagCapacity,
             int valueCapacity,
             int behaviourCapacity,
             Entity.Settings settings,
-            Args<TeamType, IGameContext> args)
+            Args<TeamType, IGameContext> args
+        )
         {
             TeamType team = args.value1;
             IGameContext gameContext = args.value2;

@@ -1,4 +1,5 @@
 ﻿using Atomic.Entities;
+using Atomic.Infrastructure;
 
 /**
  * Created by Entity Domain Generator.
@@ -14,8 +15,8 @@ namespace ShooterGame.Gameplay
     /// </remarks>
     public sealed class GameEntityPool : MonoEntityPool<IGameEntity, GameEntity>, IEntityPool<IGameEntity>
     {
-        IGameEntity IEntityPool<IGameEntity>.Rent() => this.Rent();
+        IGameEntity IPool<IGameEntity>.Rent() => this.Rent();
 
-        void IEntityPool<IGameEntity>.Return(IGameEntity entity) => this.Return((GameEntity)entity);
+        void IPool<IGameEntity>.Return(IGameEntity entity) => this.Return((GameEntity)entity);
     }
 }

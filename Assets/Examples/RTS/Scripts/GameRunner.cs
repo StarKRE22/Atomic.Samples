@@ -1,4 +1,5 @@
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;

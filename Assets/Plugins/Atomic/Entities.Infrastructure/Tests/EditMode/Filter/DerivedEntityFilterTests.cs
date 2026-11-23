@@ -38,7 +38,7 @@ namespace Atomic.Entities
 
             public readonly HashSet<T> Tracked = new();
 
-            public void SetAction(Action<T> action)
+            public void SetTrigger(Action<T> action)
             {
                 SetActionCalled = true;
                 Action = action;

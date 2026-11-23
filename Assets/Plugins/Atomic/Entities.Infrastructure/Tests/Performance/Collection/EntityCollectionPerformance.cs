@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
+using Atomic.Infrastructure;
 
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 

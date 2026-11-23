@@ -1,4 +1,5 @@
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -14,9 +15,10 @@ namespace RTSGame
         [SerializeField]
         private TransformEntityBaker _transformBaker;
 
-        protected void OnValidate()
+        protected override void OnValidate()
         {
             _teamBaker.OnValidate();
+            base.OnValidate();
         }
 
         protected override void Override(IGameEntity entity, Args<IGameContext> args)

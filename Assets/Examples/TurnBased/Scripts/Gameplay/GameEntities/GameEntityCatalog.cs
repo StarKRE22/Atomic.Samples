@@ -1,4 +1,5 @@
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -7,7 +8,8 @@ namespace Game.Gameplay
         fileName = "GameEntityCatalog",
         menuName = "Game/Gameplay/GameEntities/GameEntityCatalog"
     )]
-    public sealed class GameEntityCatalog : ScriptableEntityCatalog<GameEntityType, IGameEntity, GameEntityFactory, Args<IGameContext>>
+    public sealed class GameEntityCatalog : ScriptableEntityCatalog
+        <GameEntityType, IGameEntity, GameEntityFactory, Args<IGameContext>>
     {
         protected override GameEntityType GetKey(GameEntityFactory factory) => factory.Type;
     }

@@ -1,3 +1,5 @@
+using Atomic.Infrastructure;
+
 namespace Atomic.Entities
 {
     /// <summary>

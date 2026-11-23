@@ -1,3 +1,5 @@
+using Atomic.Infrastructure;
+
 namespace Atomic.Entities
 {
     /// <summary>
@@ -6,19 +8,9 @@ namespace Atomic.Entities
     /// This interface is typically implemented by systems or data-driven structures (e.g., ScriptableObjects, MonoBehaviours)
     /// that are responsible for instantiating and configuring entities at runtime.
     /// </summary>
-    /// <typeparam name="TEntity">The type of <see cref="IEntity"/> this factory creates.</typeparam>
+    /// <typeparam name="E">The type of <see cref="IEntity"/> this factory creates.</typeparam>
     /// <typeparam name="TArgs">The type of construction arguments passed to the factory. Must implement <see cref="IArgs"/>.</typeparam>
-    public interface IEntityFactory<out TEntity, in TArgs>
-        where TEntity : IEntity
-        where TArgs : IArgs
+    public interface IEntityFactory<out E, in TArgs> : IFactory<E, TArgs> where E : IEntity where TArgs : IArgs
     {
-        /// <summary>
-        /// Creates and returns a new instance of the entity type <typeparamref name="TEntity"/>.
-        /// 
-        /// Implementations may optionally preconfigure the instance with default tags, values, or behaviors
-        /// before returning it.
-        /// </summary>
-        /// <returns>A new instance of the entity of type <typeparamref name="TEntity"/>.</returns>
-        TEntity Create(TArgs args);
     }
 }

@@ -1,5 +1,6 @@
 #if UNITY_5_3_OR_NEWER
 using System;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 #if ODIN_INSPECTOR
@@ -23,7 +24,9 @@ namespace Atomic.Entities
     /// extracts entity metadata (like name, tag count, etc.) and stores it for optimization or display purposes.
     /// </remarks>
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Factories/ScriptableEntityFactory%601.md")]
-    public abstract class ScriptableEntityFactory<TEntity, TArgs> : ScriptableObject, IEntityFactory<TEntity, TArgs>
+    public abstract class ScriptableEntityFactory<TEntity, TArgs> :
+        ScriptableFactory<TEntity, TArgs>,
+        IEntityFactory<TEntity, TArgs>
         where TArgs : IArgs
         where TEntity : IEntity
     {
@@ -79,7 +82,7 @@ namespace Atomic.Entities
         /// Creates and returns a new instance of the entity.
         /// </summary>
         /// <returns>A new <typeparamref name="TEntity"/> instance.</returns>
-        public TEntity Create(TArgs args) => this.Create(
+        public override TEntity Create(TArgs args) => this.Create(
             this.tagCapacity,
             this.valueCapacity,
             this.behaviourCapacity,

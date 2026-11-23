@@ -1,0 +1,25 @@
+{
+    "name": "Atomic.Entities.Infrastructure.PlayModeTests",
+    "rootNamespace": "Atomic.Entities.Infrastructure",
+    "references": [
+        "Atomic.Entities",
+        "Atomic.Entities.Infrastructure",
+        "Atomic.Entities.Substitutions",
+        "Atomic.Entities.Infrastructure.Substitutions",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

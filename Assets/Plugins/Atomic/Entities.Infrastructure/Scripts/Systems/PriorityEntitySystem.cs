@@ -91,7 +91,7 @@ namespace Atomic.Entities
 #endif
         private float _priorityTime;
 
-        private readonly IEntityTrigger<E>[] _triggers;
+        private readonly IEntityTracker<E>[] _triggers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PriorityEntitySystem{E}"/> class.
@@ -102,7 +102,7 @@ namespace Atomic.Entities
         protected PriorityEntitySystem(
             IReadOnlyEntityCollection<E> source,
             Settings settings,
-            params IEntityTrigger<E>[] triggers
+            params IEntityTracker<E>[] triggers
         ) : base(source, settings)
         {
             int initialCapacity = Math.Max(16, source.Count);
@@ -121,8 +121,8 @@ namespace Atomic.Entities
         {
             _priorityTime = _settings.cooldown;
 
-            foreach (IEntityTrigger<E> trigger in _triggers)
-                trigger.SetAction(this.ChangePriority);
+            foreach (IEntityTracker<E> trigger in _triggers)
+                trigger.SetTrigger(this.ChangePriority);
         }
 
         #region Add
@@ -149,7 +149,7 @@ namespace Atomic.Entities
                 AddInternal(entity, priority);
             }
 
-            foreach (IEntityTrigger<E> trigger in _triggers)
+            foreach (IEntityTracker<E> trigger in _triggers)
                 trigger.Track(entity);
         }
 
@@ -221,7 +221,7 @@ namespace Atomic.Entities
                 this.RemoveInternal(entity);
             }
 
-            foreach (IEntityTrigger<E> trigger in _triggers)
+            foreach (IEntityTracker<E> trigger in _triggers)
                 trigger.Untrack(entity);
         }
 

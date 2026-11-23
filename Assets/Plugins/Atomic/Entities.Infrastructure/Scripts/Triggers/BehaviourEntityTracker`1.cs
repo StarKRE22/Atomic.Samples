@@ -6,7 +6,7 @@ namespace Atomic.Entities
     /// A trigger that responds to behaviour changes (added or removed) on entities of type <typeparamref name="E"/>.
     /// </summary>
     /// <typeparam name="E">The entity type, which must implement <see cref="IEntity"/>.</typeparam>
-    public class BehaviourEntityTrigger<E> : IEntityTrigger<E> where E : IEntity
+    public class BehaviourEntityTracker<E> : IEntityTracker<E> where E : IEntity
     {
         private Action<E> _action;
 
@@ -14,11 +14,11 @@ namespace Atomic.Entities
         private readonly bool _removed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviourEntityTrigger{E}"/> class.
+        /// Initializes a new instance of the <see cref="BehaviourEntityTracker{E}"/> class.
         /// </summary>
         /// <param name="added">Whether to react to behaviour additions via <c>OnBehaviourAdded</c>.</param>
         /// <param name="removed">Whether to react to behaviour removals via <c>OnBehaviourRemoved</c>.</param>
-        public BehaviourEntityTrigger(bool added = true, bool removed = true)
+        public BehaviourEntityTracker(bool added = true, bool removed = true)
         {
             _added = added;
             _removed = removed;
@@ -28,7 +28,7 @@ namespace Atomic.Entities
         /// Sets the action to be invoked when the trigger detects a relevant change in the entity.
         /// </summary>
         /// <param name="action">The callback action to invoke.</param>
-        public void SetAction(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
+        public void SetTrigger(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
 
         /// <summary>
         /// Subscribes to the behaviour-related events on the given entity.

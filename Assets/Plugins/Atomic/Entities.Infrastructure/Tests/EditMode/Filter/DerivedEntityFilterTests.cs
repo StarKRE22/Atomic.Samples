@@ -31,7 +31,7 @@ namespace Atomic.Entities
             }
         }
 
-        private class DerivedTriggerTestDouble<T> : IEntityTrigger<T> where T : IEntity
+        private class DerivedTrackerTestDouble<T> : IEntityTracker<T> where T : IEntity
         {
             public Action<T> Action;
             public bool SetActionCalled;
@@ -80,8 +80,8 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var trigger1 = new DerivedTriggerTestDouble<WarriorEntity>();
-            var trigger2 = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger1 = new DerivedTrackerTestDouble<WarriorEntity>();
+            var trigger2 = new DerivedTrackerTestDouble<WarriorEntity>();
 
             //Act:
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
@@ -172,7 +172,7 @@ namespace Atomic.Entities
             var source = new EntityCollection();
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
 
             //Act:
             _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
@@ -489,7 +489,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
@@ -1017,7 +1017,7 @@ namespace Atomic.Entities
             source.Add(w1);
             source.Add(w2);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
@@ -1158,7 +1158,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 1);
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5, trigger);
 
@@ -1181,7 +1181,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 5, trigger);
 
@@ -1204,7 +1204,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
@@ -1225,7 +1225,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             _ = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
@@ -1243,7 +1243,7 @@ namespace Atomic.Entities
         {
             //Arrange:
             var source = new EntityCollection();
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => true, trigger);
 
@@ -1269,7 +1269,7 @@ namespace Atomic.Entities
             var addedLog = new List<string>();
             var removedLog = new List<string>();
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power >= 5, trigger);
 
@@ -1349,7 +1349,7 @@ namespace Atomic.Entities
             var warrior = new WarriorEntity("Alex", 10);
             source.Add(warrior);
 
-            var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+            var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
             var filter = new DerivedEntityFilter<WarriorEntity, IEntity>(
                 source, e => e.Power > 0, trigger);
 
@@ -1493,7 +1493,7 @@ namespace Atomic.Entities
                 var warrior = new WarriorEntity("Alex", 1);
                 source.Add(warrior);
 
-                var trigger = new DerivedTriggerTestDouble<WarriorEntity>();
+                var trigger = new DerivedTrackerTestDouble<WarriorEntity>();
                 var filter = new DerivedEntityFilter<WarriorEntity>(
                     source, e => e.Power > 5, trigger);
 

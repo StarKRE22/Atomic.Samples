@@ -33,7 +33,7 @@ namespace Atomic.Entities
         private readonly EntityCollection<E> state;
         private readonly IReadOnlyEntityCollection<E> source;
         private readonly Predicate<E> predicate;
-        private readonly IEntityTrigger<E>[] triggers;
+        private readonly IEntityTracker<E>[] triggers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter{E}"/> class.
@@ -45,7 +45,7 @@ namespace Atomic.Entities
         public EntityFilter(
             IReadOnlyEntityCollection<E> source,
             Predicate<E> predicate,
-            params IEntityTrigger<E>[] triggers
+            params IEntityTracker<E>[] triggers
         )
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
@@ -54,7 +54,7 @@ namespace Atomic.Entities
             this.triggers = triggers;
 
             for (int i = 0, count = triggers.Length; i < count; i++)
-                triggers[i].SetAction(this.Synchronize);
+                triggers[i].SetTrigger(this.Synchronize);
 
             this.source.OnAdded += this.Observe;
             this.source.OnRemoved += this.Unobserve;
@@ -145,7 +145,7 @@ namespace Atomic.Entities
         {
             private IReadOnlyEntityCollection<E> _source;
             private Predicate<E> _predicate;
-            private List<IEntityTrigger<E>> _triggers;
+            private List<IEntityTracker<E>> _triggers;
 
             /// <summary>
             /// Assigns a source collection.
@@ -168,23 +168,23 @@ namespace Atomic.Entities
             /// <summary>
             /// Adds a trigger.
             /// </summary>
-            public Builder WithTrigger(IEntityTrigger<E> trigger)
+            public Builder WithTrigger(IEntityTracker<E> tracker)
             {
-                if (trigger == null) throw new ArgumentNullException(nameof(trigger));
+                if (tracker == null) throw new ArgumentNullException(nameof(tracker));
 
-                _triggers ??= new List<IEntityTrigger<E>>();
-                _triggers.Add(trigger);
+                _triggers ??= new List<IEntityTracker<E>>();
+                _triggers.Add(tracker);
                 return this;
             }
 
             /// <summary>
             /// Adds multiple triggers.
             /// </summary>
-            public Builder WithTriggers(params IEntityTrigger<E>[] triggers)
+            public Builder WithTriggers(params IEntityTracker<E>[] triggers)
             {
                 if (triggers == null) throw new ArgumentNullException(nameof(triggers));
 
-                _triggers ??= new List<IEntityTrigger<E>>();
+                _triggers ??= new List<IEntityTracker<E>>();
                 _triggers.AddRange(triggers);
                 return this;
             }
@@ -200,7 +200,7 @@ namespace Atomic.Entities
                 return new EntityFilter<E>(
                     _source,
                     _predicate,
-                    _triggers != null ? _triggers.ToArray() : Array.Empty<IEntityTrigger<E>>()
+                    _triggers != null ? _triggers.ToArray() : Array.Empty<IEntityTracker<E>>()
                 );
             }
         }

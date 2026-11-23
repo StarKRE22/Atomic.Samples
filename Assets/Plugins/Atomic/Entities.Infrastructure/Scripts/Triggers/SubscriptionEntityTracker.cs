@@ -7,7 +7,7 @@ namespace Atomic.Entities
     /// Provides infrastructure for tracking entities and managing subscription resources.
     /// </summary>
     /// <typeparam name="S">The type of subscription.</typeparam>
-    public abstract class SubscriptionEntityTrigger<S> : SubscriptionEntityTrigger<IEntity, S> where S : IDisposable
+    public abstract class SubscriptionEntityTracker<S> : SubscriptionEntityTracker<IEntity, S> where S : IDisposable
     {
     }
 }

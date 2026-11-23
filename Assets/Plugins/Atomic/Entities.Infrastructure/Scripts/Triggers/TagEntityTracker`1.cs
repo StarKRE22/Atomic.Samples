@@ -6,7 +6,7 @@ namespace Atomic.Entities
     /// A trigger that responds to tag changes (added or removed) on entities of type <typeparamref name="E"/>.
     /// </summary>
     /// <typeparam name="E">The entity type, which must implement <see cref="IEntity"/>.</typeparam>
-    public class TagEntityTrigger<E> : IEntityTrigger<E> where E : IEntity
+    public class TagEntityTracker<E> : IEntityTracker<E> where E : IEntity
     {
         private Action<E> _action;
         
@@ -14,11 +14,11 @@ namespace Atomic.Entities
         private readonly bool _deleted;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TagEntityTrigger{E}"/> class.
+        /// Initializes a new instance of the <see cref="TagEntityTracker{E}"/> class.
         /// </summary>
         /// <param name="added">Whether to react to tag additions via <c>OnTagAdded</c>.</param>
         /// <param name="deleted">Whether to react to tag removals via <c>OnTagDeleted</c>.</param>
-        public TagEntityTrigger(bool added = true, bool deleted = true)
+        public TagEntityTracker(bool added = true, bool deleted = true)
         {
             _added = added;
             _deleted = deleted;
@@ -28,7 +28,7 @@ namespace Atomic.Entities
         /// Sets the action to be invoked when the trigger detects a relevant change in the entity.
         /// </summary>
         /// <param name="action">The callback action to invoke.</param>
-        public void SetAction(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
+        public void SetTrigger(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
 
         /// <summary>
         /// Subscribes to the tag-related events on the given entity.

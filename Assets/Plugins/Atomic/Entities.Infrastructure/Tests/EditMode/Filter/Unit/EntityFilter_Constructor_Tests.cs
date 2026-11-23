@@ -32,8 +32,8 @@ namespace Atomic.Entities
         {
             // Arrange
             var source = new EntityCollection();
-            var trigger1 = new EntityTriggerTestDouble();
-            var trigger2 = new EntityTriggerTestDouble();
+            var trigger1 = new EntityTrackerTestDouble();
+            var trigger2 = new EntityTrackerTestDouble();
 
             // Act
             var filter = new EntityFilter(source, e => true, trigger1, trigger2);

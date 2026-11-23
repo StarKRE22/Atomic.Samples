@@ -18,9 +18,9 @@ namespace Atomic.Entities.Tests
     }
 
     /// <summary>
-    /// Test double for <see cref="IEntityTrigger{T}"/> that records all calls.
+    /// Test double for <see cref="IEntityTracker{E}"/> that records all calls.
     /// </summary>
-    internal sealed class TestTrigger : IEntityTrigger<Entity>
+    internal sealed class TestTracker : IEntityTracker<Entity>
     {
         public Action<Entity> CapturedAction { get; private set; }
         public bool SetActionCalled { get; private set; }
@@ -70,7 +70,7 @@ namespace Atomic.Entities.Tests
             IEntityCollection<Entity> source,
             Settings settings,
             Func<Entity, EntityUpdatePriority> priorityFunc,
-            params IEntityTrigger<Entity>[] triggers
+            params IEntityTracker<Entity>[] triggers
         ) : base(source, settings, triggers)
         {
             MutableSource = source;
@@ -153,7 +153,7 @@ namespace Atomic.Entities.Tests
             float cooldown = 0.25f,
             int batchSize = 1000,
             Func<Entity, EntityUpdatePriority> priorityFunc = null,
-            params IEntityTrigger<Entity>[] triggers)
+            params IEntityTracker<Entity>[] triggers)
         {
             var settings = CreateSettings(highPercent, midPercent, cooldown, batchSize);
             return new TestPrioritySystem(collection, settings, priorityFunc ?? DefaultPriorityFunc, triggers);
@@ -193,7 +193,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var collection = new EntityCollection<Entity>();
             var settings = CreateSettings();
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
 
             //Act:
             var system = new TestPrioritySystem(collection, settings, DefaultPriorityFunc, trigger);
@@ -253,7 +253,7 @@ namespace Atomic.Entities.Tests
         {
             //Arrange:
             var collection = new EntityCollection<Entity>();
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
 
             //Act:
@@ -270,7 +270,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { entity });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
 
             //Act:
@@ -340,7 +340,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { entity });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -724,7 +724,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var high = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { high });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -747,7 +747,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var high = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { high });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
             Warmup(system);
@@ -768,7 +768,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>();
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
             Warmup(system);
@@ -788,7 +788,7 @@ namespace Atomic.Entities.Tests
             //Arrange: entity in High, will be changed to Low during Update callback
             var high = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { high });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger, batchSize: 1000);
             system.Enable();
             Warmup(system);
@@ -815,7 +815,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { entity });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -970,7 +970,7 @@ namespace Atomic.Entities.Tests
             var high1 = CreateEntity(PriorityTag.High);
             var high2 = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { high1, high2 });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger, batchSize: 1000);
             system.Enable();
             Warmup(system);
@@ -1088,7 +1088,7 @@ namespace Atomic.Entities.Tests
         {
             //Arrange:
             var collection = new EntityCollection<Entity>();
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -1108,7 +1108,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { entity });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -1126,7 +1126,7 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var entity = CreateEntity(PriorityTag.High);
             var collection = new EntityCollection<Entity>(new[] { entity });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var settings = CreateSettings(cooldown: 0.01f);
             var system = new TestPrioritySystem(collection, settings, DefaultPriorityFunc, trigger);
             system.Enable();
@@ -1152,7 +1152,7 @@ namespace Atomic.Entities.Tests
             var high = CreateEntity(PriorityTag.High);
             var mid = CreateEntity(PriorityTag.Medium);
             var collection = new EntityCollection<Entity>(new[] { high, mid });
-            var trigger = new TestTrigger();
+            var trigger = new TestTracker();
             var system = CreateSystem(collection, triggers: trigger);
             system.Enable();
 
@@ -1614,8 +1614,8 @@ namespace Atomic.Entities.Tests
             //Arrange:
             var collection = new EntityCollection<Entity>();
             var settings = CreateSettings();
-            var trigger1 = new TestTrigger();
-            var trigger2 = new TestTrigger();
+            var trigger1 = new TestTracker();
+            var trigger2 = new TestTracker();
 
             //Act:
             var system = new TestPrioritySystem(collection, settings, DefaultPriorityFunc, trigger1, trigger2);

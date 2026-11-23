@@ -10,7 +10,7 @@ namespace Atomic.Entities
     /// </summary>
     /// <typeparam name="E">The type of entity implementing <see cref="IEntity"/>.</typeparam>
     /// <typeparam name="S">The type of subscription.</typeparam>
-    public abstract class SubscriptionEntityTrigger<E, S> : IEntityTrigger<E>
+    public abstract class SubscriptionEntityTracker<E, S> : IEntityTracker<E>
         where E : IEntity
         where S : IDisposable
     {
@@ -25,7 +25,7 @@ namespace Atomic.Entities
         /// Sets the action to be invoked when the trigger detects a relevant change in the entity.
         /// </summary>
         /// <param name="action">The callback action to invoke.</param>
-        public void SetAction(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
+        public void SetTrigger(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
 
         /// <summary>
         /// Starts tracking the specified entity.

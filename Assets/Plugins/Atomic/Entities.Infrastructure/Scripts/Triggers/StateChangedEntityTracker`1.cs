@@ -6,7 +6,7 @@ namespace Atomic.Entities
     /// A trigger that responds to state changes on entities of type <typeparamref name="E"/>.
     /// </summary>
     /// <typeparam name="E">The entity type, which must implement <see cref="IEntity"/>.</typeparam>
-    public class StateChangedEntityTrigger<E> : IEntityTrigger<E> where E : IEntity
+    public class StateChangedEntityTracker<E> : IEntityTracker<E> where E : IEntity
     {
         private Action<E> _action;
         
@@ -14,7 +14,7 @@ namespace Atomic.Entities
         /// Sets the action to be invoked when the trigger detects a relevant change in the entity.
         /// </summary>
         /// <param name="action">The callback action to invoke.</param>
-        public void SetAction(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
+        public void SetTrigger(Action<E> action) => _action = action ?? throw new ArgumentNullException(nameof(action));
 
         /// <summary>
         /// Subscribes to the state change event on the given entity.

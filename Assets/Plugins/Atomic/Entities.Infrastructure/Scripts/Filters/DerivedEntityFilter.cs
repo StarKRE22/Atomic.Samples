@@ -35,13 +35,13 @@ namespace Atomic.Entities
     /// </example>
     /// <seealso cref="DerivedEntityFilter{E,B}"/>
     /// <seealso cref="IEntity"/>
-    /// <seealso cref="IEntityTrigger{TEntity}"/>
+    /// <seealso cref="IEntityTracker{E}"/>
     public class DerivedEntityFilter<T> : DerivedEntityFilter<T, IEntity> where T : IEntity
     {
         public DerivedEntityFilter(
             IReadOnlyEntityCollection<IEntity> source,
             Predicate<T> predicate,
-            params IEntityTrigger<T>[] triggers
+            params IEntityTracker<T>[] triggers
         ) : base(source, predicate, triggers)
         {
         }

@@ -4,7 +4,7 @@ using Atomic.Entities;
 
 namespace RTSGame
 {
-    public sealed class TeamEntityTrigger : SubscriptionEntityTrigger<IGameEntity, Subscription<TeamType>>
+    public sealed class TeamEntityTracker : SubscriptionEntityTracker<IGameEntity, Subscription<TeamType>>
     {
         protected override Subscription<TeamType> Track(IGameEntity entity, Action<IGameEntity> callback)
         {

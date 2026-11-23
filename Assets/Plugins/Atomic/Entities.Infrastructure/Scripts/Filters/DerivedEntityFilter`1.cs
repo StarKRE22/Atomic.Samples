@@ -22,11 +22,11 @@ namespace Atomic.Entities
     /// <para>
     /// The filter automatically synchronizes its internal state whenever entities are
     /// added to or removed from the source, or when tracked entities trigger state changes
-    /// via <see cref="IEntityTrigger{TEntity}"/>.
+    /// via <see cref="IEntityTracker{E}"/>.
     /// </para>
     /// </remarks>
     /// <seealso cref="IReadOnlyEntityCollection{TEntity}"/>
-    /// <seealso cref="IEntityTrigger{TEntity}"/>
+    /// <seealso cref="IEntityTracker{E}"/>
     /// <seealso cref="EntityCollection{TEntity}"/>
     public class DerivedEntityFilter<T, E> : IReadOnlyEntityCollection<T>, IDisposable
         where E : IEntity
@@ -50,7 +50,7 @@ namespace Atomic.Entities
         private readonly EntityCollection<T> state;
         private readonly IReadOnlyEntityCollection<E> source;
         private readonly Predicate<T> predicate;
-        private readonly IEntityTrigger<T>[] triggers;
+        private readonly IEntityTracker<T>[] triggers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter{E}"/> class.
@@ -62,7 +62,7 @@ namespace Atomic.Entities
         public DerivedEntityFilter(
             IReadOnlyEntityCollection<E> source,
             Predicate<T> predicate,
-            params IEntityTrigger<T>[] triggers
+            params IEntityTracker<T>[] triggers
         )
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
@@ -71,7 +71,7 @@ namespace Atomic.Entities
             this.triggers = triggers;
 
             for (int i = 0, count = triggers.Length; i < count; i++)
-                triggers[i].SetAction(this.Synchronize);
+                triggers[i].SetTrigger(this.Synchronize);
 
             this.source.OnAdded += this.Observe;
             this.source.OnRemoved += this.Unobserve;

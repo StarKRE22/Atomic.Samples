@@ -7,7 +7,7 @@ namespace Atomic.Entities
     /// It listens for value additions, removals, and modifications using corresponding entity events.
     /// </summary>
     /// <typeparam name="E">The type of entity to track, constrained to <see cref="IEntity"/>.</typeparam>
-    public class ValueEntityTrigger<E> : IEntityTrigger<E> where E : IEntity
+    public class ValueEntityTracker<E> : IEntityTracker<E> where E : IEntity
     {
         private Action<E> _action;
         
@@ -16,13 +16,13 @@ namespace Atomic.Entities
         private readonly bool _changed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValueEntityTrigger{E}"/> class
+        /// Initializes a new instance of the <see cref="ValueEntityTracker{E}"/> class
         /// with configurable listening behavior for value events.
         /// </summary>
         /// <param name="added">Whether to react to value additions via <c>OnValueAdded</c>.</param>
         /// <param name="deleted">Whether to react to value removals via <c>OnValueDeleted</c>.</param>
         /// <param name="changed">Whether to react to value changes via <c>OnValueChanged</c>.</param>
-        public ValueEntityTrigger(bool added = true, bool deleted = true, bool changed = true)
+        public ValueEntityTracker(bool added = true, bool deleted = true, bool changed = true)
         {
             _added = added;
             _deleted = deleted;
@@ -33,7 +33,7 @@ namespace Atomic.Entities
         /// Sets the action to be invoked when the trigger detects a relevant change in the entity.
         /// </summary>
         /// <param name="action">The callback action to invoke.</param>
-        public void SetAction(Action<E> action)
+        public void SetTrigger(Action<E> action)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
         }

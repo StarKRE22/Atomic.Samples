@@ -5,19 +5,19 @@ namespace Atomic.Entities
 {
     public readonly struct GizmosSubscription : IDisposable
     {
-        private readonly IGizmosSource _source;
+        private readonly IGizmosObservable observable;
         private readonly Action _callback;
 
-        public GizmosSubscription(IGizmosSource source, Action callback)
+        public GizmosSubscription(IGizmosObservable observable, Action callback)
         {
-            _source = source ?? throw new ArgumentNullException(nameof(source));
+            this.observable = observable ?? throw new ArgumentNullException(nameof(observable));
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
-            _source.OnGizmosDraw += _callback;
+            this.observable.OnGizmosDraw += _callback;
         }
 
         public void Dispose()
         {
-            _source.OnGizmosDraw -= _callback;
+            observable.OnGizmosDraw -= _callback;
         }
     }
 }

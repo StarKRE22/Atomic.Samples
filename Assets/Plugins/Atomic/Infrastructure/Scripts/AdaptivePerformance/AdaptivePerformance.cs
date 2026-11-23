@@ -3,19 +3,19 @@ using UnityEngine;
 namespace Atomic.Infrastructure
 {
     [DefaultExecutionOrder(-10000)]
-    public sealed class AdaptivePerformanceSource : MonoBehaviour
+    public sealed class AdaptivePerformance : MonoBehaviour
     {
-        private static AdaptivePerformanceSource _instance;
+        private static AdaptivePerformance _instance;
 
-        public static AdaptivePerformanceSource Instance
+        public static AdaptivePerformance Instance
         {
             get
             {
                 if (_instance != null)
                     return _instance;
 
-                GameObject go = new GameObject(nameof(AdaptivePerformanceSource));
-                _instance = go.AddComponent<AdaptivePerformanceSource>();
+                GameObject go = new GameObject(nameof(AdaptivePerformance));
+                _instance = go.AddComponent<AdaptivePerformance>();
 
                 DontDestroyOnLoad(go);
                 go.hideFlags = HideFlags.HideInHierarchy;

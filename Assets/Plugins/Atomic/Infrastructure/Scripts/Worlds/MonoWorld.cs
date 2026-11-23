@@ -155,14 +155,6 @@ namespace Atomic.Infrastructure
         }
 
         public int Count => Inner.Count;
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            this.Inner.CopyTo(array, arrayIndex);
-        }
-
-
-        
         
         /// <inheritdoc />
         public bool IsReadOnly => Inner.IsReadOnly;

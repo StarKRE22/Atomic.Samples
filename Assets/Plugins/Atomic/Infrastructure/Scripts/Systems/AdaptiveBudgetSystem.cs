@@ -9,7 +9,7 @@ namespace Atomic.Infrastructure
         
         private readonly IBudgetSystem _system;
         private readonly IBudgetStrategy _strategy;
-        private AdaptivePerformanceSource _performance;
+        private AdaptivePerformance _performance;
 
         private float _elapsed;
 
@@ -30,7 +30,7 @@ namespace Atomic.Infrastructure
 
         public void Enable()
         {
-            _performance = AdaptivePerformanceSource.Instance;
+            _performance = AdaptivePerformance.Instance;
             _system.Enable();
         }
 

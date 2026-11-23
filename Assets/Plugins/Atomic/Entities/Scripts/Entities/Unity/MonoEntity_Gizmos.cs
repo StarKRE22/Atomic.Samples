@@ -9,7 +9,7 @@ namespace Atomic.Entities
     /// Provides gizmo drawing functionality for the <see cref="MonoEntity"/> component,
     /// allowing visual debugging in both play mode and edit mode.
     /// </summary>
-    public partial class MonoEntity : IGizmosSource
+    public partial class MonoEntity : IGizmosObservable
     {
         public event Action OnGizmosDraw;
         

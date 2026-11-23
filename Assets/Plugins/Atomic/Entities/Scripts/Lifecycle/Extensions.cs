@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Atomic.Entities
@@ -10,95 +9,91 @@ namespace Atomic.Entities
     public static partial class Extensions
     {
         /// <summary>
-        /// Subscribes to the <see cref="IInitSource.OnInitialized"/> event.
+        /// Subscribes to the <see cref="IInitLifecycle.OnInitialized"/> event.
         /// </summary>
-        /// <param name="source">The spawnable object.</param>
+        /// <param name="lifecycle">The spawnable object.</param>
         /// <param name="action">The action to invoke on spawn.</param>
         /// <returns>A disposable <see cref="InitSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static InitSubscription WhenInit(this IInitSource source, Action action) =>
-            new(source, action);
+        public static InitSubscription WhenInit(this IInitLifecycle lifecycle, Action action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="IInitSource.OnDisposed"/> event.
+        /// Subscribes to the <see cref="IInitLifecycle.OnDisposed"/> event.
         /// </summary>
-        /// <param name="source">The spawnable object.</param>
+        /// <param name="lifecycle">The spawnable object.</param>
         /// <param name="action">The action to invoke on despawn.</param>
         /// <returns>A disposable <see cref="DisposeSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DisposeSubscription WhenDispose(this IInitSource source, Action action) =>
-            new(source, action);
+        public static DisposeSubscription WhenDispose(this IInitLifecycle lifecycle, Action action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="IEnableSource.OnEnabled"/> event.
+        /// Subscribes to the <see cref="IEnableLifecycle.OnEnabled"/> event.
         /// </summary>
-        /// <param name="source">The activatable object.</param>
+        /// <param name="lifecycle">The activatable object.</param>
         /// <param name="action">The action to invoke when enabled.</param>
         /// <returns>A disposable <see cref="EnableSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EnableSubscription WhenEnable(this IEnableSource source, Action action) =>
-            new(source, action);
+        public static EnableSubscription WhenEnable(this IEnableLifecycle lifecycle, Action action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="IEnableSource.OnDisables"/> event.
+        /// Subscribes to the <see cref="IEnableLifecycle.OnDisables"/> event.
         /// </summary>
-        /// <param name="source">The activatable object.</param>
+        /// <param name="lifecycle">The activatable object.</param>
         /// <param name="action">The action to invoke when disabled.</param>
         /// <returns>A disposable <see cref="DisableSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static DisableSubscription WhenDisable(this IEnableSource source, Action action) =>
-            new(source, action);
+        public static DisableSubscription WhenDisable(this IEnableLifecycle lifecycle, Action action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="ITickSource.OnTicked"/> event.
+        /// Subscribes to the <see cref="ITickLifecycle.OnTicked"/> event.
         /// </summary>
-        /// <param name="source">The updatable object.</param>
+        /// <param name="lifecycle">The updatable object.</param>
         /// <param name="action">The action to invoke each frame update.</param>
         /// <returns>A disposable <see cref="TickSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TickSubscription WhenTick(this ITickSource source, Action<float> action) =>
-            new(source, action);
+        public static TickSubscription WhenTick(this ITickLifecycle lifecycle, Action<float> action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="ITickSource.OnFixedTicked"/> event.
+        /// Subscribes to the <see cref="ITickLifecycle.OnFixedTicked"/> event.
         /// </summary>
-        /// <param name="source">The updatable object.</param>
+        /// <param name="lifecycle">The updatable object.</param>
         /// <param name="action">The action to invoke each fixed update frame.</param>
         /// <returns>A disposable <see cref="FixedTickSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static FixedTickSubscription WhenFixedTick(this ITickSource source, Action<float> action) =>
-            new(source, action);
+        public static FixedTickSubscription WhenFixedTick(this ITickLifecycle lifecycle, Action<float> action) =>
+            new(lifecycle, action);
 
         /// <summary>
-        /// Subscribes to the <see cref="ITickSource.OnLateTicked"/> event.
+        /// Subscribes to the <see cref="ITickLifecycle.OnLateTicked"/> event.
         /// </summary>
-        /// <param name="source">The updatable object.</param>
+        /// <param name="lifecycle">The updatable object.</param>
         /// <param name="action">The action to invoke each late update frame.</param>
         /// <returns>A disposable <see cref="LateTickSubscription"/> that unsubscribes when disposed.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static LateTickSubscription WhenLateTick(this ITickSource source, Action<float> action) =>
-            new(source, action);
+        public static LateTickSubscription WhenLateTick(this ITickLifecycle lifecycle, Action<float> action) =>
+            new(lifecycle, action);
 
 #if UNITY_EDITOR
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void WhenGizmos(this IGizmosSource source, Action action) => source.OnGizmosDraw += action;
-        
+        public static void WhenGizmos(this IGizmosObservable observable, Action action) =>
+            observable.OnGizmosDraw += action;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void AddGizmosBehaviour(this IEntity source, Action action) => source.AddBehaviour(new GizmosBehaviour(action));
+        public static void AddGizmosBehaviour(this IEntity source, Action action) =>
+            source.AddBehaviour(new GizmosBehaviour(action));
 
         private sealed class GizmosBehaviour : IEntityGizmos
         {
             private readonly Action _action;
 
-            public GizmosBehaviour(Action action)
-            {
-                _action = action;
-            }
+            public GizmosBehaviour(Action action) => _action = action;
 
-            void IEntityGizmos.DrawGizmos(IEntity entity)
-            {
-                _action.Invoke();
-            }
+            void IEntityGizmos.DrawGizmos(IEntity entity) => _action.Invoke();
         }
 #endif
     }

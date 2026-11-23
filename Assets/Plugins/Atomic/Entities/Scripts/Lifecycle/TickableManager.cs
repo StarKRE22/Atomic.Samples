@@ -10,12 +10,12 @@ namespace Atomic.Entities
     [DisallowMultipleComponent]
     internal sealed class TickableManager : MonoBehaviour
     {
-        private static readonly IEqualityComparer<ITickSource> s_comparer = EqualityComparer<ITickSource>.Default;
+        private static readonly IEqualityComparer<ITickLifecycle> s_comparer = EqualityComparer<ITickLifecycle>.Default;
 
         private static TickableManager _instance;
         private static bool _spawned;
 
-        internal ITickSource[] _sources;
+        internal ITickLifecycle[] _sources;
         private int _count;
 
         internal static TickableManager Instance
@@ -32,9 +32,9 @@ namespace Atomic.Entities
             }
         }
 
-        internal void Register(ITickSource tickSource)
+        internal void Register(ITickLifecycle tickLifecycle)
         {
-            if (tickSource == null)
+            if (tickLifecycle == null)
                 return;
 
 #if UNITY_EDITOR
@@ -42,17 +42,17 @@ namespace Atomic.Entities
                 return;
 #endif
             TickableManager instance = Instance;
-            AddIfAbsent(ref instance._sources, ref instance._count, tickSource, s_comparer);
+            AddIfAbsent(ref instance._sources, ref instance._count, tickLifecycle, s_comparer);
         }
 
-        internal void Unregister(ITickSource tickSource)
+        internal void Unregister(ITickLifecycle tickLifecycle)
         {
 #if UNITY_EDITOR
             if (!EditorApplication.isPlaying)
                 return;
 #endif
             TickableManager instance = Instance;
-            Remove(ref instance._sources, ref instance._count, tickSource, s_comparer);
+            Remove(ref instance._sources, ref instance._count, tickLifecycle, s_comparer);
         }
 
         private void Update()

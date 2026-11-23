@@ -17,8 +17,8 @@ namespace Atomic.Infrastructure
         where TModel : class
         where TView : View<TModel>
     {
-        private static readonly ProfilerMarker s_removeMarker = new($"ViewCollection<{typeof(TModel).Name}>.Remove");
-        private static readonly ProfilerMarker s_addMarker = new($"ViewCollection<{typeof(TModel).Name}>.Add");
+        private static readonly ProfilerMarker s_removeMarker = new($"ViewStore<{typeof(TModel).Name}>.Remove");
+        private static readonly ProfilerMarker s_addMarker = new($"ViewStore<{typeof(TModel).Name}>.Add");
 
         private static readonly ArrayPool<TModel> s_arrayPool = ArrayPool<TModel>.Shared;
 

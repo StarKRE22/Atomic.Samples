@@ -3,7 +3,7 @@ using System;
 
 namespace Atomic.Entities
 {
-    public interface IGizmosSource
+    public interface IGizmosObservable
     {
         event Action OnGizmosDraw;
     }

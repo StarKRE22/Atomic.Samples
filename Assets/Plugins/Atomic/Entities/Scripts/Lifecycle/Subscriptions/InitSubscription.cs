@@ -3,10 +3,10 @@ using System;
 namespace Atomic.Entities
 {
     /// <summary>
-    /// Represents a disposable subscription to an <see cref="IInitSource"/>'s <see cref="IInitSource.OnInitialized"/> event.
+    /// Represents a disposable subscription to an <see cref="IInitLifecycle"/>'s <see cref="IInitLifecycle.OnInitialized"/> event.
     /// </summary>
     /// <remarks>
-    /// This struct allows temporarily reacting to initialization events of an <see cref="IInitSource"/> instance.
+    /// This struct allows temporarily reacting to initialization events of an <see cref="IInitLifecycle"/> instance.
     /// When the subscription is disposed, it automatically unsubscribes the callback, preventing memory leaks 
     /// or unintended repeated invocations.
     /// 
@@ -15,31 +15,31 @@ namespace Atomic.Entities
     /// </remarks>
     public readonly struct InitSubscription : IDisposable
     {
-        private readonly IInitSource _source;
+        private readonly IInitLifecycle lifecycle;
         private readonly Action _callback;
 
         /// <summary>
         /// Initializes a new <see cref="InitSubscription"/> instance.
-        /// Subscribes the specified callback to the <see cref="IInitSource.OnInitialized"/> event of the provided source.
+        /// Subscribes the specified callback to the <see cref="IInitLifecycle.OnInitialized"/> event of the provided source.
         /// </summary>
-        /// <param name="source">The <see cref="IInitSource"/> instance to subscribe to.</param>
+        /// <param name="lifecycle">The <see cref="IInitLifecycle"/> instance to subscribe to.</param>
         /// <param name="callback">The callback action to invoke when the source is initialized.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="callback"/> is <c>null</c>.</exception>
-        public InitSubscription(IInitSource source, Action callback)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="lifecycle"/> or <paramref name="callback"/> is <c>null</c>.</exception>
+        public InitSubscription(IInitLifecycle lifecycle, Action callback)
         {
-            _source = source ?? throw new ArgumentNullException(nameof(source));
+            this.lifecycle = lifecycle ?? throw new ArgumentNullException(nameof(lifecycle));
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
-            _source.OnInitialized += _callback;
+            this.lifecycle.OnInitialized += _callback;
         }
 
         /// <summary>
-        /// Unsubscribes the callback from the <see cref="IInitSource.OnInitialized"/> event.
+        /// Unsubscribes the callback from the <see cref="IInitLifecycle.OnInitialized"/> event.
         /// Calling this method ensures the callback will no longer be invoked.
         /// Safe to call multiple times.
         /// </summary>
         public void Dispose()
         {
-            _source.OnInitialized -= _callback;
+            lifecycle.OnInitialized -= _callback;
         }
     }
 }

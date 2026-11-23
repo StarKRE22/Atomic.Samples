@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Entities
 {
-    public partial class MonoEntityBaker<TEntity, TArgs>
+    public partial class MonoEntityBaker<E, TArgs>
     {
         [Header("Gizmos")]
 #if ODIN_INSPECTOR

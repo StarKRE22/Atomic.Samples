@@ -12,7 +12,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Entities
 {
-    public partial class MonoEntityBaker<TEntity, TArgs>
+    public partial class MonoEntityBaker<E, TArgs>
     {
         [Header("Editor")]
 #if ODIN_INSPECTOR
@@ -70,7 +70,7 @@ namespace Atomic.Entities
                 
                 if (_previewEntity == null)
                 {
-                    Debug.LogWarning($"{nameof(MonoEntityBaker<TEntity, TArgs>)}: Create() returned null.",
+                    Debug.LogWarning($"{nameof(MonoEntityBaker<E, TArgs>)}: Create() returned null.",
                         this);
                 }
                 else

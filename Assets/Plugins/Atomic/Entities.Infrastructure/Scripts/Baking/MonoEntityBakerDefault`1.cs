@@ -26,7 +26,7 @@ namespace Atomic.Entities
     /// assigned <see cref="EntityViewPool{E, V}"/> for reuse.
     /// </remarks>
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Baking/MonoEntityBakerOptimized%602.md")]
-    public abstract class MonoEntityBakerOptimized<TKey, TEntity, TView, TArgs> : MonoEntityBaker<TEntity, TArgs>
+    public abstract class MonoEntityBakerDefault<TKey, TEntity, TView, TArgs> : MonoEntityBaker<TEntity, TArgs>
         where TEntity : class, IEntity
         where TView : EntityView<TEntity>
         where TArgs : IArgs
@@ -79,7 +79,9 @@ namespace Atomic.Entities
         /// </summary>
         protected override void Release()
         {
-            EntityWorldViewSingleton<TKey, TEntity, TView>.Instance.Pool.Return(_view);
+            var worldView = EntityWorldViewSingleton<TKey, TEntity, TView>.Instance;
+            var viewPool = worldView.Pool;
+            viewPool.Return(_view);
             Destroy(this);
         }
     }

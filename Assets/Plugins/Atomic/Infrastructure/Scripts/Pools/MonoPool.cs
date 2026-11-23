@@ -4,28 +4,15 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
 
-namespace Atomic.Entities
+namespace Atomic.Infrastructure
 {
-    /// <summary>
-    /// A Unity MonoBehaviour-based entity pool for scene-bound entities of type <typeparamref name="E"/>.
-    /// </summary>
-    /// <typeparam name="E">The type of entity managed by this pool. Must inherit from <see cref="MonoEntity"/>.</typeparam>
-    /// <typeparam name="P">The concrete prefab type used to instantiate entities. Must inherit from <see cref="MonoEntity"/> and implement <typeparamref name="E"/>.</typeparam>
-    /// <remarks>
-    /// This pool uses a prefab to instantiate entities and manages their reuse via a stack.
-    /// Entities are activated/deactivated on rent/return, and can be preloaded using <see cref="Init(int)"/>.
-    /// </remarks>
-    //TODO: Add Strategies FixedPool
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Pooling/MonoEntityPool%601.md")]
-    public abstract class MonoEntityPool<E, P> : MonoBehaviour, IEntityPool<E>
-        where E : IEntity
-        where P : MonoEntity, E
+    public abstract class MonoPool<T, U> : MonoBehaviour, IPool<T> where U : Component, T
     {
 #if ODIN_INSPECTOR
         [GUIColor(0f, 0.83f, 1f)]
@@ -51,7 +38,7 @@ namespace Atomic.Entities
         [Space]
         [SerializeField]
         [Tooltip("The prefab used to create pooled entity instances.")]
-        private P _prefab;
+        private U _prefab;
 
         [SerializeField]
         [Tooltip("Optional container transform under which pooled entities are parented. Defaults to this GameObject.")]
@@ -73,13 +60,13 @@ namespace Atomic.Entities
         [FoldoutGroup("Debug")]
         [ShowInInspector, ReadOnly, HideInEditorMode]
 #endif
-        internal readonly Stack<P> _pooledEntities = new();
+        internal readonly Stack<U> _pooledEntities = new();
 
 #if ODIN_INSPECTOR
         [FoldoutGroup("Debug")]
         [ShowInInspector, ReadOnly, HideInEditorMode]
 #endif
-        internal readonly HashSet<P> _rentEntities = new();
+        internal readonly HashSet<U> _rentEntities = new();
 
         /// <summary>
         /// Initializes the pool when the GameObject is activated, if <see cref="_initOnAwake"/> is <c>true</c>.
@@ -110,7 +97,7 @@ namespace Atomic.Entities
             for (int i = 0; i < initialCount; i++)
                 _pooledEntities.Push(this.CreateEntity());
         }
-        
+
         public async ValueTask InitAsync(int initialCount)
         {
             if (_prefab == null)
@@ -122,23 +109,24 @@ namespace Atomic.Entities
             if (initialCount <= 0)
                 return;
 
-            P[] entities = await MonoEntity.CreateAsync(_prefab, initialCount, _container);
-            foreach (P entity in entities)
+            U[] entities = await this.CreateAsync(_prefab, initialCount, _container);
+            foreach (U entity in entities)
             {
                 this.OnCreate(entity);
                 _pooledEntities.Push(entity);
             }
         }
 
+
         /// <summary>
-        /// Rents (activates) an entity from the pool. If the pool is empty, expansion behavior
+        /// Rents (activates) an entity from the pool. If the pool is empty, expansion behaviour
         /// depends on <see cref="_expandMode"/>.
         /// </summary>
         /// <returns>The rented entity.</returns>
         /// <exception cref="InvalidOperationException">Thrown when <see cref="ExpandMode.NoExpand"/> is set and the pool is empty.</exception>
-        public E Rent()
+        public T Rent()
         {
-            if (!_pooledEntities.TryPop(out P entity))
+            if (!_pooledEntities.TryPop(out U entity))
                 entity = this.Expand();
 
             _rentEntities.Add(entity);
@@ -146,19 +134,19 @@ namespace Atomic.Entities
             return entity;
         }
 
-        private P Expand()
+        private U Expand()
         {
             switch (_expandMode)
             {
                 case ExpandMode.NoExpand:
                     throw new InvalidOperationException(
-                        $"[EntityPool] Pool '{name}' is empty and ExpandMode is NoExpand. " +
-                        $"Pre-instantiate more entities via Init() or switch to ExpandByOne/ExpandByDoubling.");
+                        $"[Pool] Pool '{name}' is empty and ExpandMode is NoExpand. " +
+                        "Pre-instantiate more entities via Init() or switch to ExpandByOne/ExpandByDoubling.");
 
                 case ExpandMode.ExpandByDoubling:
                     int count = _rentEntities.Count > 0 ? _rentEntities.Count : 1;
                     this.CreateEntities(count);
-                    _pooledEntities.TryPop(out P doubled);
+                    _pooledEntities.TryPop(out U doubled);
                     return doubled;
 
                 case ExpandMode.ExpandByOne:
@@ -171,7 +159,7 @@ namespace Atomic.Entities
         {
             for (int i = 0; i < count; i++)
             {
-                P entity = this.CreateEntity();
+                U entity = this.CreateEntity();
                 _pooledEntities.Push(entity);
             }
         }
@@ -180,9 +168,9 @@ namespace Atomic.Entities
         /// Returns (deactivates) an entity to the pool.
         /// </summary>
         /// <param name="entity">The entity to return. Must have been previously rented.</param>
-        public void Return(E entity)
+        public void Return(T entity)
         {
-            P sceneEntity = MonoEntity.Cast<P>(entity);
+            U sceneEntity = this.Cast(entity);
             if (_rentEntities.Remove(sceneEntity) || _acceptExternalReturns)
             {
                 this.OnReturn(sceneEntity);
@@ -194,21 +182,22 @@ namespace Atomic.Entities
             }
         }
 
+
         /// <summary>
         /// Disposes all pooled and rent entities by destroying them and clearing the internal pool.
         /// </summary>
         public virtual void Dispose()
         {
-            foreach (P entity in _pooledEntities)
+            foreach (U entity in _pooledEntities)
             {
                 this.OnDispose(entity);
-                MonoEntity.Destroy(entity);
+                this.Destroy(entity);
             }
 
-            foreach (P entity in _rentEntities)
+            foreach (U entity in _rentEntities)
             {
                 this.OnDispose(entity);
-                MonoEntity.Destroy(entity);
+                this.Destroy(entity);
             }
 
             _pooledEntities.Clear();
@@ -219,14 +208,14 @@ namespace Atomic.Entities
         /// Called when a new entity instance is created.
         /// </summary>
         /// <param name="entity">The newly created entity.</param>
-        protected virtual void OnCreate(P entity) =>
+        protected virtual void OnCreate(U entity) =>
             entity.gameObject.SetActive(false);
 
         /// <summary>
         /// Called when a pooled entity is being permanently destroyed during disposal.
         /// </summary>
         /// <param name="entity">The entity being destroyed.</param>
-        protected virtual void OnDispose(P entity)
+        protected virtual void OnDispose(U entity)
         {
         }
 
@@ -234,26 +223,36 @@ namespace Atomic.Entities
         /// Called when an entity is rented from the pool.
         /// </summary>
         /// <param name="entity">The entity being rented.</param>
-        protected virtual void OnRent(P entity) =>
+        protected virtual void OnRent(U entity) =>
             entity.gameObject.SetActive(true);
 
         /// <summary>
         /// Called when an entity is returned to the pool.
         /// </summary>
         /// <param name="entity">The entity being returned.</param>
-        protected virtual void OnReturn(P entity)
+        protected virtual void OnReturn(U entity)
         {
             entity.gameObject.SetActive(false);
             entity.transform.SetParent(_container);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private P CreateEntity()
+        private U CreateEntity()
         {
-            P entity = MonoEntity.Create(_prefab, _container);
+            U entity = this.Create(_prefab, _container);
             this.OnCreate(entity);
             return entity;
         }
+
+        protected virtual U Create(U prefab, Transform container) => Instantiate(prefab, container);
+
+        protected virtual async ValueTask<U[]> CreateAsync(U prefab, int count, Transform container) =>
+            await InstantiateAsync(prefab, count, container);
+        
+        protected virtual U Cast(T entity) => (U) entity;
+
+        protected virtual void Destroy(U entity) => GameObject.Destroy(entity.gameObject);
+
 
         #region Static
 
@@ -267,7 +266,7 @@ namespace Atomic.Entities
             public string name;
 
             [Tooltip("The prefab used to instantiate pooled entities")]
-            public P prefab;
+            public U prefab;
 
             [Tooltip(
                 "Optional transform under which pooled entities will be parented. Defaults to the pool's GameObject if null")]
@@ -300,7 +299,7 @@ namespace Atomic.Entities
         /// </code>
         /// </example>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TPool Create<TPool>(in CreateArgs args) where TPool : MonoEntityPool<E, P>
+        public static TPool Create<TPool>(in CreateArgs args) where TPool : MonoPool<T, U>
         {
             var gameObject = new GameObject(args.name);
             gameObject.SetActive(false);
@@ -325,7 +324,7 @@ namespace Atomic.Entities
         /// </code>
         /// </example>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(MonoEntityPool<E, P> pool, float t = 0)
+        public static void Destroy(MonoPool<T, U> pool, float t = 0)
         {
             if (pool)
             {

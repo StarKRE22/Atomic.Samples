@@ -2,6 +2,7 @@
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Atomic.Entities

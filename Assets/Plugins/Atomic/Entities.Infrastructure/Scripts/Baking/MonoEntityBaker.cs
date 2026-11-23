@@ -1,4 +1,5 @@
 #if UNITY_5_3_OR_NEWER
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Atomic.Entities

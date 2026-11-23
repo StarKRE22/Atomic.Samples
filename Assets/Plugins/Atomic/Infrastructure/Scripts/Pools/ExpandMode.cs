@@ -1,4 +1,4 @@
-namespace Atomic.Entities
+namespace Atomic.Infrastructure
 {
     /// <summary>
     /// Determines how a pool behaves when it runs out of pre-instantiated entities

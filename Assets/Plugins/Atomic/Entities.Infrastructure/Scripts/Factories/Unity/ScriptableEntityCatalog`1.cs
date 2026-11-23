@@ -1,6 +1,4 @@
 #if UNITY_5_3_OR_NEWER
-using System.Collections;
-using System.Collections.Generic;
 using Atomic.Infrastructure;
 using UnityEngine;
 

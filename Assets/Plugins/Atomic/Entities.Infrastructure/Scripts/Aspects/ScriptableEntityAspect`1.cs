@@ -1,4 +1,5 @@
 #if UNITY_5_3_OR_NEWER
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Atomic.Entities
@@ -12,19 +13,8 @@ namespace Atomic.Entities
     /// logic to apply and discard behaviors or properties on entities.
     /// </remarks>
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Aspects/ScriptableEntityAspect%601.md")]
-    public abstract class ScriptableEntityAspect<E> : ScriptableObject, IEntityAspect<E> where E : IEntity
+    public abstract class ScriptableEntityAspect<E> : ScriptableAspect<E>, IEntityAspect<E> where E : IEntity
     {
-        /// <summary>
-        /// Applies this aspect to the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity to which the aspect should be applied.</param>
-        public abstract void Apply(E entity);
-
-        /// <summary>
-        /// Discards this aspect from the specified entity, reversing any changes made by <see cref="Apply"/>.
-        /// </summary>
-        /// <param name="entity">The entity from which the aspect should be removed.</param>
-        public abstract void Discard(E entity);
     }
 }
 #endif

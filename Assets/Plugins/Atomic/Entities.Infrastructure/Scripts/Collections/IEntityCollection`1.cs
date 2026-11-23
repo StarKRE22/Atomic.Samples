@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -8,7 +9,7 @@ namespace Atomic.Entities
     /// Supports standard collection operations and provides utility methods for working with entity lifecycles.
     /// </summary>
     /// <typeparam name="E">The type of entities stored in the collection. Must implement <see cref="IEntity"/>.</typeparam>
-    public interface IEntityCollection<E> : IReadOnlyEntityCollection<E>, ICollection<E>, IDisposable where E : IEntity
+    public interface IEntityCollection<E> : IObjectCollection<E>, IReadOnlyEntityCollection<E> where E : IEntity
     {
         /// <summary>
         /// Gets the number of entities contained in the collection.

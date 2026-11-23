@@ -1,5 +1,6 @@
 using Atomic.Elements;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -33,7 +34,7 @@ namespace RTSGame
            
             entity.AddTeam(new ReactiveVariable<TeamType>());
             entity.AddBehaviour(new SpatialGridBehaviour(gameContext));
-            entity.AddUpdatePriority(new ReactiveVariable<EntityUpdatePriority>(EntityUpdatePriority.High));
+            entity.AddUpdatePriority(new ReactiveVariable<UpdatePriority>(UpdatePriority.High));
             
             _transformInstaller.Install(entity);
             _unitMoveInstaller.Install(entity);

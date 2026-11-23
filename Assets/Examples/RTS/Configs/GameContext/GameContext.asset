@@ -20,69 +20,10 @@ MonoBehaviour:
   autoCompile: 1
   _gameEntityInstaller:
     _entityCatalog: {fileID: 11400000, guid: 87c990609c5ea4403b71dea5013d73e7, type: 2}
-    _unitPrioritySystem:
-      _settings:
-        frameBudget: 0.003
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-      _highDistance: 200
-      _mediumDistance: 400
-    _attackTargetSystem:
-      _settings:
-        frameBudget: 0.003
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
-    _detectTargetSystem:
-      _settings:
-        frameBudget: 0.003
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
-    _moveUnitSystem:
-      _settings:
-        frameBudget: 0.0015
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
-    _fireUnitsSystem:
-      _settings:
-        frameBudget: 0.0015
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
-    _projectileMoveSystem:
-      _settings:
-        frameBudget: 0.002
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
-    _projectileLifetimeSystem:
-      _settings:
-        frameBudget: 0.002
-        minBatchSize: 1024
-        maxBatchSize: 2048
-        batchScaleDown: 2
-        batchStepUp: 256
-        highPercent: 70
-        midPercent: 20
+    _unitPrioritySettings:
+      highDistance: 200
+      mediumDistance: 400
+    _budgetStrategy: {fileID: 11400000, guid: 6514295b5792b4bc6b14266b7709f90b, type: 2}
     sizeX: 1000
     sizeY: 100
     cellSize: 20

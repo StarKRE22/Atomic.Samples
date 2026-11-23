@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -6,36 +5,32 @@ namespace Atomic.Infrastructure
 {
     public sealed class AdaptiveBudgetSystem : ISystem
     {
-        [Serializable]
-        public sealed class Settings
-        {
-            [Min(0.01f)]
-            public float updateInterval = 0.25f;
-        }
-
+        public const float DEFAULT_INTERVAL = 0.1f;
+        
         private readonly IBudgetSystem _system;
-        private readonly IAdaptiveBudgetStrategy _strategy;
-        private readonly AdaptivePerformanceSource _performance;
-        private readonly Settings _settings;
+        private readonly IBudgetStrategy _strategy;
+        private AdaptivePerformanceSource _performance;
 
         private float _elapsed;
 
         public int Budget => _system.Budget;
 
+        private readonly float _updateInterval;
+
         public AdaptiveBudgetSystem(
             IBudgetSystem system,
-            IAdaptiveBudgetStrategy strategy,
-            Settings settings
+            IBudgetStrategy strategy,
+            float updateInterval = DEFAULT_INTERVAL
         )
         {
             _system = system ?? throw new ArgumentNullException(nameof(system));
             _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _performance = AdaptivePerformanceSource.Instance;
+            _updateInterval = updateInterval;
         }
 
         public void Enable()
         {
+            _performance = AdaptivePerformanceSource.Instance;
             _system.Enable();
         }
 
@@ -48,15 +43,11 @@ namespace Atomic.Infrastructure
         {
             _elapsed += Time.unscaledDeltaTime;
 
-            float interval = Mathf.Max(
-                0.01f,
-                _settings.updateInterval
-            );
+            float interval = Mathf.Max(0.01f, _updateInterval);
 
             if (_elapsed >= interval)
             {
                 _elapsed %= interval;
-
                 if (_performance.HasSample)
                 {
                     AdjustBudget();

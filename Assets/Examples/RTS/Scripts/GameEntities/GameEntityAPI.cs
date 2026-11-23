@@ -2,6 +2,7 @@ using Atomic.Elements;
 using Atomic.Entities;
 using Modules.SpatialStructures;
 using System;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -40,6 +41,6 @@ namespace RTSGame
         public static readonly ValueKey<IGameEntity, IValue<Vector3>> FirePoint = new(nameof(FirePoint));
         public static readonly ValueKey<IGameEntity, IValue<float>> DetectionRadius = new(nameof(DetectionRadius));
         public static readonly ValueKey<IGameEntity, ICooldown> DetectionCooldown = new(nameof(DetectionCooldown));
-        public static readonly ValueKey<IGameEntity, IReactiveVariable<EntityUpdatePriority>> UpdatePriority = new(nameof(UpdatePriority));
+        public static readonly ValueKey<IGameEntity, IReactiveVariable<UpdatePriority>> UpdatePriority = new(nameof(UpdatePriority));
     }
 }

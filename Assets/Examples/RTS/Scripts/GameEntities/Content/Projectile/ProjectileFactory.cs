@@ -1,5 +1,6 @@
 using Atomic.Elements;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -36,7 +37,7 @@ namespace RTSGame
             entity.AddTarget(new ReactiveVariable<IGameEntity>());
             entity.AddTeam(new ReactiveVariable<TeamType>());
             entity.WhenEnable(cooldown.ResetTime);
-            entity.AddUpdatePriority(new ReactiveVariable<EntityUpdatePriority>(EntityUpdatePriority.High));
+            entity.AddUpdatePriority(new ReactiveVariable<UpdatePriority>(UpdatePriority.High));
             
             // entity.AddBehaviour(new ProjectileLifetimeBehaviour(gameContext));
             // entity.AddBehaviour(new ProjectileMoveBehaviour(gameContext));

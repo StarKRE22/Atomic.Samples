@@ -1,20 +1,17 @@
 using System;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
 {
     [Serializable]
-    public sealed class ProjectileMoveSystem : PriorityGameEntitySystem
+    public sealed class ProjectileMoveSystem : RoundGameEntitySystem
     {
         private readonly IGameContext _gameContext;
 
-        public ProjectileMoveSystem(
-            IGameContext context,
-            GamePriorityEntitySystemSettings settings)
-            : base(
-                new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasProjectileTag()),
-                settings)
+        public ProjectileMoveSystem(IGameContext context)
+            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasProjectileTag()))
         {
             _gameContext = context;
         }
@@ -35,7 +32,7 @@ namespace RTSGame
                 entity.GetRotation().Value = Quaternion.LookRotation(vector.normalized);
                 entity.MoveStep(vector.normalized, deltaTime);
             }
-            else if (entity.DealDamage(target)) 
+            else if (entity.DealDamage(target))
                 _gameContext.Despawn(entity);
         }
     }

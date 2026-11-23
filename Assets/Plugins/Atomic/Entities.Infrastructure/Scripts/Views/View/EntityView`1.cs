@@ -43,7 +43,6 @@ namespace Atomic.Entities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected override void OnShow(E model)
         {
-            Debug.Log($"ON SHOW {model}", this);
             if (this.installers != null)
             {
                 for (int i = 0, count = this.installers.Count; i < count; i++)

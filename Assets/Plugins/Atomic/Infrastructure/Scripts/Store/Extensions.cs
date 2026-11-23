@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Atomic.Infrastructure
 {
-    public static class Extensions
+    public static partial class Extensions
     {
         /// <summary>
         /// Adds a range of entities to the collection.

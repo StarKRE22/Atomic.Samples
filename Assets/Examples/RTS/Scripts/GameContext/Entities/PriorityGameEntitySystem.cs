@@ -1,20 +1,19 @@
-using System;
 using Atomic.Entities;
-using UnityEngine;
+using Atomic.Infrastructure;
 
 namespace RTSGame
 {
-    [Serializable]
     public abstract class PriorityGameEntitySystem : PriorityEntitySystem<IGameEntity>
     {
         protected PriorityGameEntitySystem(
             IReadOnlyEntityCollection<IGameEntity> source,
-            GamePriorityEntitySystemSettings settings)
-            : base(source, settings)
+            int budget = DEFAULT_BUDGET,
+            float cooldown = DEFAULT_COOLDOWN
+        ) : base(source, budget, cooldown)
         {
         }
 
-        protected sealed override EntityUpdatePriority EvaluatePriority(IGameEntity entity) =>
+        protected override UpdatePriority EvaluatePriority(IGameEntity entity) =>
             entity.GetUpdatePriority().Value;
     }
 }

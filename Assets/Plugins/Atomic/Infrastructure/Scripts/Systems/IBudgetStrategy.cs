@@ -1,6 +1,6 @@
 namespace Atomic.Infrastructure
 {
-    public interface IAdaptiveBudgetStrategy
+    public interface IBudgetStrategy
     {
         int Adjust(int currentBudget, float cpuTime);
     }

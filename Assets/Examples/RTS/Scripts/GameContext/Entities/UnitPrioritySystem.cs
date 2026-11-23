@@ -1,41 +1,46 @@
 using System;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
 {
-    [Serializable]
-    public sealed class UnitPrioritySystem : RoundEntitySystem<IGameEntity>
+    public sealed class UnitPrioritySystem : RoundGameEntitySystem
     {
-        private readonly UnitPrioritySettings _settings;
-        private Transform _targetTransform;
+        [Serializable]
+        public sealed class Settings
+        {
+            public float highDistance = 200f;
+            public float mediumDistance = 400f;
+        }
+
+        private readonly Settings _settings;
+        private Transform _target;
 
         public UnitPrioritySystem(
             IGameContext context,
-            UnitPrioritySettings settings)
-            : base(
-                new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasUnitTag()),
-                settings)
+            Settings settings
+        ) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasUnitTag()))
         {
             _settings = settings;
         }
 
         protected override void Update(IGameEntity entity, float deltaTime)
         {
-            if (_targetTransform == null)
-                _targetTransform = Camera.main?.transform;
+            if (_target == null)
+                _target = Camera.main?.transform;
 
-            if (_targetTransform == null)
+            if (_target == null)
                 return;
 
             Vector3 entityPosition = entity.GetPosition().Value;
-            float distance = Vector3.Magnitude(entityPosition - _targetTransform.position);
+            float distance = Vector3.Magnitude(entityPosition - _target.position);
 
             entity.GetUpdatePriority().Value = distance <= _settings.highDistance
-                ? EntityUpdatePriority.High
+                ? UpdatePriority.High
                 : distance <= _settings.mediumDistance
-                    ? EntityUpdatePriority.Medium
-                    : EntityUpdatePriority.Low;
+                    ? UpdatePriority.Medium
+                    : UpdatePriority.Low;
         }
     }
 }

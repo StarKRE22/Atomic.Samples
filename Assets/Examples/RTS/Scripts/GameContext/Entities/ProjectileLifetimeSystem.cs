@@ -5,16 +5,12 @@ using Atomic.Entities;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class ProjectileLifetimeSystem : PriorityGameEntitySystem
+    public sealed class ProjectileLifetimeSystem : RoundGameEntitySystem
     {
         private readonly IGameContext _gameContext;
 
-        public ProjectileLifetimeSystem(
-            IGameContext context,
-            GamePriorityEntitySystemSettings settings)
-            : base(
-                new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasProjectileTag()),
-                settings)
+        public ProjectileLifetimeSystem(IGameContext context)
+            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasProjectileTag()))
         {
             _gameContext = context;
         }

@@ -5,16 +5,10 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    [Serializable]
     public abstract class PrioritySystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 256;
         protected const float DEFAULT_COOLDOWN = 0.1f;
-
-        [Serializable]
-        public class Settings
-        {
-        }
 
         private struct Entry
         {
@@ -60,10 +54,15 @@ namespace Atomic.Infrastructure
         [ShowInInspector, ReadOnly, HideInEditorMode]
 #endif
         private int _budget;
-
+      
+        
+#if ODIN_INSPECTOR
+        [ShowInInspector, ReadOnly, HideInEditorMode]
+#endif
+        private float _cooldown;
+        
         private bool _isUpdating;
         private float _priorityTime;
-        private float _cooldown;
 
         private readonly ITracker<T>[] _trackers;
 
@@ -175,7 +174,7 @@ namespace Atomic.Infrastructure
 
         protected void UpdatePriority(T entity)
         {
-            UpdatePriority priority = this.GetPriority(entity);
+            UpdatePriority priority = this.EvaluatePriority(entity);
 
             if (_isUpdating)
             {
@@ -192,7 +191,7 @@ namespace Atomic.Infrastructure
             }
         }
         
-        protected abstract UpdatePriority GetPriority(T entity);
+        protected abstract UpdatePriority EvaluatePriority(T entity);
 
         private void UpdatePriorityInternal(T entity, UpdatePriority priority)
         {
@@ -210,10 +209,13 @@ namespace Atomic.Infrastructure
 
         protected sealed override void OnAdd(T entity)
         {
+            if (entity == null)
+                throw new Exception("Added null Entity");
+            
             if (_lookup.ContainsKey(entity))
                 return;
 
-            UpdatePriority priority = GetPriority(entity);
+            UpdatePriority priority = EvaluatePriority(entity);
 
             if (_isUpdating)
             {

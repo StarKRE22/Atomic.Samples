@@ -5,17 +5,13 @@ using Atomic.Entities;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class DetectTargetSystem : PriorityGameEntitySystem
+    public sealed class DetectTargetSystem : RoundGameEntitySystem
     {
         private readonly IEntityWorld<IGameEntity> _entityWorld;
         private readonly IGameContext _gameContext;
 
-        public DetectTargetSystem(
-            IGameContext context,
-            GamePriorityEntitySystemSettings settings)
-            : base(
-                new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasDetectorTag()),
-                settings)
+        public DetectTargetSystem(IGameContext context) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(),
+            e => e.HasDetectorTag()))
         {
             _gameContext = context;
             _entityWorld = context.GetEntityWorld();

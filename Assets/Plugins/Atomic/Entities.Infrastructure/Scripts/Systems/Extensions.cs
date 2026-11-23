@@ -11,9 +11,7 @@ namespace Atomic.Entities
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>    
-        public static void BindTickSystem<E, TEntity>(this E entity, ISystem system)
-            where E : IEntity
-            where TEntity : IEntity
+        public static void BindTickSystem(this IEntity entity, ISystem system)
         {
             entity.WhenEnable(system.Enable);
             entity.WhenTick(system.Update);
@@ -28,9 +26,7 @@ namespace Atomic.Entities
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>
-        public static void BindFixedTickSystem<E, TEntity>(this E entity, ISystem system)
-            where E : IEntity
-            where TEntity : IEntity
+        public static void BindFixedTickSystem(this IEntity entity, ISystem system)
         {
             entity.WhenEnable(system.Enable);
             entity.WhenFixedTick(system.Update);
@@ -45,9 +41,7 @@ namespace Atomic.Entities
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>
-        public static void BindLateTickSystem<E, TEntity>(this E entity, ISystem system)
-            where E : IEntity
-            where TEntity : IEntity
+        public static void BindLateTickSystem(this IEntity entity, ISystem system)
         {
             entity.WhenEnable(system.Enable);
             entity.WhenLateTick(system.Update);

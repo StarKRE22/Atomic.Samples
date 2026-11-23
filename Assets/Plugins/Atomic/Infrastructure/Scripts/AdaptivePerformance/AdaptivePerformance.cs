@@ -70,11 +70,7 @@ namespace Atomic.Infrastructure
                 return;
             }
 
-            _cpuTime = Mathf.Lerp(
-                _cpuTime,
-                cpuTime,
-                _smoothing
-            );
+            _cpuTime = Mathf.Lerp(_cpuTime, cpuTime, _smoothing);
         }
 
         private void OnDestroy()

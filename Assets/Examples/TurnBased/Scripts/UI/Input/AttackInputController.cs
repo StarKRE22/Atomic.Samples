@@ -39,7 +39,7 @@ namespace Game.UI
             if (character == null || !_camera.RaycastTarget(Input.mousePosition, out GameEntityView targetView))
                 return;
 
-            IGameEntity target = targetView.Entity;
+            IGameEntity target = targetView.Model;
             this.AttackCharacter(character, target).Forget();
         }
 

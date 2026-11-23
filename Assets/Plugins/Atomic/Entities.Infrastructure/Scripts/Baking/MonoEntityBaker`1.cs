@@ -58,19 +58,14 @@ namespace Atomic.Entities
         [SerializeField]
         private Entity.Settings settings;
 
-        protected sealed override E BakeInternal(TArgs args)
-        {
-            E e = this.Create(
-                this.tagCapacity,
-                this.valueCapacity,
-                this.behaviourCapacity,
-                this.settings,
-                args
-            );
-            this.Release();
-            return e;
-        }
-        
+        protected sealed override E BakeInternal(TArgs args) => this.Create(
+            this.tagCapacity,
+            this.valueCapacity,
+            this.behaviourCapacity,
+            this.settings,
+            args
+        );
+
         /// <summary>
         /// Constructs a new entity instance of type <typeparamref name="E"/>.
         /// </summary>

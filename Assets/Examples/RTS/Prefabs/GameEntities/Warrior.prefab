@@ -223,7 +223,6 @@ GameObject:
   - component: {fileID: 201134232100325297}
   - component: {fileID: 7218851486221765621}
   - component: {fileID: 8808063545637895219}
-  - component: {fileID: 3169454516288331522}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -259,10 +258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb61f36c73346548d53827ada75f50f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  installers:
-  - {fileID: 7218851486221765621}
   _onlySelectedGizmos: 0
   _onlyEditModeGizmos: 0
+  installers:
+  - {fileID: 7218851486221765621}
   _type: 3
 --- !u!114 &7218851486221765621
 MonoBehaviour:
@@ -279,8 +278,6 @@ MonoBehaviour:
   _takeDamageBehaviour:
     _visual: {fileID: 5948162306037690326}
     _originalScale: {x: 1, y: 1, z: 1}
-  _transformBehaviour:
-    _transform: {fileID: 3169454516288331522}
   _positionBehaviour:
     _transform: {fileID: 3141069101459334024}
     _positionThreshold: 0.05
@@ -342,15 +339,3 @@ MonoBehaviour:
     - {fileID: 8821030069575764120}
   _transformBaker:
     _transform: {fileID: 3141069101459334024}
---- !u!114 &3169454516288331522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8258922563122937303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29295a5ac1174d939104b3ad9a7cec6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: RTSGame::RTSGame.TransformAgent

@@ -96,13 +96,13 @@ namespace Atomic.Infrastructure
         }
 
 #if ODIN_INSPECTOR
-        private bool ValidateFactories(F[] factories)
+        private bool ValidateFactories(TFactory[] factories)
         {
             if (factories == null)
                 return true;
 
-            var set = new HashSet<K>();
-            foreach (F factory in factories)
+            var set = new HashSet<TKey>();
+            foreach (TFactory factory in factories)
             {
                 if (factory == null)
                     return false;

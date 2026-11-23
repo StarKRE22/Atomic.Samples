@@ -7,9 +7,6 @@ namespace RTSGame
     {
         [SerializeField]
         private TakeDamageViewBehaviour _takeDamageBehaviour;
-        
-        [SerializeField]
-        private TransformViewBehaviour _transformBehaviour = new();
 
         [SerializeField]
         private PositionViewBehaviour _positionBehaviour;
@@ -30,14 +27,10 @@ namespace RTSGame
             entity.AddBehaviour(_rotationBehaviour);
             entity.AddBehaviour(_teamColorBehaviour);
             entity.AddBehaviour(_weaponRecoilBehaviour);
-
-            // entity.AddBehaviour(_transformBehaviour);
         }
 
         public override void Uninstall(IGameEntity entity)
         {
-            // entity.DelBehaviour(_transformBehaviour);
-            
             entity.DelBehaviour(_takeDamageBehaviour);
             entity.DelBehaviour(_positionBehaviour);
             entity.DelBehaviour(_rotationBehaviour);

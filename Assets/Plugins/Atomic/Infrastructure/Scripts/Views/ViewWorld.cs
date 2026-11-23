@@ -1,0 +1,54 @@
+using System;
+
+namespace Atomic.Infrastructure
+{
+    public abstract class ViewWorld<TKey, TEntity, TView> : ViewCollection<TKey, TEntity, TView>
+        where TEntity : class
+        where TView : View<TEntity>
+    {
+        /// <summary>
+        /// Gets a value indicating whether this collection is currently visible 
+        /// (i.e. has a bound <see cref="IReadOnlyEntityCollection{E}"/> source).
+        /// </summary>
+        public bool IsActive => _source != null;
+
+        private IReadOnlyObjectCollection<TEntity> _source;
+
+        /// <summary>
+        /// Shows this collection, binding it to the specified source of entities.
+        /// </summary>
+        /// <param name="source">The entity collection to visualize.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
+        public void Show(IReadOnlyObjectCollection<TEntity> source)
+        {
+            this.Hide();
+
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            
+            foreach (TEntity entity in _source) 
+                this.Add(entity);
+
+            _source.OnAdded += this.OnAdd;
+            _source.OnRemoved += this.OnRemove;
+        }
+
+        /// <summary>
+        /// Hides this collection, detaching it from the bound entity source and removing all views.
+        /// </summary>
+        public void Hide()
+        {
+            if (_source != null)
+            {
+                _source.OnAdded -= this.OnAdd;
+                _source.OnRemoved -= this.OnRemove;
+            }
+
+            this.Clear();
+            _source = null;
+        }
+
+        private void OnAdd(TEntity entity) => this.Add(entity);
+        
+        private void OnRemove(TEntity entity) => this.Remove(entity);
+    }
+}

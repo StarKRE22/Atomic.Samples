@@ -14,14 +14,14 @@ namespace Game.UI
         {
             entity.UpdateHealthBar(0);
 
-            Animator animator = entity.Entity.GetAnimator();
+            Animator animator = entity.Model.GetAnimator();
             animator.SetTrigger(Death);
             await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
 
             GameObjectPool prefabPool = ui.GetGameObjectPrefabPool();
             GameObject deathEffect = ui.GetDeathEffect();
 
-            Transform transform = entity.Entity.GetTransform();
+            Transform transform = entity.Model.GetTransform();
             Vector3 effectPosition = transform.position;
             effectPosition.y = 1.5f;
             prefabPool.Rent(deathEffect, effectPosition, deathEffect.transform.rotation);
@@ -44,7 +44,7 @@ namespace Game.UI
             var waterSplashPosition = to;
             waterSplashPosition.y = 0f;
 
-            Transform target = view.Entity.GetTransform();
+            Transform target = view.Model.GetTransform();
             target.DOKill();
             target.position = from;
 

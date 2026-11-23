@@ -7,7 +7,7 @@ namespace Game.UI
         public static void Despawn(this GameEntityView entityView, IUIContext uiContext)
         {
             GameEntityCollectionView collectionView = uiContext.GetEntityCollectionView();
-            collectionView.Remove(entityView.Entity);
+            collectionView.Remove(entityView.Model);
         }
     }
 }

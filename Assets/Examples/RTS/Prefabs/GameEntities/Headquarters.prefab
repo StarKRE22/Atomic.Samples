@@ -258,10 +258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb61f36c73346548d53827ada75f50f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  installers:
-  - {fileID: 1636457273297419117}
   _onlySelectedGizmos: 0
   _onlyEditModeGizmos: 0
+  installers:
+  - {fileID: 1636457273297419117}
   _type: 2
 --- !u!114 &1636457273297419117
 MonoBehaviour:
@@ -287,8 +287,6 @@ MonoBehaviour:
     _renderers:
     - {fileID: 3064850760050433709}
     _viewConfig: {fileID: 11400000, guid: 092153cc4c1644aa284e47f2e0128f60, type: 2}
-  _transformBehaviour:
-    _transform: {fileID: 0}
 --- !u!114 &1072667488915062089
 MonoBehaviour:
   m_ObjectHideFlags: 0

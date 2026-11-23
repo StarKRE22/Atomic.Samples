@@ -8,13 +8,13 @@ namespace Atomic.Entities
     /// </summary>
     /// <remarks>
     /// This non-generic version is a concrete specialization of 
-    /// <see cref="EntityWorldView{E,V}"/> with <typeparamref name="E"/> fixed 
+    /// <see cref="EntityViewWorld{K,E,V}"/> with <typeparamref name="E"/> fixed 
     /// to <see cref="IEntity"/> and <typeparamref name="V"/> fixed to <see cref="EntityView"/>.
     /// </remarks>
     [AddComponentMenu("Atomic/Entities/Entity Collection View")]
     [DisallowMultipleComponent]
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/UI/EntityWorldView.md")]
-    public class EntityWorldView : EntityWorldView<string, IEntity, EntityView>
+    public class EntityViewWorld : EntityViewWorld<string, IEntity, EntityView>
     {
         protected override string GetKey(IEntity entity) => entity.Name;
     }

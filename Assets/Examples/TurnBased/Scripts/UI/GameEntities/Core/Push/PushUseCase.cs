@@ -16,7 +16,7 @@ namespace Game.UI
             Vector3 to = ui.GetWorldPosition(args.targetPosition);
 
 
-            Transform sourceTransform = source.Entity.GetTransform();
+            Transform sourceTransform = source.Model.GetTransform();
             target.RotateAt(sourceTransform.position).Forget();
 
             // source.AnimatorHit();

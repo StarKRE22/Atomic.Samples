@@ -18,13 +18,8 @@ namespace RTSGame
         [SerializeField]
         private TeamColorViewBehaviour _teamColorBehaviour;
 
-        [SerializeField]
-        private TransformViewBehaviour _transformBehaviour = new ();
-        
         public override void Install(IGameEntity entity)
         {
-            // entity.AddBehaviour(_transformBehaviour);
-            
             entity.AddBehaviour(_takeDamageBehaviour);
             entity.AddBehaviour(_positionBehaviour);
             entity.AddBehaviour(_rotationBehaviour);
@@ -33,8 +28,6 @@ namespace RTSGame
 
         public override void Uninstall(IGameEntity entity)
         {
-            // entity.DelBehaviour(_transformBehaviour);
-
             entity.DelBehaviour(_takeDamageBehaviour);
             entity.DelBehaviour(_positionBehaviour);
             entity.DelBehaviour(_rotationBehaviour);

@@ -5,6 +5,10 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Pool;
 
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
+
 namespace Atomic.Infrastructure
 {
     public abstract class MonoObjectWorld<T> : MonoBehaviour, IObjectWorld<T>

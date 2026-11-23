@@ -6,6 +6,6 @@ namespace Atomic.Entities
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T GetValue<E, T>(this EntityView<E> view, ValueKey<E, T> key) where E : class, IEntity =>
-            view.Entity.GetValue<T>(key.Id);
+            view.Model.GetValue<T>(key.Id);
     }
 }

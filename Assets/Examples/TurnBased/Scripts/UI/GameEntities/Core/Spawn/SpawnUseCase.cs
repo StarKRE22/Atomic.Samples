@@ -13,7 +13,7 @@ namespace Game.UI
             GameEntityCollectionView collectionView = context.GetEntityCollectionView();
             GameEntityView view = collectionView.Add(entity);
             
-            Transform transform = view.Entity.GetTransform();
+            Transform transform = view.Model.GetTransform();
             transform.position = context.GetWorldPosition(position);
             
             await transform

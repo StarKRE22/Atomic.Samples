@@ -9,12 +9,12 @@ using Sirenix.OdinInspector;
 namespace Atomic.Entities
 {
     /// <summary>
-    /// A singleton-based implementation of <see cref="EntityWorldView{E, V}"/>.
+    /// A singleton-based implementation of <see cref="EntityViewWorld{K,E,V}"/>.
     /// Ensures that only one instance exists in the scene (or globally if marked as persistent).
     /// </summary>
     /// <typeparam name="E">Entity type.</typeparam>
     /// <typeparam name="V">View type.</typeparam>
-    public class EntityWorldViewSingleton : EntityWorldView<string, IEntity, EntityView>
+    public class EntityViewWorldSingleton : EntityViewWorld<string, IEntity, EntityView>
     {
 #if ODIN_INSPECTOR
         [PropertyOrder(-10)]
@@ -25,24 +25,24 @@ namespace Atomic.Entities
         [SerializeField]
         private bool dontDestroyOnLoad;
 
-        private static EntityWorldViewSingleton _instance;
+        private static EntityViewWorldSingleton _instance;
 
         /// <summary>
         /// Gets the singleton instance.
         /// Throws an exception if no instance is found in the scene.
         /// </summary>
-        public static EntityWorldViewSingleton Instance
+        public static EntityViewWorldSingleton Instance
         {
             get
             {
                 if (_instance != null)
                     return _instance;
 
-                _instance = FindAnyObjectByType<EntityWorldViewSingleton>(FindObjectsInactive.Exclude);
+                _instance = FindAnyObjectByType<EntityViewWorldSingleton>(FindObjectsInactive.Exclude);
 
                 if (_instance == null)
                     throw new Exception(
-                        $"Singleton of type {nameof(EntityWorldViewSingleton)} was not found in the scene.");
+                        $"Singleton of type {nameof(EntityViewWorldSingleton)} was not found in the scene.");
 
                 return _instance;
             }
@@ -51,7 +51,7 @@ namespace Atomic.Entities
         /// <summary>
         /// Attempts to get the singleton instance without throwing.
         /// </summary>
-        public static bool TryGetInstance(out EntityWorldViewSingleton instance)
+        public static bool TryGetInstance(out EntityViewWorldSingleton instance)
         {
             if (_instance != null)
             {
@@ -59,7 +59,7 @@ namespace Atomic.Entities
                 return true;
             }
 
-            instance = _instance = FindAnyObjectByType<EntityWorldViewSingleton>(FindObjectsInactive.Exclude);
+            instance = _instance = FindAnyObjectByType<EntityViewWorldSingleton>(FindObjectsInactive.Exclude);
             return instance != null;
         }
 
@@ -80,7 +80,7 @@ namespace Atomic.Entities
             if (_instance != null && _instance != this)
             {
                 Debug.LogError(
-                    $"Duplicate singleton of type {nameof(EntityWorldViewSingleton)} detected on '{name}'. Destroying this instance.",
+                    $"Duplicate singleton of type {nameof(EntityViewWorldSingleton)} detected on '{name}'. Destroying this instance.",
                     this);
 
                 Destroy(gameObject);

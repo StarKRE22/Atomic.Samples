@@ -26,7 +26,7 @@ namespace Game.UI
                 !_camera.RaycastTarget(Input.mousePosition, out GameEntityView targetView))
                 return;
 
-            IGameEntity target = targetView.Entity;
+            IGameEntity target = targetView.Model;
             if (target.GetEntityType().Value != GameEntityType.Character)
                 return;
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 namespace Atomic.Infrastructure
 {
     public abstract class ObjectWorld<T> : ObjectCollection<T>, IObjectWorld<T>

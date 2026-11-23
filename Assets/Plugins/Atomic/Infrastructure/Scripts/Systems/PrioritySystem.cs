@@ -7,8 +7,8 @@ namespace Atomic.Infrastructure
 {
     public abstract class PrioritySystem<T> : SystemBase<T>, IBudgetSystem
     {
-        protected const int DEFAULT_BUDGET = 256;
-        protected const float DEFAULT_COOLDOWN = 0.1f;
+        protected const int DEFAULT_BUDGET = 512;
+        protected const float DEFAULT_COOLDOWN = 0.2f;
 
         private struct Entry
         {

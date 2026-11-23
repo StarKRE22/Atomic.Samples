@@ -10,7 +10,7 @@ namespace Atomic.Infrastructure
 {
     public abstract class RoundSystem<T> : SystemBase<T>, IBudgetSystem
     {
-        protected const int DEFAULT_BUDGET = 256;
+        protected const int DEFAULT_BUDGET = 1024;
 
         private enum CommandType : byte
         {

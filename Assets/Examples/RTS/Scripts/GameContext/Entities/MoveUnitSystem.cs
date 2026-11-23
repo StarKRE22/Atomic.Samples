@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class MoveUnitSystem : RoundGameEntitySystem
+    public sealed class MoveUnitSystem : PriorityGameEntitySystem
     {
         public MoveUnitSystem(IGameContext context)
             : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasUnitTag() && e.HasMoveableTag()))

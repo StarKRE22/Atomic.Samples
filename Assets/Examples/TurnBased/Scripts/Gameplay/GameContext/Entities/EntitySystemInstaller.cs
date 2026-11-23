@@ -25,7 +25,7 @@ namespace Game.Gameplay
                 ));
 
             context.WhenInit(context.SpawnInitialUnits);
-            entityWorld.BindTo(context);
+            context.BindWorld(entityWorld);
         }
     }
 }

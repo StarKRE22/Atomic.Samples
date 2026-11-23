@@ -12,7 +12,7 @@ namespace Atomic.Entities
     /// Provides lifecycle management including, enabling, updating, and disposing all entities in the collection.
     /// </summary>
     /// <typeparam name="E">The specific type of entity managed by this world. Must implement <see cref="IEntity"/>.</typeparam>
-    public class EntityWorld<E> : ObjectWorld<E>, IEntityWorld<E> where E : IEntity
+    public class EntityWorld<E> : World<E>, IEntityWorld<E> where E : IEntity
     {
         /// <summary>
         /// Initializes a new <see cref="EntityWorld{E}"/> with the specified entities and an empty name.

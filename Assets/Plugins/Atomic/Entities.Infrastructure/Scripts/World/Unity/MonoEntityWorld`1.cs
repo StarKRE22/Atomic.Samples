@@ -18,9 +18,9 @@ namespace Atomic.Entities
     /// Attach this component to a GameObject in the scene to automatically scan and manage entities of type <typeparamref name="E"/>.
     /// </example>
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Worlds/MonoEntityWorld%601.md")]
-    public abstract class MonoEntityWorld<E> : MonoObjectWorld<E>, IEntityWorld<E> where E : IEntity
+    public abstract class MonoEntityWorld<E> : MonoWorld<E>, IEntityWorld<E> where E : IEntity
     {
-        protected override ObjectWorld<E> Inner => _inner;
+        protected override World<E> Inner => _inner;
 
         private readonly EntityWorld<E> _inner = new();
 
@@ -40,12 +40,12 @@ namespace Atomic.Entities
             CopyTo(array, arrayIndex);
         }
 
-        void IReadOnlyObjectCollection<E>.CopyTo(E[] array, int arrayIndex)
+        void IReadOnlyStore<E>.CopyTo(E[] array, int arrayIndex)
         {
             CopyTo(array, arrayIndex);
         }
 
-        void IObjectCollection<E>.CopyTo(E[] array, int arrayIndex)
+        void IStore<E>.CopyTo(E[] array, int arrayIndex)
         {
             CopyTo(array, arrayIndex);
         }

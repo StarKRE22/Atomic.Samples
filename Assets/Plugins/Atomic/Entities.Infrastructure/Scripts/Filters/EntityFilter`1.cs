@@ -9,7 +9,7 @@ namespace Atomic.Entities
     /// Entities are included based on a predicate and tracked using optional triggers.
     /// </summary>
     /// <typeparam name="E">The type of entity being filtered. Must implement <see cref="IEntity"/>.</typeparam>
-    public class EntityFilter<E> : ObjectFilter<E>, IReadOnlyEntityCollection<E> where E : IEntity
+    public class EntityFilter<E> : Filter<E>, IReadOnlyEntityCollection<E> where E : IEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter{E}"/> class.

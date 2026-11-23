@@ -20,7 +20,7 @@ namespace Game.UI
         private Camera _camera;
 
         [SerializeField]
-        private GameEntityCollectionView _gameEntityViews;
+        private GameEntityStoreView _gameEntityViews;
 
         [SerializeField]
         private SelectedMarkerView _markerView;

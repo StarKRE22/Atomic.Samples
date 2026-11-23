@@ -4,7 +4,7 @@ using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection<E> : ObjectCollection<E>, IEntityCollection<E> where E : IEntity
+    public class EntityCollection<E> : Store<E>, IEntityCollection<E> where E : IEntity
     {
         public EntityCollection() : this(DEFAULT_CAPACITY)
         {

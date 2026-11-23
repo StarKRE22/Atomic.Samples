@@ -1,3 +1,5 @@
+using Atomic.Infrastructure;
+
 namespace Atomic.Entities
 {
     public static partial class Extensions
@@ -5,12 +7,12 @@ namespace Atomic.Entities
         /// <summary>
         /// Registers an entity system that is updated during the Tick phase of the context entity lifecycle.
         /// </summary>
-        /// <typeparam name="TContext">Type of the context entity.</typeparam>
+        /// <typeparam name="E">Type of the context entity.</typeparam>
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>    
-        public static void AddTickSystem<TContext, TEntity>(this TContext entity, EntitySystemBase<TEntity> system)
-            where TContext : IEntity
+        public static void BindTickSystem<E, TEntity>(this E entity, ISystem system)
+            where E : IEntity
             where TEntity : IEntity
         {
             entity.WhenEnable(system.Enable);
@@ -22,12 +24,12 @@ namespace Atomic.Entities
         /// <summary>
         /// Registers an entity system that is updated during the FixedTick phase of the context entity lifecycle.
         /// </summary>
-        /// <typeparam name="TContext">Type of the context entity.</typeparam>
+        /// <typeparam name="E">Type of the context entity.</typeparam>
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>
-        public static void AddFixedTickSystem<TContext, TEntity>(this TContext entity, EntitySystemBase<TEntity> system)
-            where TContext : IEntity
+        public static void BindFixedTickSystem<E, TEntity>(this E entity, ISystem system)
+            where E : IEntity
             where TEntity : IEntity
         {
             entity.WhenEnable(system.Enable);
@@ -39,12 +41,12 @@ namespace Atomic.Entities
         /// <summary>
         /// Registers an entity system that is updated during the LateTick phase of the context entity lifecycle.
         /// </summary>
-        /// <typeparam name="TContext">Type of the context entity.</typeparam>
+        /// <typeparam name="E">Type of the context entity.</typeparam>
         /// <typeparam name="TEntity">Type of entities processed by the system.</typeparam>
         /// <param name="entity">The context entity.</param>
         /// <param name="system">The entity system to register.</param>
-        public static void AddLateTickSystem<TContext, TEntity>(this TContext entity, EntitySystemBase<TEntity> system)
-            where TContext : IEntity
+        public static void BindLateTickSystem<E, TEntity>(this E entity, ISystem system)
+            where E : IEntity
             where TEntity : IEntity
         {
             entity.WhenEnable(system.Enable);

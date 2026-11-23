@@ -28,6 +28,7 @@ namespace RTSGame
 
         public override void Uninstall(IGameEntity entity)
         {
+
             entity.DelBehaviour(_takeDamageBehaviour);
             entity.DelBehaviour(_positionBehaviour);
             entity.DelBehaviour(_rotationBehaviour);

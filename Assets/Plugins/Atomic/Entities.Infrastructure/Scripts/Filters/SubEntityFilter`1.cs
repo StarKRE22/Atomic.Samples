@@ -27,7 +27,7 @@ namespace Atomic.Entities
     /// <seealso cref="IReadOnlyEntityCollection{TEntity}"/>
     /// <seealso cref="IEntityTracker{E}"/>
     /// <seealso cref="EntityCollection{TEntity}"/>
-    public class SubEntityFilter<T, E> : SubObjectFilter<T, E>, IReadOnlyEntityCollection<T>
+    public class SubEntityFilter<T, E> : SubFilter<T, E>, IReadOnlyEntityCollection<T>
         where E : IEntity
         where T : E
     {

@@ -7,8 +7,8 @@ namespace Game.UI
     {
         public static GameEntityView GetEntityView(this IUIContext ui, IGameEntity entity)
         {
-            GameEntityCollectionView collectionView = ui.GetEntityCollectionView();
-            return collectionView.Get(entity);
+            GameEntityStoreView storeView = ui.GetEntityCollectionView();
+            return storeView.Get(entity);
         }
     }
 }

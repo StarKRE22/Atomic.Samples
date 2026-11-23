@@ -9,7 +9,7 @@ namespace Game.UI
         private readonly SelectedMarkerView _markerView;
         
         private IReactiveVariable<IGameEntity> _selectedCharacter;
-        private GameEntityCollectionView _entityViews;
+        private GameEntityStoreView _entityViews;
         private Subscription<IGameEntity> _subscription;
 
         public SelectedMarkerPresenter(SelectedMarkerView markerView)

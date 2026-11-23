@@ -7,7 +7,7 @@ namespace Atomic.Entities
     /// Provides access to entity presence, enumeration, and change events.
     /// </summary>
     /// <typeparam name="E">The type of entity contained in the collection. Must implement <see cref="IEntity"/>.</typeparam>
-    public interface IReadOnlyEntityCollection<E> : IReadOnlyObjectCollection<E> where E : IEntity
+    public interface IReadOnlyEntityCollection<E> : IReadOnlyStore<E> where E : IEntity
     {
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class ViewWorld<TKey, TEntity, TView> : ViewCollection<TKey, TEntity, TView>
+    public abstract class ViewWorld<TKey, TEntity, TView> : ViewStore<TKey, TEntity, TView>
         where TEntity : class
         where TView : View<TEntity>
     {
@@ -12,14 +12,14 @@ namespace Atomic.Infrastructure
         /// </summary>
         public bool IsActive => _source != null;
 
-        private IReadOnlyObjectCollection<TEntity> _source;
+        private IReadOnlyStore<TEntity> _source;
 
         /// <summary>
         /// Shows this collection, binding it to the specified source of entities.
         /// </summary>
         /// <param name="source">The entity collection to visualize.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
-        public void Show(IReadOnlyObjectCollection<TEntity> source)
+        public void Show(IReadOnlyStore<TEntity> source)
         {
             this.Hide();
 

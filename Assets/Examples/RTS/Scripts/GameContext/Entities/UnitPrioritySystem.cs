@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class UnitPrioritySystem : EntitySystem<IGameEntity>
+    public sealed class UnitPrioritySystem : RoundEntitySystem<IGameEntity>
     {
         private readonly UnitPrioritySettings _settings;
         private Transform _targetTransform;

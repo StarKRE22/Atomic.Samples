@@ -70,8 +70,8 @@ namespace Atomic.Entities.Tests
             IEntityCollection<Entity> source,
             Settings settings,
             Func<Entity, EntityUpdatePriority> priorityFunc,
-            params IEntityTracker<Entity>[] triggers
-        ) : base(source, settings, triggers)
+            params IEntityTracker<Entity>[] trackers
+        ) : base(source, settings, trackers)
         {
             MutableSource = source;
             _priorityFunc = priorityFunc;

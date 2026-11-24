@@ -28,7 +28,7 @@ namespace Modules.Spatial
                 if (y > _maxCellY) _maxCellY = y;
             }
 
-            long key = GetKey(x, y);
+            Vector2Int key = new Vector2Int(x, y);
             if (!_cells.TryGetValue(key, out List<KeyValuePair<T, Vector2>> list))
             {
                 list = ListPool<KeyValuePair<T, Vector2>>.Get();

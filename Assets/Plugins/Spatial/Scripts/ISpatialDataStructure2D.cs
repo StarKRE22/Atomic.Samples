@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable UnusedMemberInSuper.Global
 
 namespace Modules.Spatial
 {

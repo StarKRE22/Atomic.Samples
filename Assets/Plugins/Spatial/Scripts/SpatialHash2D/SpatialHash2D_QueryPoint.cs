@@ -9,7 +9,7 @@ namespace Modules.Spatial
         {
             int count = 0;
 
-            long key = GetCellKey(point);
+            Vector2Int key = GetCell(point);
             if (!_cells.TryGetValue(key, out List<KeyValuePair<T, Vector2>> list))
                 return 0;
 

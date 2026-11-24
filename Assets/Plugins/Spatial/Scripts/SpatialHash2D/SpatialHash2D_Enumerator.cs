@@ -16,7 +16,7 @@ namespace Modules.Spatial
 
         public struct Enumerator : IEnumerator<KeyValuePair<T, Vector2>>
         {
-            private Dictionary<long, List<KeyValuePair<T, Vector2>>>.Enumerator _cellEnumerator;
+            private Dictionary<Vector2Int, List<KeyValuePair<T, Vector2>>>.Enumerator _cellEnumerator;
             private List<KeyValuePair<T, Vector2>> _currentList;
             private int _index;
 
@@ -24,7 +24,7 @@ namespace Modules.Spatial
 
             object IEnumerator.Current => Current;
 
-            internal Enumerator(Dictionary<long, List<KeyValuePair<T, Vector2>>> cells)
+            internal Enumerator(Dictionary<Vector2Int, List<KeyValuePair<T, Vector2>>> cells)
             {
                 _cellEnumerator = cells.GetEnumerator();
 

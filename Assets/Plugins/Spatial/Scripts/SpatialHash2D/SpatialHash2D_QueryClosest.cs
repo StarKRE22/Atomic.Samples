@@ -49,23 +49,24 @@ namespace Modules.Spatial
 
                     float dx = 0f;
 
-                    if (center.x < cellMinX) 
+                    if (center.x < cellMinX)
                         dx = cellMinX - center.x;
                     else if (center.x > cellMaxX)
                         dx = center.x - cellMaxX;
 
                     float dy = 0f;
 
-                    if (center.y < cellMinY) 
+                    if (center.y < cellMinY)
                         dy = cellMinY - center.y;
-                    else if (center.y > cellMaxY) 
+                    else if (center.y > cellMaxY)
                         dy = center.y - cellMaxY;
 
                     float cellDistanceSq = dx * dx + dy * dy;
                     if (cellDistanceSq >= bestDistanceSq)
                         continue;
 
-                    if (!_cells.TryGetValue(GetKey(x, y), out List<KeyValuePair<T, Vector2>> list))
+                    Vector2Int key = new Vector2Int(x, y);
+                    if (!_cells.TryGetValue(key, out List<KeyValuePair<T, Vector2>> list))
                         continue;
 
                     int count = list.Count;

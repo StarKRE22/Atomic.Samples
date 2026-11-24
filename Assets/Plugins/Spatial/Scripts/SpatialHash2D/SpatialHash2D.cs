@@ -8,12 +8,12 @@ namespace Modules.Spatial
     {
         private readonly struct Handle
         {
-            public readonly long cellKey;
+            public readonly Vector2Int key;
             public readonly int index;
 
-            public Handle(long cellKey, int index)
+            public Handle(Vector2Int key, int index)
             {
-                this.cellKey = cellKey;
+                this.key = key;
                 this.index = index;
             }
         }
@@ -24,7 +24,7 @@ namespace Modules.Spatial
         private int _minCellX, _maxCellX, _minCellY, _maxCellY;
         private bool _boundsDirty;
 
-        private readonly Dictionary<long, List<KeyValuePair<T, Vector2>>> _cells;
+        private readonly Dictionary<Vector2Int, List<KeyValuePair<T, Vector2>>> _cells;
         private readonly Dictionary<T, Handle> _lookup;
 
         public float CellSize => _cellSize;
@@ -36,7 +36,7 @@ namespace Modules.Spatial
         {
             _cellSize = cellSize;
             _invCellSize = 1f / cellSize;
-            _cells = new Dictionary<long, List<KeyValuePair<T, Vector2>>>(capacity);
+            _cells = new Dictionary<Vector2Int, List<KeyValuePair<T, Vector2>>>(capacity);
             _lookup = new Dictionary<T, Handle>(capacity);
         }
 
@@ -44,30 +44,17 @@ namespace Modules.Spatial
 
         public int GetCount(Vector2 position)
         {
-            long key = this.GetCellKey(position);
+            Vector2Int key = this.GetCell(position);
             return _cells.TryGetValue(key, out List<KeyValuePair<T, Vector2>> entities) ? entities.Count : 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private long GetCellKey(Vector2 position)
+        private Vector2Int GetCell(Vector2 position)
         {
-            int x = Mathf.FloorToInt(position.x * _invCellSize);
-            int y = Mathf.FloorToInt(position.y * _invCellSize);
-
-            return GetKey(x, y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static long GetKey(int x, int y) => ((long) x << 32) | (uint) y;
-
-        public IEnumerable<Vector2Int> GetCellPositions()
-        {
-            foreach (long key in _cells.Keys)
-            {
-                int x = (int) (key >> 32);
-                int y = (int) key;
-                yield return new Vector2Int(x, y);
-            }
+            return new Vector2Int(
+                Mathf.FloorToInt(position.x * _invCellSize),
+                Mathf.FloorToInt(position.y * _invCellSize)
+            );
         }
     }
 }

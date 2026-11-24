@@ -11,8 +11,8 @@ namespace Modules.Spatial
             if (!_lookup.TryGetValue(obj, out Handle handle))
                 return false;
 
-            long newKey = GetCellKey(p);
-            if (handle.cellKey == newKey)
+            Vector2Int newKey = GetCell(p);
+            if (handle.key == newKey)
                 return true;
 
             this.RemoveInternal(handle);

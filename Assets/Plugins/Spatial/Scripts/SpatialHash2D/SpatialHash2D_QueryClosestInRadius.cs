@@ -26,7 +26,7 @@ namespace Modules.Spatial
             for (int y = minY; y <= maxY; y++)
             for (int x = minX; x <= maxX; x++)
             {
-                long key = GetKey(x, y);
+                Vector2Int key = new Vector2Int(x, y);
                 if (!_cells.TryGetValue(key, out List<KeyValuePair<T, Vector2>> list))
                     continue;
 

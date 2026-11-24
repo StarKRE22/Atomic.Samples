@@ -21,14 +21,14 @@ namespace Modules.Spatial
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void RemoveInternal(Handle handle)
         {
-            List<KeyValuePair<T, Vector2>> list = _cells[handle.cellKey];
+            List<KeyValuePair<T, Vector2>> list = _cells[handle.key];
 
             int lastIndex = list.Count - 1;
             if (handle.index != lastIndex)
             {
                 KeyValuePair<T, Vector2> moved = list[lastIndex];
                 list[handle.index] = moved;
-                _lookup[moved.Key] = new Handle(handle.cellKey, handle.index);
+                _lookup[moved.Key] = new Handle(handle.key, handle.index);
             }
 
             list.RemoveAt(lastIndex);
@@ -36,10 +36,10 @@ namespace Modules.Spatial
             if (list.Count > 0)
                 return;
 
-            _cells.Remove(handle.cellKey);
+            _cells.Remove(handle.key);
 
-            int cellX = (int) (handle.cellKey >> 32);
-            int cellY = (int) handle.cellKey;
+            int cellX = handle.key.x;
+            int cellY = handle.key.y;
 
             if (cellX == _minCellX || cellX == _maxCellX || cellY == _minCellY || cellY == _maxCellY)
                 _boundsDirty = true;
@@ -58,30 +58,27 @@ namespace Modules.Spatial
             }
 
             bool first = true;
-            foreach (long key in _cells.Keys)
+            foreach (Vector2Int key in _cells.Keys)
             {
-                int x = (int) (key >> 32);
-                int y = (int) key;
-
                 if (first)
                 {
-                    _minCellX = _maxCellX = x;
-                    _minCellY = _maxCellY = y;
+                    _minCellX = _maxCellX = key.x;
+                    _minCellY = _maxCellY = key.y;
                     first = false;
                     continue;
                 }
 
-                if (x < _minCellX)
-                    _minCellX = x;
+                if (key.x < _minCellX)
+                    _minCellX = key.x;
 
-                if (x > _maxCellX)
-                    _maxCellX = x;
+                if (key.x > _maxCellX)
+                    _maxCellX = key.x;
 
-                if (y < _minCellY)
-                    _minCellY = y;
+                if (key.y < _minCellY)
+                    _minCellY = key.y;
 
-                if (y > _maxCellY)
-                    _maxCellY = y;
+                if (key.y > _maxCellY)
+                    _maxCellY = key.y;
             }
 
             _boundsDirty = false;

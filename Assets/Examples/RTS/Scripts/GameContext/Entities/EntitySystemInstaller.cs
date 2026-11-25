@@ -26,9 +26,7 @@ namespace RTSGame
                 new Args<IGameContext>(context)
             ));
             context.AddEntityWorld(entityWorld);
-            context.BindWorld(entityWorld);
-
-            
+            context.BindWorld(entityWorld).EveryUpdate();
             
             this.InstallEntitySpace(context);
             this.InstallUnitSystems(context, entityWorld);

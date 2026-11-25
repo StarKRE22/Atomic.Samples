@@ -77,6 +77,7 @@ namespace ShooterGame.Gameplay
             entity.AddRotationDirection(new ReactiveVariable<Vector3>());
             entity.AddRotationCondition(new AndExpression().Add(_health.Exists));
             entity.AddRotationEvent(new Event<Vector3>());
+            entity.AddBehaviour<RotationBehaviour>();
 
             //Physics:
             entity.AddRigidbody(_rigidbody);

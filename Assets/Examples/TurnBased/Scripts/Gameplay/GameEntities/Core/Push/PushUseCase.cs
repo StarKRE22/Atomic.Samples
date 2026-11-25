@@ -1,6 +1,3 @@
-using Atomic.Elements;
-using Atomic.Entities;
-using Atomic.Events;
 using UnityEngine;
 
 namespace Game.Gameplay

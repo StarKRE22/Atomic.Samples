@@ -9,7 +9,7 @@ namespace Atomic.Entities
         [Test]
         public void Enable_Raises_OnStateChanged()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool called = false;
             world.OnStateChanged += () => called = true;
 
@@ -21,7 +21,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_Raises_OnStateChanged()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable(); // чтобы _enabled = true
             bool called = false;
             world.OnStateChanged += () => called = true;
@@ -34,7 +34,7 @@ namespace Atomic.Entities
         [Test]
         public void Add_Raises_OnStateChanged()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool called = false;
             world.OnStateChanged += () => called = true;
 
@@ -47,7 +47,7 @@ namespace Atomic.Entities
         public void Remove_Raises_OnStateChanged()
         {
             var entity = new Entity();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             bool called = false;
             world.OnStateChanged += () => called = true;
@@ -60,7 +60,7 @@ namespace Atomic.Entities
         [Test]
         public void Clear_Raises_OnStateChanged()
         {
-            var world = new EntityWorld<Entity>(new Entity(), new Entity());
+            var world = new EntityManager<Entity>(new Entity(), new Entity());
 
             bool called = false;
             world.OnStateChanged += () => called = true;
@@ -73,7 +73,7 @@ namespace Atomic.Entities
         [Test]
         public void Dispose_Raises_OnStateChanged()
         {
-            var world = new EntityWorld<Entity>(new Entity());
+            var world = new EntityManager<Entity>(new Entity());
             world.Enable(); // Ensure state changes on Dispose
 
             bool called = false;

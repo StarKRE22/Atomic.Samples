@@ -18,12 +18,12 @@ namespace Atomic.Entities
                 spy
             });
 
-            MonoEntityWorld world = MonoEntityWorld.Create("MonoEntityWorld", useUnityLifecycle: true);
-            world.Add(entity);
+            MonoEntityManager manager = MonoEntityManager.Create("MonoEntityWorld", useUnityLifecycle: true);
+            manager.Add(entity);
 
             //Wait Awake, Start
             yield return null;
-            Assert.IsTrue(world.Enabled);
+            Assert.IsTrue(manager.Enabled);
             Assert.IsTrue(entity.Initialized);
             Assert.IsTrue(entity.Enabled);
             Assert.IsTrue(spy.Initialized);
@@ -38,14 +38,14 @@ namespace Atomic.Entities
             Assert.IsTrue(spy.LateUpdated);
 
             //Disable world
-            world.enabled = false;
-            Assert.IsFalse(world.Enabled);
+            manager.enabled = false;
+            Assert.IsFalse(manager.Enabled);
             Assert.IsFalse(entity.Enabled);
             Assert.IsTrue(spy.Disabled);
 
             //Destroy world
             Assert.IsTrue(spy.Enabled);
-            MonoEntityWorld.Destroy(world);
+            MonoEntityManager.Destroy(manager);
 
             //Wait OnDestroy
             yield return null;
@@ -65,8 +65,8 @@ namespace Atomic.Entities
                 spy
             });
 
-            MonoEntityWorld world = MonoEntityWorld.Create("MonoEntityWorld", useUnityLifecycle: true);
-            world.Add(entity);
+            MonoEntityManager manager = MonoEntityManager.Create("MonoEntityWorld", useUnityLifecycle: true);
+            manager.Add(entity);
             
             yield return new WaitForSeconds(0.1f);
 
@@ -75,12 +75,12 @@ namespace Atomic.Entities
             Assert.IsTrue(spy.Updated);
             
             //Act:
-            world.enabled = false;
+            manager.enabled = false;
 
             Assert.IsTrue(spy.Disabled);
 
             //Act:
-            world.enabled = true;
+            manager.enabled = true;
             
             Assert.AreEqual(nameof(IEntityEnable.Enable), spy.InvocationList[^1]);
         }
@@ -96,8 +96,8 @@ namespace Atomic.Entities
                 spy
             });
 
-            MonoEntityWorld world = MonoEntityWorld.Create("MonoEntityWorld", useUnityLifecycle: true);
-            world.Add(entity);
+            MonoEntityManager manager = MonoEntityManager.Create("MonoEntityWorld", useUnityLifecycle: true);
+            manager.Add(entity);
             
             //Arrange:
             yield return new WaitForSeconds(0.1f);

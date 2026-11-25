@@ -6,7 +6,7 @@ namespace RTSGame
     public sealed class DetectTargetJob : IJob<IGameEntity>
     {
         private readonly IGameContext _gameContext;
-        private readonly IWorld<IGameEntity> _entityWorld;
+        private readonly IReadOnlyStore<IGameEntity> _entityWorld;
 
         public DetectTargetJob(IGameContext gameContext)
         {

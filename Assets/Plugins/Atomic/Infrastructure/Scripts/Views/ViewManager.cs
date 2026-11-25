@@ -2,9 +2,9 @@ using System;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class ViewWorld<TKey, TEntity, TView> : ViewStore<TKey, TEntity, TView>
-        where TEntity : class
-        where TView : View<TEntity>
+    public abstract class ViewManager<TKey, TModel, TView> : ViewStore<TKey, TModel, TView>
+        where TModel : class
+        where TView : View<TModel>
     {
         /// <summary>
         /// Gets a value indicating whether this collection is currently visible 
@@ -12,20 +12,20 @@ namespace Atomic.Infrastructure
         /// </summary>
         public bool IsActive => _source != null;
 
-        private IReadOnlyStore<TEntity> _source;
+        private IReadOnlyStore<TModel> _source;
 
         /// <summary>
         /// Shows this collection, binding it to the specified source of entities.
         /// </summary>
         /// <param name="source">The entity collection to visualize.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is null.</exception>
-        public void Show(IReadOnlyStore<TEntity> source)
+        public void Show(IReadOnlyStore<TModel> source)
         {
             this.Hide();
 
             _source = source ?? throw new ArgumentNullException(nameof(source));
             
-            foreach (TEntity entity in _source) 
+            foreach (TModel entity in _source) 
                 this.Add(entity);
 
             _source.OnAdded += this.OnAdd;
@@ -47,8 +47,8 @@ namespace Atomic.Infrastructure
             _source = null;
         }
 
-        private void OnAdd(TEntity entity) => this.Add(entity);
+        private void OnAdd(TModel entity) => this.Add(entity);
         
-        private void OnRemove(TEntity entity) => this.Remove(entity);
+        private void OnRemove(TModel entity) => this.Remove(entity);
     }
 }

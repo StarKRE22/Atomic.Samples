@@ -9,7 +9,7 @@ namespace Atomic.Entities
         [Test]
         public void DefaultConstructor_SetsEmptyName_AndEmptyCollection()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
 
             Assert.AreEqual(string.Empty, world.Name);
             Assert.AreEqual(0, world.Count);
@@ -21,7 +21,7 @@ namespace Atomic.Entities
             var e1 = new Entity();
             var e2 = new Entity();
 
-            var world = new EntityWorld<Entity>(e1, e2);
+            var world = new EntityManager<Entity>(e1, e2);
 
             Assert.AreEqual(string.Empty, world.Name);
             Assert.AreEqual(2, world.Count);
@@ -35,7 +35,7 @@ namespace Atomic.Entities
             var e1 = new Entity();
             var e2 = new Entity();
 
-            var world = new EntityWorld<Entity>("GameWorld", e1, e2);
+            var world = new EntityManager<Entity>("GameWorld", e1, e2);
 
             Assert.AreEqual("GameWorld", world.Name);
             Assert.AreEqual(2, world.Count);
@@ -50,7 +50,7 @@ namespace Atomic.Entities
             var e2 = new Entity();
             var list = new List<Entity> {e1, e2};
 
-            var world = new EntityWorld<Entity>("FromCollection", list);
+            var world = new EntityManager<Entity>("FromCollection", list);
 
             Assert.AreEqual("FromCollection", world.Name);
             Assert.AreEqual(2, world.Count);
@@ -62,7 +62,7 @@ namespace Atomic.Entities
         public void Constructor_WithNullName_AllowsNull_AndAddsEntities()
         {
             var e1 = new Entity();
-            var world = new EntityWorld<Entity>(name: null, e1);
+            var world = new EntityManager<Entity>(name: null, e1);
 
             Assert.IsNull(world.Name);
             Assert.AreEqual(1, world.Count);
@@ -77,7 +77,7 @@ namespace Atomic.Entities
             var e2 = new Entity();
             var e3 = new Entity();
             var e4 = new Entity();
-            var world = new EntityWorld("Test", e1, e2, e3);
+            var world = new EntityManager("Test", e1, e2, e3);
 
             //Assert:
             Assert.AreEqual("Test", world.Name);

@@ -2,13 +2,13 @@ using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class MonoEntityWorldTests
+    public partial class MonoEntityManagerTests
     {
         [Test]
         public void AddEntity()
         {
             //Arrange
-            var entityWorld = MonoEntityWorld.Create("Test", scanEntities: false);
+            var entityWorld = MonoEntityManager.Create("Test", scanEntities: false);
             var entity = MonoEntity.Create("Test Entity");
             IEntity wasEvent = null;
 
@@ -26,7 +26,7 @@ namespace Atomic.Entities
         {
             //Arrange
             var entity = MonoEntity.Create("Test Entity");
-            var entityWorld = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var entityWorld = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             entityWorld.Add(entity);
             IEntity wasEvent = null;
 
@@ -44,7 +44,7 @@ namespace Atomic.Entities
         {
             //Arrange
             var entity = MonoEntity.Create("Test Entity");
-            var entityWorld = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var entityWorld = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             entityWorld.Add(entity);
 
             //Act

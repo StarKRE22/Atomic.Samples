@@ -9,7 +9,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
             world.Enable();
 
             Assert.IsTrue(world.Enabled);
@@ -27,7 +27,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             // Ensure inactive
             Assert.IsFalse(world.Enabled);
@@ -44,7 +44,7 @@ namespace Atomic.Entities
         public void Deactivate_Should_TriggerOnDeactivatedEvent()
         {
             // Arrange
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable(); // Активируем перед деактивацией
             bool wasCalled = false;
             world.OnDisabled += () => wasCalled = true;

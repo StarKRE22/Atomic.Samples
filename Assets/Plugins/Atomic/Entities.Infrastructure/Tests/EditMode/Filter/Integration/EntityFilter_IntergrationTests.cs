@@ -30,7 +30,7 @@ namespace Atomic.Entities
             mike.AddTag("Warrior");
             mike.AddValue("Team", _TeamType.BLUE);
 
-            var world = new EntityWorld("Entity World", alex, george, ivan, mike);
+            var world = new EntityManager("Entity World", alex, george, ivan, mike);
             var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             //Assert:
@@ -63,7 +63,7 @@ namespace Atomic.Entities
 
             IEntity wasAddEvent = null;
 
-            var world = new EntityWorld("Entity World", alex, george);
+            var world = new EntityManager("Entity World", alex, george);
             var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             filter.OnAdded += e => wasAddEvent = e;
@@ -103,7 +103,7 @@ namespace Atomic.Entities
             var ivan = new Entity("Ivan");
             ivan.AddTag("Warrior");
 
-            var world = new EntityWorld("Entity World", alex, george, mike, ivan);
+            var world = new EntityManager("Entity World", alex, george, mike, ivan);
             var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             IEntity removedEntity = null;
@@ -148,7 +148,7 @@ namespace Atomic.Entities
             var ivan = new Entity("Ivan");
             ivan.AddTag("Warrior");
 
-            var world = new EntityWorld("Entity World", alex, george, mike, ivan);
+            var world = new EntityManager("Entity World", alex, george, mike, ivan);
             var filter = new Filter<IEntity>(world, this.IsBlueWarrior, new ValueEntityTracker());
 
             IEntity addedEntity = null;
@@ -191,7 +191,7 @@ namespace Atomic.Entities
             alex.AddTag("Warrior");
             alex.AddValue("Team", _TeamType.BLUE);
 
-            var world = new EntityWorld("Entity World", alex, mike);
+            var world = new EntityManager("Entity World", alex, mike);
             var filter = new Filter<IEntity>(world, this.IsBlueWarrior, new TagEntityTracker());
 
             IEntity addedEntity = null;

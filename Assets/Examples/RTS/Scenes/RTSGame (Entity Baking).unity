@@ -724,6 +724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameFactory: {fileID: 11400000, guid: c7be78091b4bf46838d8f7bddb63cb21, type: 2}
   _bakeUnits: 1
+  _playerPoint: {fileID: 0}
   _unitColumns: 10
 --- !u!1001 &259684195
 PrefabInstance:
@@ -3794,6 +3795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334e91cf482e4e2a931b0c282bfd3c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useKeyboard: 1
+  useMouse: 0
   panSpeed: 25
   panBorderThickness: 10
   scrollSpeed: 20
@@ -4489,7 +4492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0887f32b18a485195ec513d8b16b553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RTSGame::RTSGame.GamePresenter
-  _worldView: {fileID: 1245728448}
+  managerView: {fileID: 1245728448}
   _viewPool: {fileID: 1245728450}
 --- !u!114 &1245728450
 MonoBehaviour:
@@ -4504,6 +4507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: RTSGame::RTSGame.GameEntityViewPool
   container: {fileID: 441292361}
+  initialCapacity: 32
   catalogs:
   - {fileID: 11400000, guid: c75e65200d32247cfa368cbb0f6fec52, type: 2}
 --- !u!1001 &1264792416

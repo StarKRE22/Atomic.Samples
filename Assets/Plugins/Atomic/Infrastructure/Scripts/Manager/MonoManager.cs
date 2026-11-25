@@ -11,7 +11,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class MonoWorld<T> : MonoBehaviour, IWorld<T>
+    public abstract class MonoManager<T> : MonoBehaviour, IManager<T>
     {
 #if ODIN_INSPECTOR
         [HideInPlayMode]
@@ -119,7 +119,7 @@ namespace Atomic.Infrastructure
                 this.Dispose();
         }
 
-        protected abstract World<T> Inner { get; }
+        protected abstract Manager<T> Inner { get; }
 
         private bool isStarted;
 
@@ -296,7 +296,7 @@ namespace Atomic.Infrastructure
             string name = null,
             bool scanEntities = true,
             bool useUnityLifecycle = true
-        ) where R : MonoWorld<R>
+        ) where R : MonoManager<R>
         {
             GameObject go = new GameObject();
             go.SetActive(false);
@@ -314,13 +314,13 @@ namespace Atomic.Infrastructure
         /// Destroys the <see cref="MonoEntityWorld{E}"/> and its associated GameObject after an optional delay.
         /// </summary>
         /// <typeparam name="T">The type of scene entity managed by the world.</typeparam>
-        /// <param name="world">The world instance to destroy.</param>
+        /// <param name="manager">The world instance to destroy.</param>
         /// <param name="t">Optional delay in seconds before destruction. Default is 0.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Destroy(MonoWorld<T> world, float t = 0)
+        public static void Destroy(MonoManager<T> manager, float t = 0)
         {
-            if (world)
-                GameObject.Destroy(world.gameObject, t);
+            if (manager)
+                GameObject.Destroy(manager.gameObject, t);
         }
     }
 }

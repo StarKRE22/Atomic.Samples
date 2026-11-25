@@ -9,7 +9,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             // Assert preconditions
             Assert.IsFalse(world.Enabled);
@@ -30,7 +30,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             // Act
             world.Enable(); // первая активация
@@ -47,7 +47,7 @@ namespace Atomic.Entities
         public void Enable_Should_RaiseOnEnabledEvent()
         {
             // Arrange
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool eventCalled = false;
             world.OnEnabled += () => eventCalled = true;
 

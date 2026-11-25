@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Atomic.Entities
 {
     /// <summary>
-    /// A non-generic alias for <see cref="MonoEntityWorld{IEntity}"/>.
+    /// A non-generic alias for <see cref="MonoEntityManager{E}"/>.
     /// Represents a Unity scene-bound entity world operating on base <see cref="MonoEntity"/> types.
     /// </summary>
     /// <remarks>
@@ -15,9 +15,9 @@ namespace Atomic.Entities
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-1000)]
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Worlds/MonoEntityWorld.md")]
-    public class MonoEntityWorld : MonoEntityWorld<IEntity>
+    public class MonoEntityManager : MonoEntityManager<IEntity>
     {
-        public static MonoEntityWorld Create(
+        public static MonoEntityManager Create(
             string name = null,
             bool scanEntities = true,
             bool useUnityLifecycle = true
@@ -26,13 +26,13 @@ namespace Atomic.Entities
             GameObject go = new GameObject();
             go.SetActive(false);
 
-            MonoEntityWorld world = go.AddComponent<MonoEntityWorld>();
-            world.Name = name;
-            world.collectOnAwake = scanEntities;
-            world.useUnityLifecycle = useUnityLifecycle;
+            MonoEntityManager manager = go.AddComponent<MonoEntityManager>();
+            manager.Name = name;
+            manager.collectOnAwake = scanEntities;
+            manager.useUnityLifecycle = useUnityLifecycle;
 
             go.SetActive(true);
-            return world;
+            return manager;
         }
     }
 }

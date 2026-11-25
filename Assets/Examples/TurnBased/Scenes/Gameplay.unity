@@ -1899,7 +1899,7 @@ MonoBehaviour:
   _waterSplash: {fileID: 1402041941817024963, guid: f45c1b3ca539f3948b644f38ba1e7015, type: 3}
   _deathEffect: {fileID: 1456060657882760, guid: 09508284ee2dc6a4fb7ef06fb66bb2a5, type: 3}
   _camera: {fileID: 330585545}
-  _gameEntityViews: {fileID: 1153234531}
+  gameEntityView: {fileID: 1153234531}
   _markerView: {fileID: 1925425625}
   _gameBoardInstaller:
     _gameBoardView: {fileID: 1201200290}

@@ -22,7 +22,7 @@ namespace Game.Gameplay
         public static readonly ValueKey<IGameContext, IMultiPool<GameEntityType, IGameEntity>> EntityPool =
             new(nameof(EntityPool));
 
-        public static readonly ValueKey<IGameContext, IWorld<IGameEntity>> EntityWorld =
+        public static readonly ValueKey<IGameContext, IStore<IGameEntity>> EntityWorld =
             new(nameof(EntityWorld));
 
         public static readonly ValueKey<IGameContext, EntitySpawnInfo[]> InitialEntities =

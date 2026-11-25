@@ -9,7 +9,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             // Act
             world.Remove(entity);
@@ -24,7 +24,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
             world.Enable();
 
             // Act

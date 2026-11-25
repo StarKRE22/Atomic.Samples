@@ -7,7 +7,7 @@ namespace RTSGame
     public sealed class GamePresenter : MonoBehaviour
     {
         [SerializeField]
-        private GameEntityViewWorld _worldView;
+        private GameEntityViewManager managerView;
 
         [SerializeField]
         private GameEntityViewPool _viewPool;
@@ -16,8 +16,8 @@ namespace RTSGame
         {
             _ = _viewPool.InitAsync(GameEntityType.Projectile, 4096);
             IGameContext gameContext = FindAnyObjectByType<GameRunner>().GameContext;
-            IWorld<IGameEntity> entities = gameContext.GetEntityWorld();
-            _worldView.Show(entities);
+            IReadOnlyStore<IGameEntity> entities = gameContext.GetEntityWorld();
+            managerView.Show(entities);
         }
     }
 }

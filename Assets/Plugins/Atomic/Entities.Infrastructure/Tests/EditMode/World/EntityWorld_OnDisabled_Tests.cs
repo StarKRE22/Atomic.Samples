@@ -8,7 +8,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_Raises_OnDisabled_WhenEnabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             int callCount = 0;
             world.OnDisabled += () => callCount++;
 
@@ -21,7 +21,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_DoesNotRaise_OnDisabled_IfAlreadyDisabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             int callCount = 0;
             world.OnDisabled += () => callCount++;
 
@@ -35,7 +35,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_DoesNotRaise_OnDisabled_IfNeverEnabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool called = false;
             world.OnDisabled += () => called = true;
 
@@ -47,7 +47,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_Raises_OnDisabled_EvenWithoutEntities()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             bool called = false;
@@ -61,7 +61,7 @@ namespace Atomic.Entities
         [Test]
         public void Disable_LateSubscriber_DoesNotGetEvent()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
             world.Disable();
 

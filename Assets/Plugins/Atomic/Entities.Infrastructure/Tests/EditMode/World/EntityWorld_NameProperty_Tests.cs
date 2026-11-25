@@ -8,14 +8,14 @@ namespace Atomic.Entities
         [Test]
         public void Name_DefaultValue_IsEmptyString()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             Assert.AreEqual(string.Empty, world.Name);
         }
 
         [Test]
         public void Name_SetValue_StoresCorrectly()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Name = "TestWorld";
             Assert.AreEqual("TestWorld", world.Name);
         }
@@ -23,7 +23,7 @@ namespace Atomic.Entities
         [Test]
         public void Name_CanBeSetToNull()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Name = null;
             Assert.IsNull(world.Name);
         }
@@ -31,7 +31,7 @@ namespace Atomic.Entities
         [Test]
         public void Name_MultipleAssignments_WorkCorrectly()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Name = "A";
             world.Name = "B";
             Assert.AreEqual("B", world.Name);
@@ -40,7 +40,7 @@ namespace Atomic.Entities
         [Test]
         public void Name_SetThroughConstructor_Works()
         {
-            var world = new EntityWorld<Entity>("FromCtor");
+            var world = new EntityManager<Entity>("FromCtor");
             Assert.AreEqual("FromCtor", world.Name);
         }
     }

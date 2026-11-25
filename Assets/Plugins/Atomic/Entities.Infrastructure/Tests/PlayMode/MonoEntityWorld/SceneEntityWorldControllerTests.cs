@@ -10,7 +10,7 @@ namespace Atomic.Entities
     [TestFixture]
     public sealed class MonoEntityWorldControllerTests
     {
-        private MonoEntityWorld _world;
+        private MonoEntityManager manager;
 
        
 

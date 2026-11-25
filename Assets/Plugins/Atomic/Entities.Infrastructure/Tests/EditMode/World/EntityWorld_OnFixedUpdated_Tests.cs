@@ -8,7 +8,7 @@ namespace Atomic.Entities
         [Test]
         public void OnFixedUpdate_Raises_OnFixedUpdated_WithCorrectDeltaTime()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             float receivedDelta = -1;
@@ -22,7 +22,7 @@ namespace Atomic.Entities
         [Test]
         public void OnFixedUpdate_DoesNotRaise_OnFixedUpdated_IfNotEnabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
 
             bool called = false;
             world.OnFixedTicked += _ => called = true;
@@ -35,7 +35,7 @@ namespace Atomic.Entities
         [Test]
         public void OnFixedUpdate_CallsHandler_OncePerCall()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             int count = 0;
@@ -50,7 +50,7 @@ namespace Atomic.Entities
         [Test]
         public void OnFixedUpdate_LateSubscriber_DoesNotGetCalled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             world.FixedTick(0.03f);
@@ -64,7 +64,7 @@ namespace Atomic.Entities
         [Test]
         public void OnFixedUpdate_DoesNotThrow_WhenNoEntities()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             Assert.DoesNotThrow(() => world.FixedTick(0.015f));

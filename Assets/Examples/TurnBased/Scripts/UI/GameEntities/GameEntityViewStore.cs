@@ -3,7 +3,7 @@ using Game.Gameplay;
 
 namespace Game.UI
 {
-    public sealed class GameEntityStoreView : EntityViewStore<GameEntityType, IGameEntity, GameEntityView>
+    public sealed class GameEntityViewStore : EntityViewStore<GameEntityType, IGameEntity, GameEntityView>
     {
         protected override GameEntityType GetKey(IGameEntity entity) => 
             entity.GetEntityType().Value;

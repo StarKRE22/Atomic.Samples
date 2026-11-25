@@ -31729,7 +31729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0887f32b18a485195ec513d8b16b553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: RTSGame::RTSGame.GamePresenter
-  _worldView: {fileID: 1245728448}
+  managerView: {fileID: 1245728448}
   _viewPool: {fileID: 1245728450}
 --- !u!114 &1245728450
 MonoBehaviour:

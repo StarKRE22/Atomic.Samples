@@ -1,5 +1,4 @@
-﻿using Atomic.Entities;
-using Game.Gameplay;
+﻿using Game.Gameplay;
 
 namespace Game.UI
 {
@@ -7,8 +6,8 @@ namespace Game.UI
     {
         public static GameEntityView GetEntityView(this IUIContext ui, IGameEntity entity)
         {
-            GameEntityStoreView storeView = ui.GetEntityCollectionView();
-            return storeView.Get(entity);
+            GameEntityViewStore viewStore = ui.GetEntityCollectionView();
+            return viewStore.Get(entity);
         }
     }
 }

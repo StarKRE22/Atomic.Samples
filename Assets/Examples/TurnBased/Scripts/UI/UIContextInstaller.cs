@@ -20,7 +20,7 @@ namespace Game.UI
         private Camera _camera;
 
         [SerializeField]
-        private GameEntityStoreView _gameEntityViews;
+        private GameEntityViewStore gameEntityView;
 
         [SerializeField]
         private SelectedMarkerView _markerView;
@@ -43,7 +43,7 @@ namespace Game.UI
             ui.AddWaterSplashEffect( _waterSplash);
             ui.AddDeathEffect( _deathEffect);
             
-            ui.AddEntityCollectionView( _gameEntityViews);
+            ui.AddEntityCollectionView( gameEntityView);
             
             _gameBoardInstaller.Install(ui, gameContext);
             _uiInstaller.Install(ui, gameContext);

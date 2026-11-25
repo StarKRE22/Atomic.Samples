@@ -10,7 +10,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
             world.Enable();
 
             // Act
@@ -25,7 +25,7 @@ namespace Atomic.Entities
         public void Dispose_Should_ClearEntities()
         {
             // Arrange
-            var world = new EntityWorld<Entity>(new EntitySpy(), new EntitySpy());
+            var world = new EntityManager<Entity>(new EntitySpy(), new EntitySpy());
 
             // Act
             world.Dispose();
@@ -39,7 +39,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
             world.Enable();
 
             // Act
@@ -53,7 +53,7 @@ namespace Atomic.Entities
         public void Dispose_Should_UnsubscribeAllEvents()
         {
             // Arrange
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool updatedCalled = false;
             world.OnTicked += _ => updatedCalled = true;
 
@@ -71,7 +71,7 @@ namespace Atomic.Entities
         public void Dispose_Should_DisableWorld()
         {
             // Arrange
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             // Act

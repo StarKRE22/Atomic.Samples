@@ -30,7 +30,7 @@ namespace RTSGame.Debugging
             bool available = false;
 
             IGameContext gameContext = _gameRunner.GameContext;
-            if (gameContext.TryGetEntityWorld(out IWorld<IGameEntity> world))
+            if (gameContext.TryGetEntityWorld(out IStore<IGameEntity> world))
             {
                 count = world.Count;
                 available = true;

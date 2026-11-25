@@ -9,7 +9,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
             world.Enable();
 
             float delta = 0.033f;
@@ -26,7 +26,7 @@ namespace Atomic.Entities
         public void OnLateUpdate_Should_TriggerOnLateUpdatedEvent()
         {
             // Arrange
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             float calledDelta = -1f;
@@ -46,7 +46,7 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             // Act
             world.LateTick(0.033f);

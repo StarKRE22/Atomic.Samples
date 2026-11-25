@@ -12,7 +12,7 @@ namespace RTSGame
 
         private readonly IGameContext _gameContext;
 
-        private IWorld<IGameEntity> _entityWorld;
+        private IStore<IGameEntity> _entityWorld;
         private IVariable<IGameEntity> _target;
         private IGameEntity _self;
         private ICooldown _cooldown;

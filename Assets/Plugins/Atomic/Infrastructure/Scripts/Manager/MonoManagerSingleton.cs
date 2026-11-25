@@ -3,26 +3,26 @@ using UnityEngine;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class MonoWorldSingleton<E> : MonoWorld<E>
+    public abstract class MonoManagerSingleton<E> : MonoManager<E>
     {
         [Tooltip("If enabled, this object will persist across scene loads.")]
         [SerializeField]
         private bool dontDestroyOnLoad;
 
-        private static MonoWorldSingleton<E> _instance;
+        private static MonoManagerSingleton<E> _instance;
 
         /// <summary>
         /// Gets the singleton instance.
         /// Throws an exception if not found.
         /// </summary>
-        public static MonoWorldSingleton<E> Instance
+        public static MonoManagerSingleton<E> Instance
         {
             get
             {
                 if (_instance != null)
                     return _instance;
 
-                _instance = FindAnyObjectByType<MonoWorldSingleton<E>>(FindObjectsInactive.Exclude);
+                _instance = FindAnyObjectByType<MonoManagerSingleton<E>>(FindObjectsInactive.Exclude);
 
                 if (_instance == null)
                     throw new Exception(
@@ -35,7 +35,7 @@ namespace Atomic.Infrastructure
         /// <summary>
         /// Attempts to get the singleton instance.
         /// </summary>
-        public static bool TryGetInstance(out MonoWorldSingleton<E> instance)
+        public static bool TryGetInstance(out MonoManagerSingleton<E> instance)
         {
             if (_instance != null)
             {
@@ -43,7 +43,7 @@ namespace Atomic.Infrastructure
                 return true;
             }
 
-            instance = _instance = FindAnyObjectByType<MonoWorldSingleton<E>>(FindObjectsInactive.Exclude);
+            instance = _instance = FindAnyObjectByType<MonoManagerSingleton<E>>(FindObjectsInactive.Exclude);
             return instance != null;
         }
 

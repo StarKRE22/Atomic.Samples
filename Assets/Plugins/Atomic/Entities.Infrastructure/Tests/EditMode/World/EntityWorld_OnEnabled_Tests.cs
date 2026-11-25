@@ -8,7 +8,7 @@ namespace Atomic.Entities
         [Test]
         public void Enable_Raises_OnEnabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             int callCount = 0;
             world.OnEnabled += () => callCount++;
 
@@ -20,7 +20,7 @@ namespace Atomic.Entities
         [Test]
         public void Enable_DoesNotRaise_OnEnabled_IfAlreadyEnabled()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             int callCount = 0;
             world.OnEnabled += () => callCount++;
 
@@ -34,7 +34,7 @@ namespace Atomic.Entities
         public void Enable_TriggersSpawn_IfNotAlreadySpawned()
         {
             var entity = new Entity();
-            var world = new EntityWorld<Entity>(entity);
+            var world = new EntityManager<Entity>(entity);
 
             Assert.IsFalse(entity.Initialized);
 
@@ -46,7 +46,7 @@ namespace Atomic.Entities
         [Test]
         public void Enable_Raises_OnEnabled_WithNoEntities()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             bool called = false;
             world.OnEnabled += () => called = true;
 
@@ -58,7 +58,7 @@ namespace Atomic.Entities
         [Test]
         public void Enable_LateSubscriber_DoesNotGetEvent()
         {
-            var world = new EntityWorld<Entity>();
+            var world = new EntityManager<Entity>();
             world.Enable();
 
             bool called = false;

@@ -2,14 +2,8 @@ using System;
 
 namespace Atomic.Infrastructure
 {
-    public interface IWorld<T> : IStore<T>
+    public interface IManager<T> : IStore<T>
     {
-        /// <summary>
-        /// Gets the name of the entity world.
-        /// This can be used for debugging, identification, or UI representation purposes.
-        /// </summary>
-        string Name { get; set; }
-
         #region Enable
 
         /// <summary>

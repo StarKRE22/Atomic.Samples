@@ -79,7 +79,7 @@ namespace Atomic.Entities
         /// </summary>
         protected override void Release()
         {
-            var worldView = EntityViewWorldSingleton<TKey, TEntity, TView>.Instance;
+            var worldView = EntityViewManagerSingleton<TKey, TEntity, TView>.Instance;
             var viewPool = worldView.Pool;
             
             viewPool.Return(_view);

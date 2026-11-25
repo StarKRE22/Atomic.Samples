@@ -6,16 +6,12 @@ using Sirenix.OdinInspector;
 #endif
 namespace Atomic.Infrastructure
 {
-    public abstract class World<T> : Store<T>, IWorld<T>
+    public abstract class Manager<T> : Store<T>, IManager<T>
     {
         public event Action OnEnabled;
-
         public event Action OnDisabled;
-
         public event Action<float> OnTicked;
-
         public event Action<float> OnFixedTicked;
-
         public event Action<float> OnLateTicked;
 
 #if ODIN_INSPECTOR
@@ -35,24 +31,24 @@ namespace Atomic.Infrastructure
         private string _name;
         private bool _enabled;
 
-        protected World() => _name = string.Empty;
+        protected Manager() => _name = string.Empty;
 
-        protected World(params T[] entities)
+        protected Manager(params T[] objects)
         {
             _name = string.Empty;
-            this.AddRange(entities);
+            this.AddRange(objects);
         }
 
-        protected World(string name = null, params T[] entities)
+        protected Manager(string name = null, params T[] objects)
         {
             _name = name;
-            this.AddRange(entities);
+            this.AddRange(objects);
         }
 
-        protected World(string name, IEnumerable<T> entities)
+        protected Manager(string name, IEnumerable<T> objects)
         {
             _name = name;
-            this.AddRange(entities);
+            this.AddRange(objects);
         }
 
         /// <inheritdoc/>

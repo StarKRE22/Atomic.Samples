@@ -5,34 +5,34 @@ using UnityEngine;
 namespace Atomic.Entities
 {
     /// <summary>
-    /// A singleton implementation of <see cref="MonoEntityWorld{E}"/>.
+    /// A singleton implementation of <see cref="MonoEntityManager{E}"/>.
     /// Ensures that only one instance exists in the scene or globally.
     /// </summary>
     /// <typeparam name="E">Entity type.</typeparam>
-    public abstract class MonoEntityWorldSingleton<E> : MonoEntityWorld<E> where E : IEntity
+    public abstract class MonoEntityManagerSingleton : MonoEntityManager
     {
         [Tooltip("If enabled, this object will persist across scene loads.")]
         [SerializeField]
         private bool dontDestroyOnLoad;
 
-        private static MonoEntityWorldSingleton<E> _instance;
+        private static MonoEntityManagerSingleton _instance;
 
         /// <summary>
         /// Gets the singleton instance.
         /// Throws an exception if not found.
         /// </summary>
-        public static MonoEntityWorldSingleton<E> Instance
+        public static MonoEntityManagerSingleton Instance
         {
             get
             {
                 if (_instance != null)
                     return _instance;
 
-                _instance = FindAnyObjectByType<MonoEntityWorldSingleton<E>>(FindObjectsInactive.Exclude);
+                _instance = FindAnyObjectByType<MonoEntityManagerSingleton>(FindObjectsInactive.Exclude);
 
                 if (_instance == null)
                     throw new Exception(
-                        $"MonoEntityWorldSingleton<{typeof(E).Name}> was not found in the scene.");
+                        $"MonoEntityWorldSingleton was not found in the scene.");
 
                 return _instance;
             }
@@ -41,7 +41,7 @@ namespace Atomic.Entities
         /// <summary>
         /// Attempts to get the singleton instance.
         /// </summary>
-        public static bool TryGetInstance(out MonoEntityWorldSingleton<E> instance)
+        public static bool TryGetInstance(out MonoEntityManagerSingleton instance)
         {
             if (_instance != null)
             {
@@ -49,7 +49,7 @@ namespace Atomic.Entities
                 return true;
             }
 
-            instance = _instance = FindAnyObjectByType<MonoEntityWorldSingleton<E>>(FindObjectsInactive.Exclude);
+            instance = _instance = FindAnyObjectByType<MonoEntityManagerSingleton>(FindObjectsInactive.Exclude);
             return instance != null;
         }
 
@@ -61,7 +61,7 @@ namespace Atomic.Entities
             if (_instance != null && _instance != this)
             {
                 Debug.LogError(
-                    $"Duplicate MonoEntityWorldSingleton<{typeof(E).Name}> detected on '{name}'. Destroying this instance.",
+                    $"Duplicate MonoEntityWorldSingleton detected on '{name}'. Destroying this instance.",
                     this);
 
                 Destroy(gameObject);

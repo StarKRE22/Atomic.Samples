@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class MonoEntityWorldTests
+    public partial class MonoEntityManagerTests
     {
 
         [Test]
@@ -12,7 +12,7 @@ namespace Atomic.Entities
             var entity = MonoEntity.Create("E", useUnityLifecycle: false);
             entity.AddBehaviour(behaviourStub);
 
-            var world = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var world = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             world.Add(entity);
             var wasEnable = false;
 
@@ -36,7 +36,7 @@ namespace Atomic.Entities
             Assert.IsFalse(behaviourStub.Initialized);
             Assert.IsFalse(behaviourStub.Enabled);
             
-            var world = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var world = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             world.Add(entity);
             world.Enable();
             var wasUpdate = false;
@@ -59,7 +59,7 @@ namespace Atomic.Entities
             var entity = MonoEntity.Create("E", useUnityLifecycle: false);
             entity.AddBehaviour(behaviourStub);
 
-            var world = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var world = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             world.Add(entity);
             world.Enable();
             var wasUpdate = false;
@@ -82,7 +82,7 @@ namespace Atomic.Entities
             var entity = MonoEntity.Create("E", useUnityLifecycle: false);
             entity.AddBehaviour(behaviourStub);
             
-            var world = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var world = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             world.Add(entity);
             world.Enable();
             var wasUpdate = false;
@@ -105,7 +105,7 @@ namespace Atomic.Entities
             var entity = MonoEntity.Create("E", useUnityLifecycle: false);
             entity.AddBehaviour(behaviourStub);
             
-            var world = MonoEntityWorld.Create("Test", scanEntities: false, useUnityLifecycle: false);
+            var world = MonoEntityManager.Create("Test", scanEntities: false, useUnityLifecycle: false);
             world.Add(entity);
             world.Enable();
             var wasDisable = false;

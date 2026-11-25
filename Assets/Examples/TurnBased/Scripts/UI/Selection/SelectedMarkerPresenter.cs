@@ -9,7 +9,7 @@ namespace Game.UI
         private readonly SelectedMarkerView _markerView;
         
         private IReactiveVariable<IGameEntity> _selectedCharacter;
-        private GameEntityStoreView _entityViews;
+        private GameEntityViewStore entityView;
         private Subscription<IGameEntity> _subscription;
 
         public SelectedMarkerPresenter(SelectedMarkerView markerView)
@@ -19,7 +19,7 @@ namespace Game.UI
 
         public void Enable(IUIContext context)
         {
-            _entityViews = context.GetEntityCollectionView();
+            entityView = context.GetEntityCollectionView();
             _selectedCharacter = context.GetSelectedCharacter();
             _subscription = _selectedCharacter.Observe(this.OnSelectedCharacterChanged);
         }
@@ -32,7 +32,7 @@ namespace Game.UI
                 return;
             }
 
-            GameEntityView view = _entityViews.Get(entity);
+            GameEntityView view = entityView.Get(entity);
             _markerView.Show(view.transform);
         }
 

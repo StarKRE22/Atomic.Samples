@@ -70,7 +70,7 @@ namespace Atomic.Infrastructure
         public int Budget => _budget;
         public int Count => _lookup.Count;
 
-        protected PriorityBudgetSystem(
+        public PriorityBudgetSystem(
             IReadOnlyStore<T> source,
             IUpdateStrategy<T> updateStrategy,
             IUpdatePriorityStrategy<T> priorityStrategy,

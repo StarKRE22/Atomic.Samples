@@ -111,7 +111,7 @@ namespace Atomic.Infrastructure
         /// <param name="source">Source collection of entities.</param>
         /// <param name="distribution">System configuration.</param>
         /// <param name="trackers">Priority change triggers.</param>
-        protected WeightedPriorityBudgetSystem(
+        public WeightedPriorityBudgetSystem(
             IReadOnlyStore<T> source,
             IUpdateStrategy<T> updateStrategy,
             IUpdatePriorityStrategy<T> priorityStrategy,

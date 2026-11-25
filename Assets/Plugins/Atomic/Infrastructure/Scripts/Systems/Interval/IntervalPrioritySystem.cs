@@ -187,7 +187,7 @@ namespace Atomic.Infrastructure
         private readonly IUpdateStrategy<T> _updateStrategy;
         private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
-        protected IntervalPrioritySystem(
+        public IntervalPrioritySystem(
             IReadOnlyStore<T> source,
             IUpdateStrategy<T> updateStrategy,
             IUpdatePriorityStrategy<T> priorityStrategy,

@@ -64,7 +64,7 @@ namespace Atomic.Infrastructure
         public int Budget => _budget;
         public int Count => _entityCount;
 
-        protected BudgetSystem(
+        public BudgetSystem(
             IReadOnlyStore<T> source,
             IUpdateStrategy<T> updateStrategy,
             int budget = DEFAULT_BUDGET

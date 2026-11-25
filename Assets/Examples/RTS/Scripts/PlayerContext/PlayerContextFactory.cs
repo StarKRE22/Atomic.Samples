@@ -32,10 +32,10 @@ namespace RTSGame
                 behaviourCapacity
             );
 
-            playerContext.AddEnemies(new EntityFilter<IGameEntity>(gameContext.GetEntityWorld(),
-                e => e.HasUnitTag() && team != e.GetTeam().Value)
-            );
-
+            IWorld<IGameEntity> entityWorld = gameContext.GetEntityWorld();
+            Filter<IGameEntity> enemies = new Filter<IGameEntity>(entityWorld,
+                e => e.HasUnitTag() && team != e.GetTeam().Value);
+            playerContext.AddEnemies(enemies);
             playerContext.AddTeam(new Const<TeamType>(team));
             return playerContext;
         }

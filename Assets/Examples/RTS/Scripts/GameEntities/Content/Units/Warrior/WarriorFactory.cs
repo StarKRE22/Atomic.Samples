@@ -34,7 +34,7 @@ namespace RTSGame
            
             entity.AddTeam(new ReactiveVariable<TeamType>());
             entity.AddBehaviour(new EntitySpaceBehaviour(gameContext));
-            entity.AddUpdatePriority(new ReactiveVariable<UpdatePriority>(UpdatePriority.High));
+            entity.AddUpdatePriority(new ReactiveVariable<Priority>(Priority.High));
             
             _transformInstaller.Install(entity);
             _unitMoveInstaller.Install(entity);

@@ -1,5 +1,6 @@
 using System;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame.Debugging
@@ -29,7 +30,7 @@ namespace RTSGame.Debugging
             bool available = false;
 
             IGameContext gameContext = _gameRunner.GameContext;
-            if (gameContext.TryGetEntityWorld(out EntityWorld<IGameEntity> world))
+            if (gameContext.TryGetEntityWorld(out IWorld<IGameEntity> world))
             {
                 count = world.Count;
                 available = true;

@@ -40,7 +40,7 @@ namespace Atomic.Infrastructure
 
         private struct Entry
         {
-            public UpdatePriority Priority;
+            public Priority Priority;
             public int BucketIndex;
             public int EntityIndex;
         }
@@ -56,7 +56,7 @@ namespace Atomic.Infrastructure
 
             public Type CommandType;
             public T Entity;
-            public UpdatePriority Priority;
+            public Priority Priority;
         }
 
         private sealed class Bucket
@@ -184,19 +184,19 @@ namespace Atomic.Infrastructure
 
         #endregion
 
-        private readonly IProcessor<T> processor;
-        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
+        private readonly IJob<T> _job;
+        private readonly IPriorityStrategy<T> _priorityStrategy;
 
         public IntervalPrioritySystem(
             IReadOnlyStore<T> source,
-            IProcessor<T> processor,
-            IUpdatePriorityStrategy<T> priorityStrategy,
+            IJob<T> job,
+            IPriorityStrategy<T> priorityStrategy,
             Intervals intervals,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
-            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _job = job ?? throw new ArgumentNullException(nameof(job));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
 
 
@@ -228,7 +228,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
         {
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
 
             if (_isUpdating)
             {
@@ -249,7 +249,7 @@ namespace Atomic.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void AddInternal(T entity, UpdatePriority priority, double lastUpdateTime)
+        private void AddInternal(T entity, Priority priority, double lastUpdateTime)
         {
             if (_lookup.ContainsKey(entity))
                 return;
@@ -368,7 +368,7 @@ namespace Atomic.Infrastructure
                 float deltaTime = (float) (_elapsedTime - slot.LastUpdateTime);
                 slot.LastUpdateTime = _elapsedTime;
 
-                processor.Process(slot.Entity, deltaTime);
+                _job.Execute(slot.Entity, deltaTime);
             }
         }
 
@@ -431,7 +431,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
 
             if (_isUpdating)
             {
@@ -449,7 +449,7 @@ namespace Atomic.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdatePriorityInternal(T entity, UpdatePriority priority)
+        private void UpdatePriorityInternal(T entity, Priority priority)
         {
             if (!_lookup.TryGetValue(entity, out Entry entry))
                 return;
@@ -466,13 +466,13 @@ namespace Atomic.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private Group GetGroup(UpdatePriority priority)
+        private Group GetGroup(Priority priority)
         {
             return priority switch
             {
-                UpdatePriority.High => _highGroup,
-                UpdatePriority.Medium => _midGroup,
-                UpdatePriority.Low => _lowGroup,
+                Priority.High => _highGroup,
+                Priority.Medium => _midGroup,
+                Priority.Low => _lowGroup,
                 _ => throw new ArgumentOutOfRangeException(nameof(priority), priority, null)
             };
         }

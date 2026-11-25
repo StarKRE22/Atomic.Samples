@@ -50,7 +50,7 @@ namespace Atomic.Infrastructure
 
         private struct Entry
         {
-            public UpdatePriority Priority;
+            public Priority Priority;
             public int Index;
         }
 
@@ -65,7 +65,7 @@ namespace Atomic.Infrastructure
 
             public Type CommandType;
             public T Entity;
-            public UpdatePriority Priority;
+            public Priority Priority;
         }
 
         private readonly Dictionary<T, Entry> _lookup = new();
@@ -102,8 +102,8 @@ namespace Atomic.Infrastructure
 
         public int Budget => _budget;
         
-        private readonly IProcessor<T> processor;
-        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
+        private readonly IJob<T> job;
+        private readonly IPriorityStrategy<T> _priorityStrategy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeightedPriorityBudgetSystem{T}"/> class.
@@ -113,15 +113,15 @@ namespace Atomic.Infrastructure
         /// <param name="trackers">Priority change triggers.</param>
         public WeightedPriorityBudgetSystem(
             IReadOnlyStore<T> source,
-            IProcessor<T> processor,
-            IUpdatePriorityStrategy<T> priorityStrategy,
+            IJob<T> job,
+            IPriorityStrategy<T> priorityStrategy,
             Distribution distribution,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
-            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            this.job = job ?? throw new ArgumentNullException(nameof(job));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
             
             int initialCapacity = Math.Max(16, source.Count);
@@ -154,7 +154,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
         {
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
             if (_isUpdating)
             {
                 _commands.Add(new Command
@@ -174,14 +174,14 @@ namespace Atomic.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void AddInternal(T entity, UpdatePriority priority)
+        private void AddInternal(T entity, Priority priority)
         {
             if (_lookup.ContainsKey(entity))
                 return;
 
             switch (priority)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                 {
                     if (_highEntityCount == _highEntities.Length)
                         Array.Resize(ref _highEntities, _highEntities.Length * 2);
@@ -192,7 +192,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                 {
                     if (_midEntityCount == _midEntities.Length)
                         Array.Resize(ref _midEntities, _midEntities.Length * 2);
@@ -203,7 +203,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default:
                 {
                     if (_lowEntityCount == _lowEntities.Length)
@@ -247,12 +247,12 @@ namespace Atomic.Infrastructure
             if (!_lookup.Remove(entity, out Entry entry))
                 return;
 
-            UpdatePriority p = entry.Priority;
+            Priority p = entry.Priority;
             int index = entry.Index;
 
             switch (p)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                 {
                     int last = _highEntityCount - 1;
                     if (index != last)
@@ -273,7 +273,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                 {
                     int last = _midEntityCount - 1;
                     if (index != last)
@@ -294,7 +294,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default: // Low
                 {
                     int last = _lowEntityCount - 1;
@@ -376,7 +376,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    processor.Process(array[cursor++], deltaTime);
+                    job.Execute(array[cursor++], deltaTime);
                 }
 
                 _highCursor = cursor;
@@ -401,7 +401,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    processor.Process(array[cursor++], deltaTime);
+                    job.Execute(array[cursor++], deltaTime);
                 }
 
                 _midCursor = cursor;
@@ -425,7 +425,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    processor.Process(array[cursor++], deltaTime);
+                    job.Execute(array[cursor++], deltaTime);
                 }
 
                 _lowCursor = cursor;
@@ -477,7 +477,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
             if (_isUpdating)
             {
                 _commands.Add(new Command
@@ -494,7 +494,7 @@ namespace Atomic.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdatePriorityInternal(T entity, UpdatePriority priority)
+        private void UpdatePriorityInternal(T entity, Priority priority)
         {
             if (!_lookup.TryGetValue(entity, out var entry))
                 return;
@@ -507,7 +507,7 @@ namespace Atomic.Infrastructure
             // ===== REMOVE =====
             switch (entry.Priority)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                 {
                     int last = _highEntityCount - 1;
 
@@ -527,7 +527,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                 {
                     int last = _midEntityCount - 1;
 
@@ -547,7 +547,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default:
                 {
                     int last = _lowEntityCount - 1;
@@ -572,7 +572,7 @@ namespace Atomic.Infrastructure
             // ===== ADD =====
             switch (priority)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                 {
                     if (_highEntityCount == _highEntities.Length)
                         Array.Resize(ref _highEntities, _highEntities.Length * 2);
@@ -583,7 +583,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                 {
                     if (_midEntityCount == _midEntities.Length)
                         Array.Resize(ref _midEntities, _midEntities.Length * 2);
@@ -594,7 +594,7 @@ namespace Atomic.Infrastructure
                     break;
                 }
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default:
                 {
                     if (_lowEntityCount == _lowEntities.Length)

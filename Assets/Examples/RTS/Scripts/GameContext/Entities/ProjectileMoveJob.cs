@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace RTSGame
 {
-    public sealed class ProjectileMoveProcessor : IProcessor<IGameEntity>
+    public sealed class ProjectileMoveJob : IJob<IGameEntity>
     {
         private readonly IGameContext _gameContext;
 
-        public ProjectileMoveProcessor(IGameContext context)
+        public ProjectileMoveJob(IGameContext context)
         {
             _gameContext = context;
         }
 
-        void IProcessor<IGameEntity>.Process(IGameEntity entity, float deltaTime)
+        void IJob<IGameEntity>.Execute(IGameEntity entity, float deltaTime)
         {
             IGameEntity target = entity.GetTarget().Value;
             if (target is not {Enabled: true})

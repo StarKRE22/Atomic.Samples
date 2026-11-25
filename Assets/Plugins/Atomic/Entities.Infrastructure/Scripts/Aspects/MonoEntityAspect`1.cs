@@ -1,4 +1,5 @@
 #if UNITY_5_3_OR_NEWER
+using System;
 using Atomic.Infrastructure;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Atomic.Entities
     /// logic to apply and discard behaviors or properties on entities during runtime.
     /// Attach this component to a GameObject in your scene to use it.
     /// </remarks>
+    [Obsolete]
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Aspects/MonoEntityAspect%601.md")]
     public abstract class MonoEntityAspect<E> : MonoAspect<E>, IEntityAspect<E> where E : IEntity
     {

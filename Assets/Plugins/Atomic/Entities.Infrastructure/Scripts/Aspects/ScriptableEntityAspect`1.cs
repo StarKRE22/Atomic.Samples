@@ -1,4 +1,5 @@
 #if UNITY_5_3_OR_NEWER
+using System;
 using Atomic.Infrastructure;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Atomic.Entities
     /// Inherit from this class to create reusable ScriptableObject assets that encapsulate
     /// logic to apply and discard behaviors or properties on entities.
     /// </remarks>
+    [Obsolete]
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Aspects/ScriptableEntityAspect%601.md")]
     public abstract class ScriptableEntityAspect<E> : ScriptableAspect<E>, IEntityAspect<E> where E : IEntity
     {

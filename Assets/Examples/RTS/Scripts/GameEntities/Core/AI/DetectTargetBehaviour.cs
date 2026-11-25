@@ -1,5 +1,6 @@
 using Atomic.Elements;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace RTSGame
 
         private readonly IGameContext _gameContext;
 
-        private IEntityWorld<IGameEntity> _entityWorld;
+        private IWorld<IGameEntity> _entityWorld;
         private IVariable<IGameEntity> _target;
         private IGameEntity _self;
         private ICooldown _cooldown;

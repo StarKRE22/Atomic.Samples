@@ -1,22 +1,20 @@
-using System;
 using Atomic.Elements;
 using Atomic.Infrastructure;
 
 namespace RTSGame
 {
-    [Serializable]
-    public sealed class DetectTargetProcessor : IProcessor<IGameEntity>
+    public sealed class DetectTargetJob : IJob<IGameEntity>
     {
         private readonly IGameContext _gameContext;
         private readonly IWorld<IGameEntity> _entityWorld;
 
-        public DetectTargetProcessor(IGameContext gameContext)
+        public DetectTargetJob(IGameContext gameContext)
         {
             _gameContext = gameContext;
             _entityWorld = gameContext.GetEntityWorld();
         }
 
-        void IProcessor<IGameEntity>.Process(IGameEntity entity, float deltaTime)
+        void IJob<IGameEntity>.Execute(IGameEntity entity, float deltaTime)
         {
             ICooldown cooldown = entity.GetDetectionCooldown();
             cooldown.Tick(deltaTime);

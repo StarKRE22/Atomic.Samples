@@ -1,4 +1,5 @@
 using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
@@ -15,7 +16,7 @@ namespace RTSGame
         {
             _ = _viewPool.InitAsync(GameEntityType.Projectile, 4096);
             IGameContext gameContext = FindAnyObjectByType<GameRunner>().GameContext;
-            EntityWorld<IGameEntity> entities = gameContext.GetEntityWorld();
+            IWorld<IGameEntity> entities = gameContext.GetEntityWorld();
             _worldView.Show(entities);
         }
     }

@@ -1,4 +1,5 @@
 #if UNITY_5_3_OR_NEWER
+using System;
 using UnityEngine;
 
 namespace Atomic.Entities
@@ -11,6 +12,7 @@ namespace Atomic.Entities
     /// with <typeparamref name="E"/> fixed to <see cref="IEntity"/>. 
     /// It implements <see cref="IEntityAspect"/> and can be added to GameObjects in a Unity scene.
     /// </remarks>
+    [Obsolete]
     [HelpURL("https://github.com/StarKRE22/Atomic/blob/main/Docs/Entities/Aspects/MonoEntityAspect.md")]
     public abstract class MonoEntityAspect : MonoEntityAspect<IEntity>, IEntityAspect
     {

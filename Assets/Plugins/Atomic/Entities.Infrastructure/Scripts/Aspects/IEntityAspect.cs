@@ -1,3 +1,5 @@
+using System;
+
 namespace Atomic.Entities
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace Atomic.Entities
     /// with <typeparamref name="E"/> fixed to <see cref="IEntity"/>.
     /// Use this when you do not need a generic aspect tied to a specific entity type.
     /// </remarks>
+    [Obsolete]
     public interface IEntityAspect : IEntityAspect<IEntity>
     {
     }

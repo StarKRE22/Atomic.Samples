@@ -2,13 +2,10 @@ using Atomic.Infrastructure;
 
 namespace RTSGame
 {
-    public sealed class GameEntityPriorityStrategy : IUpdatePriorityStrategy<IGameEntity>
+    public sealed class GameEntityPriorityStrategy : IPriorityStrategy<IGameEntity>
     {
-        public static GameEntityPriorityStrategy Default = new();
+        public static readonly GameEntityPriorityStrategy Default = new();
         
-        public UpdatePriority EvaluatePriority(IGameEntity obj)
-        {
-            return obj.GetUpdatePriority().Value;
-        }
+        public Priority Evaluate(IGameEntity obj) => obj.GetUpdatePriority().Value;
     }
 }

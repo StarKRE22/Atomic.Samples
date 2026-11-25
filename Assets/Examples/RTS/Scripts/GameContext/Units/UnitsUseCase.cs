@@ -1,5 +1,4 @@
-using System.Buffers;
-using Atomic.Entities;
+using Atomic.Infrastructure;
 using Modules.Spatial;
 using Unity.Profiling;
 using UnityEngine;
@@ -29,7 +28,7 @@ namespace RTSGame
             using (SpawnMarker.Auto())
 #endif
             {
-                IMultiEntityPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
+                IMultiPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
                 IGameEntity entity = pool.Rent(name);
                 entity.GetPosition().Value = position;
                 entity.GetRotation().Value = rotation;

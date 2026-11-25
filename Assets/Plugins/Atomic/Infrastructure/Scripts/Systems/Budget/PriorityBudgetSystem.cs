@@ -12,7 +12,7 @@ namespace Atomic.Infrastructure
 
         private struct Entry
         {
-            public UpdatePriority Priority;
+            public Priority Priority;
             public int Index;
         }
 
@@ -27,13 +27,13 @@ namespace Atomic.Infrastructure
 
             public Type CommandType;
             public T Entity;
-            public UpdatePriority Priority;
+            public Priority Priority;
         }
 
         private readonly Dictionary<T, Entry> _lookup;
         private readonly List<Command> _commands = new(64);
-        private readonly IProcessor<T> processor;
-        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
+        private readonly IJob<T> job;
+        private readonly IPriorityStrategy<T> _priorityStrategy;
 
         public int HighCount => _highEntityCount;
         public int MidCount => _midEntityCount;
@@ -72,15 +72,15 @@ namespace Atomic.Infrastructure
 
         public PriorityBudgetSystem(
             IReadOnlyStore<T> source,
-            IProcessor<T> processor,
-            IUpdatePriorityStrategy<T> priorityStrategy,
+            IJob<T> job,
+            IPriorityStrategy<T> priorityStrategy,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) :
             base(source)
         {
-            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            this.job = job ?? throw new ArgumentNullException(nameof(job));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
 
             int capacity = Math.Max(16, source.Count);
@@ -143,7 +143,7 @@ namespace Atomic.Infrastructure
                     cursor = 0;
 
                 T entity = entities[cursor++];
-                processor.Process(entity, deltaTime);
+                job.Execute(entity, deltaTime);
             }
 
             return toProcess;
@@ -170,7 +170,7 @@ namespace Atomic.Infrastructure
 
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
 
             if (_isUpdating)
             {
@@ -187,7 +187,7 @@ namespace Atomic.Infrastructure
             }
         }
 
-        private void UpdatePriorityInternal(T entity, UpdatePriority priority)
+        private void UpdatePriorityInternal(T entity, Priority priority)
         {
             if (!_lookup.TryGetValue(entity, out Entry entry))
                 return;
@@ -209,7 +209,7 @@ namespace Atomic.Infrastructure
             if (_lookup.ContainsKey(entity))
                 return;
 
-            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
+            Priority priority = _priorityStrategy.Evaluate(entity);
 
             if (_isUpdating)
             {
@@ -229,29 +229,29 @@ namespace Atomic.Infrastructure
                 tracker.Track(entity);
         }
 
-        private void AddInternal(T entity, UpdatePriority priority)
+        private void AddInternal(T entity, Priority priority)
         {
             if (_lookup.ContainsKey(entity))
                 return;
 
             switch (priority)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                     this.AddToArray(ref _highEntities, ref _highEntityCount, entity, priority);
                     break;
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                     this.AddToArray(ref _midEntities, ref _midEntityCount, entity, priority);
                     break;
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default:
                     this.AddToArray(ref _lowEntities, ref _lowEntityCount, entity, priority);
                     break;
             }
         }
 
-        private void AddToArray(ref T[] array, ref int count, T entity, UpdatePriority priority)
+        private void AddToArray(ref T[] array, ref int count, T entity, Priority priority)
         {
             if (count >= array.Length)
                 Array.Resize(ref array, array.Length * 2);
@@ -294,15 +294,15 @@ namespace Atomic.Infrastructure
 
             switch (entry.Priority)
             {
-                case UpdatePriority.High:
+                case Priority.High:
                     this.RemoveFromArray(_highEntities, ref _highEntityCount, ref _highCursor, entry.Index);
                     break;
 
-                case UpdatePriority.Medium:
+                case Priority.Medium:
                     this.RemoveFromArray(_midEntities, ref _midEntityCount, ref _midCursor, entry.Index);
                     break;
 
-                case UpdatePriority.Low:
+                case Priority.Low:
                 default:
                     this.RemoveFromArray(_lowEntities, ref _lowEntityCount, ref _lowCursor, entry.Index);
                     break;
@@ -385,22 +385,22 @@ namespace Atomic.Infrastructure
 
         #region Builder
 
-        public static Builder Using(IProcessor<T> processor) => new(processor);
+        public static Builder Using(IJob<T> job) => new(job);
         
-        public static Builder Using(ProcessHandler<T> processor) => new(new InlineProcessor<T>(processor));
+        public static Builder Using(JobHandler<T> processor) => new(new InlineJob<T>(processor));
 
         public struct Builder
         {
             private IReadOnlyStore<T> _source;
-            private readonly IProcessor<T> _processor;
-            private IUpdatePriorityStrategy<T> _priorityStrategy;
+            private readonly IJob<T> _job;
+            private IPriorityStrategy<T> _priorityStrategy;
             private int _budget;
             private float _priorityCooldown;
             private ITracker<T>[] _trackers;
 
-            public Builder(IProcessor<T> processor) : this()
+            public Builder(IJob<T> job) : this()
             {
-                _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+                _job = job ?? throw new ArgumentNullException(nameof(job));
                 _budget = DEFAULT_BUDGET;
                 _priorityCooldown = DEFAULT_PRIORITY_COOLDOWN;
                 _trackers = Array.Empty<ITracker<T>>();
@@ -424,7 +424,7 @@ namespace Atomic.Infrastructure
                 return this;
             }
 
-            public Builder Priority(IUpdatePriorityStrategy<T> strategy)
+            public Builder Priority(IPriorityStrategy<T> strategy)
             {
                 _priorityStrategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
                 return this;
@@ -453,7 +453,7 @@ namespace Atomic.Infrastructure
                 if (_source == null)
                     throw new InvalidOperationException("Source is not specified.");
 
-                if (_processor == null)
+                if (_job == null)
                     throw new InvalidOperationException("Processor is not specified.");
 
                 if (_priorityStrategy == null)
@@ -461,7 +461,7 @@ namespace Atomic.Infrastructure
 
                 return new PriorityBudgetSystem<T>(
                     _source,
-                    _processor,
+                    _job,
                     _priorityStrategy,
                     _budget,
                     _priorityCooldown,

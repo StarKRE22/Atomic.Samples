@@ -37,7 +37,7 @@ namespace RTSGame
             entity.AddTarget(new ReactiveVariable<IGameEntity>());
             entity.AddTeam(new ReactiveVariable<TeamType>());
             entity.WhenEnable(cooldown.ResetTime);
-            entity.AddUpdatePriority(new ReactiveVariable<UpdatePriority>(UpdatePriority.High));
+            entity.AddUpdatePriority(new ReactiveVariable<Priority>(Priority.High));
             
             // entity.AddBehaviour(new ProjectileLifetimeBehaviour(gameContext));
             // entity.AddBehaviour(new ProjectileMoveBehaviour(gameContext));

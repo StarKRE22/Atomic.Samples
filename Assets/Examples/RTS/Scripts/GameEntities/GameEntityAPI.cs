@@ -39,6 +39,6 @@ namespace RTSGame
         public static readonly ValueKey<IGameEntity, IValue<Vector3>> FirePoint = new(nameof(FirePoint));
         public static readonly ValueKey<IGameEntity, IValue<float>> DetectionRadius = new(nameof(DetectionRadius));
         public static readonly ValueKey<IGameEntity, ICooldown> DetectionCooldown = new(nameof(DetectionCooldown));
-        public static readonly ValueKey<IGameEntity, IReactiveVariable<UpdatePriority>> UpdatePriority = new(nameof(UpdatePriority));
+        public static readonly ValueKey<IGameEntity, IReactiveVariable<Priority>> UpdatePriority = new(nameof(UpdatePriority));
     }
 }

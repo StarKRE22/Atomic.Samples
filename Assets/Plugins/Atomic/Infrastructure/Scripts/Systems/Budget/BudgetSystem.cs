@@ -57,7 +57,7 @@ namespace Atomic.Infrastructure
 
         private readonly List<Command> _commands = new();
 
-        private readonly IProcessor<T> processor;
+        private readonly IJob<T> _job;
 
         private bool _isUpdating;
 
@@ -66,11 +66,11 @@ namespace Atomic.Infrastructure
 
         public BudgetSystem(
             IReadOnlyStore<T> source,
-            IProcessor<T> processor,
+            IJob<T> job,
             int budget = DEFAULT_BUDGET
         ) : base(source)
         {
-            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _job = job ?? throw new ArgumentNullException(nameof(job));
             _budget = Math.Max(0, budget);
 
             int capacity = Math.Max(4, source.Count);
@@ -118,7 +118,7 @@ namespace Atomic.Infrastructure
                         cursor = 0;
 
                     T entity = _entities[cursor++];
-                    processor.Process(entity, deltaTime);
+                    _job.Execute(entity, deltaTime);
                 }
             }
             finally
@@ -234,17 +234,19 @@ namespace Atomic.Infrastructure
 
         #region Builder
 
-        public static Builder Using(IProcessor<T> processor)  => new(processor);
+        public static Builder Using(IJob<T> job)  => new(job);
 
+        public static Builder Using(JobHandler<T> processor) => new(new InlineJob<T>(processor));
+        
         public struct Builder
         {
             private IReadOnlyStore<T> _source;
-            private readonly IProcessor<T> _processor;
+            private readonly IJob<T> job;
             private int _budget;
 
-            public Builder(IProcessor<T> processor) : this()
+            public Builder(IJob<T> job) : this()
             {
-                _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+                this.job = job ?? throw new ArgumentNullException(nameof(job));
                 _budget = DEFAULT_BUDGET;
             }
 
@@ -277,10 +279,10 @@ namespace Atomic.Infrastructure
                 if (_source == null)
                     throw new InvalidOperationException("Source is not specified.");
 
-                if (_processor == null)
+                if (job == null)
                     throw new InvalidOperationException("Processor is not specified.");
 
-                return new BudgetSystem<T>(_source, _processor, _budget);
+                return new BudgetSystem<T>(_source, job, _budget);
             }
         }
 

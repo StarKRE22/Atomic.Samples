@@ -4,7 +4,7 @@ using Atomic.Entities;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class AttackTargetSystem : PriorityGameEntitySystem
+    public sealed class AttackTargetSystem : EntityPriorityBudgetGameSystem
     {
         public AttackTargetSystem(IGameContext context)
             : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), entity => entity.HasAttackerTag()))

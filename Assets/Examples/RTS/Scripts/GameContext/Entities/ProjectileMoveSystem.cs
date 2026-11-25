@@ -6,7 +6,7 @@ using UnityEngine;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class ProjectileMoveSystem : RoundGameEntitySystem
+    public sealed class ProjectileMoveSystem : EntityBudgetGameSystem
     {
         private readonly IGameContext _gameContext;
 

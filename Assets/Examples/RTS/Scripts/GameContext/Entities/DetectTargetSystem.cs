@@ -5,7 +5,7 @@ using Atomic.Entities;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class DetectTargetSystem : RoundGameEntitySystem
+    public sealed class DetectTargetSystem : EntityBudgetGameSystem
     {
         private readonly IEntityWorld<IGameEntity> _entityWorld;
         private readonly IGameContext _gameContext;

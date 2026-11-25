@@ -8,7 +8,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class RoundSystem<T> : SystemBase<T>, IBudgetSystem
+    public abstract class BudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 1024;
 
@@ -62,16 +62,12 @@ namespace Atomic.Infrastructure
         public int Budget => _budget;
         public int Count => _entityCount;
 
-        protected RoundSystem(
-            IReadOnlyStore<T> source,
-            int budget = DEFAULT_BUDGET
-        ) : base(source)
+        protected BudgetSystem(IReadOnlyStore<T> source, int budget = DEFAULT_BUDGET) : base(source)
         {
             int capacity = Math.Max(4, source.Count);
 
             _lookup = new Dictionary<T, int>(capacity);
             _entities = new T[capacity];
-
             _budget = Math.Max(0, budget);
         }
 
@@ -96,10 +92,9 @@ namespace Atomic.Infrastructure
         protected sealed override void OnUpdate(float deltaTime)
         {
             int count = _entityCount;
-
             if (count == 0 || _budget == 0)
             {
-                FlushCommands();
+                this.FlushCommands();
                 return;
             }
 
@@ -116,8 +111,7 @@ namespace Atomic.Infrastructure
                         cursor = 0;
 
                     T entity = _entities[cursor++];
-
-                    Update(entity, deltaTime);
+                    this.Update(entity, deltaTime);
                 }
             }
             finally
@@ -125,7 +119,7 @@ namespace Atomic.Infrastructure
                 _cursor = cursor;
                 _isUpdating = false;
 
-                FlushCommands();
+                this.FlushCommands();
 
                 if (_cursor >= _entityCount)
                     _cursor = 0;
@@ -146,7 +140,7 @@ namespace Atomic.Infrastructure
                 return;
             }
 
-            AddInternal(entity);
+            this.AddInternal(entity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -161,7 +155,7 @@ namespace Atomic.Infrastructure
                 return;
             }
 
-            RemoveInternal(entity);
+            this.RemoveInternal(entity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -170,13 +164,8 @@ namespace Atomic.Infrastructure
             if (_lookup.ContainsKey(entity))
                 return;
 
-            if (_entityCount >= _entities.Length)
-            {
-                Array.Resize(
-                    ref _entities,
-                    _entities.Length * 2
-                );
-            }
+            if (_entityCount >= _entities.Length) 
+                Array.Resize(ref _entities, _entities.Length * 2);
 
             _entities[_entityCount] = entity;
             _lookup[entity] = _entityCount;
@@ -191,7 +180,6 @@ namespace Atomic.Infrastructure
                 return;
 
             int last = _entityCount - 1;
-
             if (index != last)
             {
                 T lastEntity = _entities[last];
@@ -216,19 +204,19 @@ namespace Atomic.Infrastructure
 
             try
             {
-                for (int i = 0; i < _commands.Count; i++)
+                foreach (Command command in _commands)
                 {
-                    Command command = _commands[i];
-
                     switch (command.Type)
                     {
                         case CommandType.Add:
-                            AddInternal(command.Entity);
+                            this.AddInternal(command.Entity);
                             break;
 
                         case CommandType.Remove:
-                            RemoveInternal(command.Entity);
+                            this.RemoveInternal(command.Entity);
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }

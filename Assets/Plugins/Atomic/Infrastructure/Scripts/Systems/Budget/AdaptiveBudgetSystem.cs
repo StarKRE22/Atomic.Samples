@@ -41,35 +41,29 @@ namespace Atomic.Infrastructure
 
         public void Update(float deltaTime)
         {
+            this.UpdatePerformance();
+            _system.Update(deltaTime);
+        }
+
+        private void UpdatePerformance()
+        {
             _elapsed += Time.unscaledDeltaTime;
 
             float interval = Mathf.Max(0.01f, _updateInterval);
-
             if (_elapsed >= interval)
             {
                 _elapsed %= interval;
-                if (_performance.HasSample)
-                {
-                    AdjustBudget();
-                }
+                if (_performance.HasSample) 
+                    this.AdjustBudget();
             }
-
-            _system.Update(deltaTime);
         }
 
         private void AdjustBudget()
         {
             int currentBudget = _system.Budget;
-
-            int nextBudget = _strategy.Adjust(
-                currentBudget,
-                _performance.CPUTime
-            );
-
-            if (nextBudget != currentBudget)
-            {
+            int nextBudget = _strategy.Adjust(currentBudget, _performance.CPUTime);
+            if (nextBudget != currentBudget) 
                 _system.SetBudget(nextBudget);
-            }
         }
 
         public void Dispose()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RTSGame
 {
-    public sealed class UnitPrioritySystem : RoundGameEntitySystem
+    public sealed class UnitPrioritySystem : EntityBudgetGameSystem
     {
         [Serializable]
         public sealed class Settings

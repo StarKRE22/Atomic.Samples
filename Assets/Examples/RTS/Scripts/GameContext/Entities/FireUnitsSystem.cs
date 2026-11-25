@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class FireUnitsSystem : PriorityGameEntitySystem
+    public sealed class FireUnitsSystem : EntityPriorityBudgetGameSystem
     {
         public FireUnitsSystem(IGameContext context)
             : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), entity => entity.HasFireableTag()))

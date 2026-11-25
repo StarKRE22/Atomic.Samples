@@ -5,10 +5,10 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class PrioritySystem<T> : SystemBase<T>, IBudgetSystem
+    public abstract class PriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 512;
-        protected const float DEFAULT_COOLDOWN = 0.2f;
+        protected const float DEFAULT_PRIORITY_COOLDOWN = 0.2f;
 
         private struct Entry
         {
@@ -32,11 +32,10 @@ namespace Atomic.Infrastructure
 
         private readonly Dictionary<T, Entry> _lookup;
         private readonly List<Command> _commands = new(64);
-        
+
         public int HighCount => _highEntityCount;
         public int MidCount => _midEntityCount;
         public int LowCount => _lowEntityCount;
-
 
         private T[] _highEntities;
         private T[] _midEntities;
@@ -54,13 +53,13 @@ namespace Atomic.Infrastructure
         [ShowInInspector, ReadOnly, HideInEditorMode]
 #endif
         private int _budget;
-      
-        
+
+
 #if ODIN_INSPECTOR
         [ShowInInspector, ReadOnly, HideInEditorMode]
 #endif
-        private float _cooldown;
-        
+        private float _priorityCooldown;
+
         private bool _isUpdating;
         private float _priorityTime;
 
@@ -69,10 +68,10 @@ namespace Atomic.Infrastructure
         public int Budget => _budget;
         public int Count => _lookup.Count;
 
-        protected PrioritySystem(
+        protected PriorityBudgetSystem(
             IReadOnlyStore<T> source,
             int budget = DEFAULT_BUDGET,
-            float cooldown = DEFAULT_COOLDOWN,
+            float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) :
             base(source)
@@ -86,7 +85,7 @@ namespace Atomic.Infrastructure
             _lowEntities = new T[capacity];
 
             _budget = budget;
-            _cooldown = cooldown;
+            _priorityCooldown = priorityCooldown;
 
             _trackers = trackers ?? Array.Empty<ITracker<T>>();
         }
@@ -96,14 +95,9 @@ namespace Atomic.Infrastructure
             _budget = Math.Max(0, budget);
         }
 
-        public void SetCooldown(float cooldown)
-        {
-            _cooldown = cooldown;
-        }
-
         protected override void OnEnable()
         {
-            _priorityTime = _cooldown;
+            _priorityTime = _priorityCooldown;
 
             foreach (ITracker<T> tracker in _trackers)
                 tracker.SetTrigger(this.RecalculatePriority);
@@ -117,7 +111,7 @@ namespace Atomic.Infrastructure
 
             try
             {
-                this.UpdateCooldown(deltaTime);
+                this.UpdatePriorityCooldown(deltaTime);
 
                 int remaining = _budget;
                 remaining -= this.UpdateBatch(_highEntities, _highEntityCount, ref _highCursor, remaining, deltaTime);
@@ -152,18 +146,17 @@ namespace Atomic.Infrastructure
 
         protected abstract void Update(T entity, float deltaTime);
 
-        private void UpdateCooldown(float deltaTime)
+        private void UpdatePriorityCooldown(float deltaTime)
         {
-            if (_cooldown <= 0)
+            if (_priorityCooldown <= 0)
                 return;
 
             _priorityTime -= deltaTime;
-
             if (_priorityTime > 0)
                 return;
 
             this.RecalculatePriorities();
-            _priorityTime = _cooldown;
+            _priorityTime = _priorityCooldown;
         }
 
         protected void RecalculatePriorities()
@@ -190,7 +183,7 @@ namespace Atomic.Infrastructure
                 this.UpdatePriorityInternal(entity, priority);
             }
         }
-        
+
         protected abstract UpdatePriority EvaluatePriority(T entity);
 
         private void UpdatePriorityInternal(T entity, UpdatePriority priority)
@@ -201,8 +194,8 @@ namespace Atomic.Infrastructure
             if (entry.Priority == priority)
                 return;
 
-            RemoveInternal(entity);
-            AddInternal(entity, priority);
+            this.RemoveInternal(entity);
+            this.AddInternal(entity, priority);
         }
 
         // ==================== ADD ====================
@@ -211,7 +204,7 @@ namespace Atomic.Infrastructure
         {
             if (entity == null)
                 throw new Exception("Added null Entity");
-            
+
             if (_lookup.ContainsKey(entity))
                 return;
 
@@ -228,7 +221,7 @@ namespace Atomic.Infrastructure
             }
             else
             {
-                AddInternal(entity, priority);
+                this.AddInternal(entity, priority);
             }
 
             foreach (ITracker<T> tracker in _trackers)
@@ -242,48 +235,27 @@ namespace Atomic.Infrastructure
 
             switch (priority)
             {
-                case Infrastructure.UpdatePriority.High:
-                    AddToArray(
-                        ref _highEntities,
-                        ref _highEntityCount,
-                        entity,
-                        priority
-                    );
+                case UpdatePriority.High:
+                    this.AddToArray(ref _highEntities, ref _highEntityCount, entity, priority);
                     break;
 
-                case Infrastructure.UpdatePriority.Medium:
-                    AddToArray(
-                        ref _midEntities,
-                        ref _midEntityCount,
-                        entity,
-                        priority
-                    );
+                case UpdatePriority.Medium:
+                    this.AddToArray(ref _midEntities, ref _midEntityCount, entity, priority);
                     break;
 
-                case Infrastructure.UpdatePriority.Low:
+                case UpdatePriority.Low:
                 default:
-                    AddToArray(
-                        ref _lowEntities,
-                        ref _lowEntityCount,
-                        entity,
-                        priority
-                    );
+                    this.AddToArray(ref _lowEntities, ref _lowEntityCount, entity, priority);
                     break;
             }
         }
 
-        private void AddToArray(
-            ref T[] array,
-            ref int count,
-            T entity,
-            UpdatePriority priority
-        )
+        private void AddToArray(ref T[] array, ref int count, T entity, UpdatePriority priority)
         {
             if (count >= array.Length)
                 Array.Resize(ref array, array.Length * 2);
 
             array[count] = entity;
-
             _lookup[entity] = new Entry
             {
                 Priority = priority,
@@ -307,7 +279,7 @@ namespace Atomic.Infrastructure
             }
             else
             {
-                RemoveInternal(entity);
+                this.RemoveInternal(entity);
             }
 
             foreach (ITracker<T> tracker in _trackers)
@@ -321,44 +293,24 @@ namespace Atomic.Infrastructure
 
             switch (entry.Priority)
             {
-                case Infrastructure.UpdatePriority.High:
-                    RemoveFromArray(
-                        _highEntities,
-                        ref _highEntityCount,
-                        ref _highCursor,
-                        entry.Index
-                    );
+                case UpdatePriority.High:
+                    this.RemoveFromArray(_highEntities, ref _highEntityCount, ref _highCursor, entry.Index);
                     break;
 
-                case Infrastructure.UpdatePriority.Medium:
-                    RemoveFromArray(
-                        _midEntities,
-                        ref _midEntityCount,
-                        ref _midCursor,
-                        entry.Index
-                    );
+                case UpdatePriority.Medium:
+                    this.RemoveFromArray(_midEntities, ref _midEntityCount, ref _midCursor, entry.Index);
                     break;
 
-                case Infrastructure.UpdatePriority.Low:
+                case UpdatePriority.Low:
                 default:
-                    RemoveFromArray(
-                        _lowEntities,
-                        ref _lowEntityCount,
-                        ref _lowCursor,
-                        entry.Index
-                    );
+                    this.RemoveFromArray(_lowEntities, ref _lowEntityCount, ref _lowCursor, entry.Index);
                     break;
             }
 
             _lookup.Remove(entity);
         }
 
-        private void RemoveFromArray(
-            T[] array,
-            ref int count,
-            ref int cursor,
-            int index
-        )
+        private void RemoveFromArray(T[] array, ref int count, ref int cursor, int index)
         {
             int last = count - 1;
 
@@ -388,18 +340,15 @@ namespace Atomic.Infrastructure
                 switch (command.CommandType)
                 {
                     case Command.Type.Add:
-                        AddInternal(command.Entity, command.Priority);
+                        this.AddInternal(command.Entity, command.Priority);
                         break;
 
                     case Command.Type.Remove:
-                        RemoveInternal(command.Entity);
+                        this.RemoveInternal(command.Entity);
                         break;
 
                     case Command.Type.Priority:
-                        UpdatePriorityInternal(
-                            command.Entity,
-                            command.Priority
-                        );
+                        this.UpdatePriorityInternal(command.Entity, command.Priority);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

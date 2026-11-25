@@ -13,14 +13,13 @@ namespace Atomic.Infrastructure
     /// Entity system that updates entities according to dynamically assigned priorities.
     /// </summary>
     /// <typeparam name="T">Type of entity processed by the system.</typeparam>
-    [Serializable]
-    public abstract class WeightedPrioritySystem<T> : SystemBase<T>, IBudgetSystem
+    public abstract class WeightedPriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 512;
-        protected const float DEFAULT_COOLDOWN = 0.2f;
+        protected const float DEFAULT_PRIORITY_COOLDOWN = 0.2f;
 
         /// <summary>
-        /// Configuration for <see cref="WeightedPrioritySystem{T}"/>.
+        /// Configuration for <see cref="WeightedPriorityBudgetSystem{T}"/>.
         /// </summary>
         [Serializable]
         public class Distribution
@@ -86,7 +85,7 @@ namespace Atomic.Infrastructure
 
         private bool _isUpdating;
 
-        private float _cooldown;
+        private readonly float _priorityCooldown;
         private int _budget;
 
 #if ODIN_INSPECTOR
@@ -104,16 +103,16 @@ namespace Atomic.Infrastructure
         public int Budget => _budget;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeightedPrioritySystem{T}"/> class.
+        /// Initializes a new instance of the <see cref="WeightedPriorityBudgetSystem{T}"/> class.
         /// </summary>
         /// <param name="source">Source collection of entities.</param>
         /// <param name="distribution">System configuration.</param>
         /// <param name="trackers">Priority change triggers.</param>
-        protected WeightedPrioritySystem(
+        protected WeightedPriorityBudgetSystem(
             IReadOnlyStore<T> source,
             Distribution distribution,
             int budget = DEFAULT_BUDGET,
-            float cooldown = DEFAULT_COOLDOWN,
+            float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
@@ -123,9 +122,9 @@ namespace Atomic.Infrastructure
             _lowEntities = new T[initialCapacity];
 
             _budget = budget;
-            _cooldown = cooldown;
+            _priorityCooldown = priorityCooldown;
 
-            this._distribution = distribution;
+            _distribution = distribution;
             _trackers = trackers;
         }
 
@@ -134,12 +133,9 @@ namespace Atomic.Infrastructure
             _budget = budget;
         }
 
-        /// <summary>
-        /// Called when the system is enabled.
-        /// </summary>
         protected override void OnEnable()
         {
-            _priorityTime = _cooldown;
+            _priorityTime = _priorityCooldown;
 
             foreach (ITracker<T> trigger in _trackers)
                 trigger.SetTrigger(this.RecalculatePriority);
@@ -147,10 +143,6 @@ namespace Atomic.Infrastructure
 
         #region Add
 
-        /// <summary>
-        /// Adds an entity to the system.
-        /// </summary>
-        /// <param name="entity">Entity to add.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
         {
@@ -221,10 +213,6 @@ namespace Atomic.Infrastructure
 
         #region Remove
 
-        /// <summary>
-        /// Removes an entity from the system.
-        /// </summary>
-        /// <param name="entity">Entity to remove.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnRemove(T entity)
         {
@@ -326,11 +314,6 @@ namespace Atomic.Infrastructure
 
         #region Update
 
-        /// <summary>
-        /// Updates the system.
-        /// </summary>
-        /// <param name="batchSize">Maximum number of entities to process.</param>
-        /// <param name="deltaTime">Time elapsed since the previous update.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnUpdate(float deltaTime)
         {
@@ -351,7 +334,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateCooldown(float deltaTime)
         {
-            if (_cooldown <= 0)
+            if (_priorityCooldown <= 0)
                 return;
 
             _priorityTime -= deltaTime;
@@ -359,7 +342,7 @@ namespace Atomic.Infrastructure
                 return;
 
             this.RecalculatePriorities();
-            _priorityTime += _cooldown;
+            _priorityTime += _priorityCooldown;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -471,11 +454,6 @@ namespace Atomic.Infrastructure
             _commands.Clear();
         }
 
-        /// <summary>
-        /// Updates a single entity.
-        /// </summary>
-        /// <param name="entity">Entity to update.</param>
-        /// <param name="deltaTime">Time elapsed since the previous update.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected abstract void Update(T entity, float deltaTime);
 
@@ -483,16 +461,8 @@ namespace Atomic.Infrastructure
 
         #region Priority
 
-        /// <summary>
-        /// Evaluates the update priority for the specified entity.
-        /// </summary>
-        /// <param name="entity">Entity whose priority should be evaluated.</param>
-        /// <returns>The priority assigned to the entity.</returns>
         protected abstract UpdatePriority EvaluatePriority(T entity);
 
-        /// <summary>
-        /// Recalculates priorities for all tracked entities.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriorities()
         {
@@ -500,10 +470,6 @@ namespace Atomic.Infrastructure
                 this.RecalculatePriority(entity);
         }
 
-        /// <summary>
-        /// Re-evaluates and updates the priority of the specified entity.
-        /// </summary>
-        /// <param name="entity">Entity whose priority should be updated.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriority(T entity)
         {
@@ -640,9 +606,6 @@ namespace Atomic.Infrastructure
 
         #endregion
 
-        /// <summary>
-        /// Releases all resources used by the system.
-        /// </summary>
         public override void Dispose()
         {
             Array.Clear(_lowEntities, 0, _lowEntityCount);

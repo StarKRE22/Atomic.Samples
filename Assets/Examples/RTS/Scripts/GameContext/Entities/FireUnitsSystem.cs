@@ -8,7 +8,7 @@ namespace RTSGame
     public sealed class FireUnitsSystem : EntityPriorityBudgetGameSystem
     {
         public FireUnitsSystem(IGameContext context)
-            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), entity => entity.HasFireableTag()))
+            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld()))
         {
         }
 
@@ -19,11 +19,7 @@ namespace RTSGame
                 Debug.Log("ENTITY NULL");
             }
             
-            if (entity.TryGetFireCooldown(out var cooldown))
-                cooldown.Tick(deltaTime);
-
-            if (entity.GetFireRequest().Consume(out IGameEntity target))
-                entity.GetFireCommand().Invoke(target);
+            
         }
     }
 }

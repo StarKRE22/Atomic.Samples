@@ -7,11 +7,11 @@ namespace RTSGame
     public sealed class AttackTargetSystem : EntityPriorityBudgetGameSystem
     {
         public AttackTargetSystem(IGameContext context)
-            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), entity => entity.HasAttackerTag()))
+            : base(new EntityFilter<IGameEntity>())
         {
         }
 
         protected override void Update(IGameEntity entity, float deltaTime) =>
-            entity.Attack();
+            ;
     }
 }

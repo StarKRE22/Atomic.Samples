@@ -8,7 +8,7 @@ namespace Game.UI
     public static class MoveUseCase
     {
         private static readonly int IsMoving = Animator.StringToHash(nameof(IsMoving));
-
+        
         public static void SetAnimatorMoving(this GameEntityView entity, bool isMoving)
         {
             Animator animator = entity.Model.GetAnimator();

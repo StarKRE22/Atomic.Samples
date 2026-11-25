@@ -4,6 +4,15 @@ namespace RTSGame
 {
     public static class CombatUseCase
     {
+        public static void ProcessFire(this IGameEntity entity, float deltaTime)
+        {
+            if (entity.TryGetFireCooldown(out var cooldown))
+                cooldown.Tick(deltaTime);
+
+            if (entity.GetFireRequest().Consume(out IGameEntity target))
+                entity.GetFireCommand().Invoke(target);
+        }
+        
         public static IGameEntity FireProjectile(
             this IGameEntity source,
             IGameEntity target,

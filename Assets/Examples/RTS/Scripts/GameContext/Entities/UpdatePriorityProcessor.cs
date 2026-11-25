@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RTSGame
 {
-    public sealed class UnitPrioritySystem : GameEntityBudgetSystem
+    public sealed class UpdatePriorityProcessor : IProcessor<IGameEntity>
     {
         [Serializable]
         public sealed class Settings
@@ -13,28 +13,20 @@ namespace RTSGame
             public float highDistance = 200f;
             public float mediumDistance = 400f;
         }
-
+        
         private readonly Settings _settings;
-        private Transform _target;
+        private readonly Transform _target;
 
-        public UnitPrioritySystem(
-            IGameContext context,
-            Settings settings
-        ) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasUnitTag()))
+        public UpdatePriorityProcessor(Settings settings, Transform target)
         {
             _settings = settings;
+            _target = target;
         }
 
-        protected override void Update(IGameEntity entity, float deltaTime)
+        void IProcessor<IGameEntity>.Process(IGameEntity entity, float deltaTime)
         {
-            if (_target == null)
-                _target = Camera.main?.transform;
-
-            if (_target == null)
-                return;
-
-            Vector3 entityPosition = entity.GetPosition().Value;
-            float distance = Vector3.Magnitude(entityPosition - _target.position);
+            Vector3 position = entity.GetPosition().Value;
+            float distance = Vector3.Magnitude(position - _target.position);
 
             entity.GetUpdatePriority().Value = distance <= _settings.highDistance
                 ? UpdatePriority.High

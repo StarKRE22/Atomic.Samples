@@ -8,6 +8,12 @@ namespace RTSGame
     [BurstCompile]
     public static class MoveUseCase
     {
+        public static void ProcessMove(this IGameEntity entity, float deltaTime)
+        {
+            if (entity.GetMoveRequest().Consume(out Vector3 direction))
+                entity.GetMoveCommand().Invoke(direction, deltaTime);
+        }
+        
         public static void MoveStep(this IGameEntity entity, Vector3 direction, float deltaTime)
         {
             IReactiveVariable<Vector3> position = entity.GetPosition();

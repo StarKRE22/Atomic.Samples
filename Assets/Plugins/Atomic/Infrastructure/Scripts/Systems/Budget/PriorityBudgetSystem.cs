@@ -32,7 +32,7 @@ namespace Atomic.Infrastructure
 
         private readonly Dictionary<T, Entry> _lookup;
         private readonly List<Command> _commands = new(64);
-        private readonly IUpdater<T> updater;
+        private readonly IProcessor<T> processor;
         private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         public int HighCount => _highEntityCount;
@@ -72,7 +72,7 @@ namespace Atomic.Infrastructure
 
         public PriorityBudgetSystem(
             IReadOnlyStore<T> source,
-            IUpdater<T> updater,
+            IProcessor<T> processor,
             IUpdatePriorityStrategy<T> priorityStrategy,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
@@ -80,7 +80,7 @@ namespace Atomic.Infrastructure
         ) :
             base(source)
         {
-            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
+            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
 
             int capacity = Math.Max(16, source.Count);
@@ -143,7 +143,7 @@ namespace Atomic.Infrastructure
                     cursor = 0;
 
                 T entity = entities[cursor++];
-                updater.Update(entity, deltaTime);
+                processor.Process(entity, deltaTime);
             }
 
             return toProcess;
@@ -381,5 +381,95 @@ namespace Atomic.Infrastructure
             _commands.Clear();
             _lookup.Clear();
         }
+
+
+        #region Builder
+
+        public static Builder Using(IProcessor<T> processor) => new(processor);
+        
+        public static Builder Using(ProcessHandler<T> processor) => new(new InlineProcessor<T>(processor));
+
+        public struct Builder
+        {
+            private IReadOnlyStore<T> _source;
+            private readonly IProcessor<T> _processor;
+            private IUpdatePriorityStrategy<T> _priorityStrategy;
+            private int _budget;
+            private float _priorityCooldown;
+            private ITracker<T>[] _trackers;
+
+            public Builder(IProcessor<T> processor) : this()
+            {
+                _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+                _budget = DEFAULT_BUDGET;
+                _priorityCooldown = DEFAULT_PRIORITY_COOLDOWN;
+                _trackers = Array.Empty<ITracker<T>>();
+            }
+
+            public Builder From(IReadOnlyStore<T> source)
+            {
+                _source = source ?? throw new ArgumentNullException(nameof(source));
+                return this;
+            }
+
+            public Builder From(IReadOnlyStore<T> source, Predicate<T> filter)
+            {
+                if (source == null)
+                    throw new ArgumentNullException(nameof(source));
+
+                if (filter == null)
+                    throw new ArgumentNullException(nameof(filter));
+
+                _source = new Filter<T>(source, filter);
+                return this;
+            }
+
+            public Builder Priority(IUpdatePriorityStrategy<T> strategy)
+            {
+                _priorityStrategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+                return this;
+            }
+
+            public Builder Budget(int budget)
+            {
+                _budget = Math.Max(0, budget);
+                return this;
+            }
+
+            public Builder PriorityCooldown(float cooldown)
+            {
+                _priorityCooldown = Math.Max(0f, cooldown);
+                return this;
+            }
+
+            public Builder Trackers(params ITracker<T>[] trackers)
+            {
+                _trackers = trackers ?? Array.Empty<ITracker<T>>();
+                return this;
+            }
+
+            public PriorityBudgetSystem<T> Build()
+            {
+                if (_source == null)
+                    throw new InvalidOperationException("Source is not specified.");
+
+                if (_processor == null)
+                    throw new InvalidOperationException("Processor is not specified.");
+
+                if (_priorityStrategy == null)
+                    throw new InvalidOperationException("Priority strategy is not specified.");
+
+                return new PriorityBudgetSystem<T>(
+                    _source,
+                    _processor,
+                    _priorityStrategy,
+                    _budget,
+                    _priorityCooldown,
+                    _trackers
+                );
+            }
+        }
+
+        #endregion
     }
 }

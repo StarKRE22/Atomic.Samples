@@ -1,22 +1,18 @@
-using System;
-using Atomic.Entities;
 using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace RTSGame
 {
-    [Serializable]
-    public sealed class ProjectileMoveSystem : GameEntityBudgetSystem
+    public sealed class ProjectileMoveProcessor : IProcessor<IGameEntity>
     {
         private readonly IGameContext _gameContext;
 
-        public ProjectileMoveSystem(IGameContext context)
-            : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(), e => e.HasProjectileTag()))
+        public ProjectileMoveProcessor(IGameContext context)
         {
             _gameContext = context;
         }
 
-        protected override void Update(IGameEntity entity, float deltaTime)
+        void IProcessor<IGameEntity>.Process(IGameEntity entity, float deltaTime)
         {
             IGameEntity target = entity.GetTarget().Value;
             if (target is not {Enabled: true})

@@ -57,7 +57,7 @@ namespace Atomic.Infrastructure
 
         private readonly List<Command> _commands = new();
 
-        private readonly IUpdater<T> updater;
+        private readonly IProcessor<T> processor;
 
         private bool _isUpdating;
 
@@ -66,11 +66,11 @@ namespace Atomic.Infrastructure
 
         public BudgetSystem(
             IReadOnlyStore<T> source,
-            IUpdater<T> updater,
+            IProcessor<T> processor,
             int budget = DEFAULT_BUDGET
         ) : base(source)
         {
-            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
+            this.processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _budget = Math.Max(0, budget);
 
             int capacity = Math.Max(4, source.Count);
@@ -118,7 +118,7 @@ namespace Atomic.Infrastructure
                         cursor = 0;
 
                     T entity = _entities[cursor++];
-                    updater.Update(entity, deltaTime);
+                    processor.Process(entity, deltaTime);
                 }
             }
             finally
@@ -230,5 +230,60 @@ namespace Atomic.Infrastructure
                 _commands.Clear();
             }
         }
+
+
+        #region Builder
+
+        public static Builder Using(IProcessor<T> processor)  => new(processor);
+
+        public struct Builder
+        {
+            private IReadOnlyStore<T> _source;
+            private readonly IProcessor<T> _processor;
+            private int _budget;
+
+            public Builder(IProcessor<T> processor) : this()
+            {
+                _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+                _budget = DEFAULT_BUDGET;
+            }
+
+            public Builder From(IReadOnlyStore<T> source)
+            {
+                _source = source ?? throw new ArgumentNullException(nameof(source));
+                return this;
+            }
+            
+            public Builder From(IReadOnlyStore<T> source, Predicate<T> filter)
+            {
+                if (source == null)
+                    throw new ArgumentNullException(nameof(source));
+
+                if (filter == null)
+                    throw new ArgumentNullException(nameof(filter));
+                
+                _source = new Filter<T>(source, filter);
+                return this;
+            }
+
+            public Builder Budget(int budget)
+            {
+                _budget = Math.Max(0, budget);
+                return this;
+            }
+
+            public BudgetSystem<T> Build()
+            {
+                if (_source == null)
+                    throw new InvalidOperationException("Source is not specified.");
+
+                if (_processor == null)
+                    throw new InvalidOperationException("Processor is not specified.");
+
+                return new BudgetSystem<T>(_source, _processor, _budget);
+            }
+        }
+
+        #endregion
     }
 }

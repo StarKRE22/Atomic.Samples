@@ -19,6 +19,32 @@ namespace Atomic.Entities
             entity.WhenDispose(system.Dispose);
         }
 
+        public static SystemBinder BindSystem(this IEntity entity, ISystem system)
+        {
+            entity.WhenEnable(system.Enable);
+            entity.WhenDisable(system.Disable);
+            entity.WhenDispose(system.Dispose);
+            return new SystemBinder(entity, system);
+        }
+
+        public readonly struct SystemBinder
+        {
+            private readonly IEntity entity;
+            private readonly ISystem system;
+
+            public SystemBinder(IEntity entity, ISystem system)
+            {
+                this.entity = entity;
+                this.system = system;
+            }
+
+            public void EveryTick() => this.entity.WhenTick(this.system.Update);
+
+            public void EveryFixedTick() => this.entity.WhenFixedTick(this.system.Update);
+
+            public void EveryLateTick() => this.entity.WhenLateTick(this.system.Update);
+        }
+
         /// <summary>
         /// Registers an entity system that is updated during the FixedTick phase of the context entity lifecycle.
         /// </summary>

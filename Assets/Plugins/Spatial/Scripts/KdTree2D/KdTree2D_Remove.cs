@@ -22,7 +22,6 @@ namespace Modules.Spatial
             return true;
         }
 
-
         private bool RemoveReplacementNode(ref Node node, Vector2 point, int depth)
         {
             if (node == null)

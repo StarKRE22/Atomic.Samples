@@ -43,7 +43,7 @@ namespace ShooterGame.Gameplay
         public override void Install(IGameEntity entity)
         {
             GameContext.TryGetInstance(out GameContext gameContext);
-            
+
             //Transform:
             entity.AddPosition(new TransformPositionVariable(_transform));
             entity.AddRotation(new TransformRotationVariable(_transform));
@@ -58,7 +58,7 @@ namespace ShooterGame.Gameplay
             entity.AddTakeDamageEvent(new Event<DamageArgs>());
             entity.AddTakeDeathEvent(new Event<DamageArgs>());
             entity.AddRespawnEvent(new Event());
-            
+
             //Combat:
             entity.AddFireCondition(new AndExpression().Add(_health.Exists));
             entity.AddFireAction(new CharacterFireAction(entity));
@@ -77,7 +77,6 @@ namespace ShooterGame.Gameplay
             entity.AddRotationDirection(new ReactiveVariable<Vector3>());
             entity.AddRotationCondition(new AndExpression().Add(_health.Exists));
             entity.AddRotationEvent(new Event<Vector3>());
-            entity.AddBehaviour<RotationBehaviour>();
 
             //Physics:
             entity.AddRigidbody(_rigidbody);
@@ -93,3 +92,4 @@ namespace ShooterGame.Gameplay
         }
     }
 }
+

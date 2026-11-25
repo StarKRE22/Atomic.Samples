@@ -18,15 +18,6 @@ namespace RTSGame
         [SerializeField]
         private ScriptableBudgetStrategy _budgetStrategy;
 
-        [SerializeField]
-        private int sizeX = 2000;
-
-        [SerializeField]
-        private int sizeY = 100;
-
-        [SerializeField]
-        private float cellSize = 20;
-
         public void Install(IGameContext context)
         {
             EntityWorld<IGameEntity> entityWorld = new EntityWorld<IGameEntity>();
@@ -35,10 +26,19 @@ namespace RTSGame
                 new Args<IGameContext>(context)
             ));
             context.AddEntityWorld(entityWorld);
-            UniformGrid2D<IGameEntity> grid = new UniformGrid2D<IGameEntity>(sizeX, sizeY, cellSize);
-            context.AddGizmosBehaviour(() => grid.DrawGizmosXZ());
-            context.AddEntitySpace(grid);
-            
+
+            QuadTree<IGameEntity> quadTree = new QuadTree<IGameEntity>(
+                min: new Vector2(-250, -250), 
+                max: new Vector2(500, 500),
+                capacity: 32,
+                maxDepth: 8
+            );
+
+            context.AddEntitySpace(quadTree);
+            context.AddGizmosBehaviour(() => quadTree.DrawGizmosXZ());
+
+            // context.AddGizmosBehaviour(() => kdTree.DrawGizmosXZ(new Rect(Vector2.zero, new Vector2(4000, 200))));
+
             context.BindWorld(entityWorld);
             context.BindFixedTickSystem(new UnitPrioritySystem(context, _unitPrioritySettings));
             context.BindFixedTickSystem(new AttackTargetSystem(context));

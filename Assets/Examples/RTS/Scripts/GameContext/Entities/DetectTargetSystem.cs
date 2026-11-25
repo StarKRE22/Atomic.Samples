@@ -10,8 +10,8 @@ namespace RTSGame
         private readonly IEntityWorld<IGameEntity> _entityWorld;
         private readonly IGameContext _gameContext;
 
-        public DetectTargetSystem(IGameContext context) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(),
-            e => e.HasDetectorTag()))
+        public DetectTargetSystem(IGameContext context, int budget = 4096) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(),
+            e => e.HasDetectorTag()), budget)
         {
             _gameContext = context;
             _entityWorld = context.GetEntityWorld();

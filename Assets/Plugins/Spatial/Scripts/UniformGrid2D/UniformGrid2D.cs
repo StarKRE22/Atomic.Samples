@@ -8,12 +8,6 @@ namespace Modules.Spatial
     {
         private const float GIZMOS_Y_OFFSET = 0.05f;
 
-        private struct Handle
-        {
-            public int cellIndex;
-            public int indexInCell;
-        }
-
         internal readonly struct Cell
         {
             public int Count => items.Count;
@@ -32,7 +26,7 @@ namespace Modules.Spatial
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal void SetPosition(int index, Vector2 position)
+            internal void UpdatePosition(int index, Vector2 position)
             {
                 KeyValuePair<T, Vector2> entry = items[index];
                 items[index] = new KeyValuePair<T, Vector2>(entry.Key, position);
@@ -44,7 +38,6 @@ namespace Modules.Spatial
                 int last = items.Count - 1;
 
                 moved = items[last];
-
                 if (index != last)
                     items[index] = moved;
 
@@ -56,6 +49,12 @@ namespace Modules.Spatial
             {
                 items.Clear();
             }
+        }
+
+        private struct Handle
+        {
+            public int cellIndex;
+            public int indexInCell;
         }
 
         private readonly float _cellSize;

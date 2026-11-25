@@ -6,10 +6,17 @@ namespace ShooterGame.Gameplay
 {
     public sealed class RotationBehaviour : IGameEntityInit, IGameEntityFixedTick
     {
+        private readonly IRotationUseCase _rotationUseCase;
+        
         private IVariable<Quaternion> _rotation;
         private IValue<float> _rotationSpeed;
         private IValue<Vector3> _rotationDirection;
         private IFunction<bool> _rotationCondition;
+
+        public RotationBehaviour(IRotationUseCase rotationUseCase)
+        {
+            _rotationUseCase = rotationUseCase;
+        }
 
         public void Init(IGameEntity entity)
         {
@@ -24,7 +31,7 @@ namespace ShooterGame.Gameplay
             if (!_rotationCondition.Invoke())
                 return;
             
-            RotationUseCase.RotationStep(
+            _rotationUseCase.RotationStep(
                 _rotation.Value,
                 _rotationDirection.Value,
                 _rotationSpeed.Value,

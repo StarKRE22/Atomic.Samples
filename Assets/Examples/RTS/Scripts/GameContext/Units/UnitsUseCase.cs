@@ -12,6 +12,7 @@ namespace RTSGame
         
 #if ENABLE_PROFILER
         private static readonly ProfilerMarker FindClosestEnemyMarker = new("UnitUseCase.FindClosestEnemy");
+        private static readonly ProfilerMarker QueryCircleMarker = new("SpatialDataStructure.QueryCircleMarker");
         private static readonly ProfilerMarker SpawnMarker = new("UnitUseCase.Spawn");
         private static readonly ProfilerMarker DespawnMarker = new("UnitUseCase.Despawn");
 #endif
@@ -65,10 +66,12 @@ namespace RTSGame
                 TeamType teamType = self.GetTeam().Value;
                 float radius = self.GetDetectionRadius().Value;
 
-                ISpatialDataStructure2D<IGameEntity> spatialHash = gameContext.GetEntitySpace();
-
+                ISpatialDataStructure2D<IGameEntity> entitySpace = gameContext.GetEntitySpace();
                 Vector2 center = new Vector2(selfPos.x, selfPos.z);
-                int enemyCount = spatialHash.QueryCircle(center, radius, s_buffer);
+                
+                QueryCircleMarker.Begin();
+                int enemyCount = entitySpace.QueryCircle(center, radius, s_buffer);
+                QueryCircleMarker.End();
                 
                 for (int i = 0; i < enemyCount; i++)
                 {

@@ -3,13 +3,24 @@ using Unity.Mathematics;
 
 namespace ShooterGame.Gameplay
 {
+    public interface IRotationUseCase
+    {
+        void RotationStep(
+            in quaternion current,
+            in float3 direction,
+            in float speedDeg,
+            in float deltaTime,
+            out quaternion result
+        );
+    }
+
     [BurstCompile]
-    public static class RotationUseCase
+    public class RotationUseCase : IRotationUseCase
     {
         private const float EPS = 1e-4f;
 
         [BurstCompile]
-        public static void RotationStep(
+        public void RotationStep(
             in quaternion current,
             in float3 direction,
             in float speedDeg,

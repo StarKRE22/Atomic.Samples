@@ -8,6 +8,7 @@ namespace Modules.Spatial
     {
         private KeyValuePair<T, Vector2>[] _entries;
         private readonly Dictionary<T, int> _lookup = new();
+        
         private int _count;
 
         public int Count => _count;

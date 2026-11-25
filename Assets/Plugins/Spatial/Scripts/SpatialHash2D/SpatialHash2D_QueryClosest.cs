@@ -42,24 +42,17 @@ namespace Modules.Spatial
                         continue;
 
                     float cellMinX = x * _cellSize;
-                    float cellMaxX = cellMinX + _cellSize;
-
                     float cellMinY = y * _cellSize;
+                    float cellMaxX = cellMinX + _cellSize;
                     float cellMaxY = cellMinY + _cellSize;
 
                     float dx = 0f;
-
-                    if (center.x < cellMinX)
-                        dx = cellMinX - center.x;
-                    else if (center.x > cellMaxX)
-                        dx = center.x - cellMaxX;
+                    if (center.x < cellMinX) dx = cellMinX - center.x;
+                    else if (center.x > cellMaxX) dx = center.x - cellMaxX;
 
                     float dy = 0f;
-
-                    if (center.y < cellMinY)
-                        dy = cellMinY - center.y;
-                    else if (center.y > cellMaxY)
-                        dy = center.y - cellMaxY;
+                    if (center.y < cellMinY) dy = cellMinY - center.y;
+                    else if (center.y > cellMaxY) dy = center.y - cellMaxY;
 
                     float cellDistanceSq = dx * dx + dy * dy;
                     if (cellDistanceSq >= bestDistanceSq)
@@ -90,8 +83,17 @@ namespace Modules.Spatial
 
                 if (found)
                 {
-                    float nextRingDistance = (radius + 1) * _cellSize;
-                    if (bestDistanceSq <= nextRingDistance * nextRingDistance)
+                    float left = center.x - minX * _cellSize;
+                    float right = (maxX + 1) * _cellSize - center.x;
+                    float bottom = center.y - minY * _cellSize;
+                    float top = (maxY + 1) * _cellSize - center.y;
+
+                    float minDistance = Mathf.Min(
+                        Mathf.Min(left, right),
+                        Mathf.Min(bottom, top)
+                    );
+
+                    if (bestDistanceSq <= minDistance * minDistance)
                         return true;
                 }
             }

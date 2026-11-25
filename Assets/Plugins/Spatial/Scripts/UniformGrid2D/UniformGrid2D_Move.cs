@@ -17,7 +17,7 @@ namespace Modules.Spatial
             if (oldCellIndex == newCellIndex)
             {
                 Cell cell = _cells[oldCellIndex];
-                cell.SetPosition(handle.indexInCell, p);
+                cell.UpdatePosition(handle.indexInCell, p);
                 return true;
             }
 

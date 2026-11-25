@@ -34,8 +34,8 @@ namespace Modules.Spatial
                 return;
 
             Vector2 delta = target - node.point;
-            float distance = delta.sqrMagnitude;
 
+            float distance = delta.sqrMagnitude;
             if (distance < bestDist)
             {
                 best = node;
@@ -44,14 +44,16 @@ namespace Modules.Spatial
 
             Axis axis = (Axis) (depth % 2);
             float axisDiff = axis == Axis.X ? delta.x : delta.y;
-            
+
             Node primary = axisDiff <= 0f ? node.left : node.right;
             Node secondary = axisDiff <= 0f ? node.right : node.left;
 
             this.QueryClosestRecursive(primary, target, ref best, ref bestDist, depth + 1);
 
-            if (axisDiff * axisDiff <= bestDist)
-                this.QueryClosestRecursive(secondary, target, ref best, ref bestDist, depth + 1);
+            if (axisDiff * axisDiff > bestDist)
+                return;
+
+            this.QueryClosestRecursive(secondary, target, ref best, ref bestDist, depth + 1);
         }
     }
 }

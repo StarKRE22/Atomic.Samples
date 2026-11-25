@@ -27,7 +27,12 @@ namespace Modules.Spatial
         public int Count => _count;
 
         private const float EPS = 0.0001f;
-        private readonly Dictionary<T, Node> _lookup = new();
+        private readonly Dictionary<T, Node> _lookup;
+        
+        public KdTree2D(int initialCapacity = 32)
+        {
+            _lookup = new Dictionary<T, Node>(initialCapacity);
+        }
 
         public bool Contains(T item)
         {

@@ -11,8 +11,8 @@ namespace RTSGame
         {
             _gameContext = context;
         }
-        
-        public void Execute(IGameEntity entity, float deltaTime)
+
+        void IJob<IGameEntity>.Execute(IGameEntity entity, float deltaTime)
         {
             Cooldown lifetime = entity.GetLifetime();
             lifetime.Tick(deltaTime);

@@ -8,7 +8,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class BudgetSystem<T> : SystemBase<T>, IBudgetSystem
+    public class BudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 1024;
 
@@ -57,18 +57,25 @@ namespace Atomic.Infrastructure
 
         private readonly List<Command> _commands = new();
 
+        private readonly IUpdateStrategy<T> _updateStrategy;
+
         private bool _isUpdating;
 
         public int Budget => _budget;
         public int Count => _entityCount;
 
-        protected BudgetSystem(IReadOnlyStore<T> source, int budget = DEFAULT_BUDGET) : base(source)
+        protected BudgetSystem(
+            IReadOnlyStore<T> source,
+            IUpdateStrategy<T> updateStrategy,
+            int budget = DEFAULT_BUDGET
+        ) : base(source)
         {
-            int capacity = Math.Max(4, source.Count);
+            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            _budget = Math.Max(0, budget);
 
+            int capacity = Math.Max(4, source.Count);
             _lookup = new Dictionary<T, int>(capacity);
             _entities = new T[capacity];
-            _budget = Math.Max(0, budget);
         }
 
         public void SetBudget(int budget)
@@ -111,7 +118,7 @@ namespace Atomic.Infrastructure
                         cursor = 0;
 
                     T entity = _entities[cursor++];
-                    this.Update(entity, deltaTime);
+                    _updateStrategy.Update(entity, deltaTime);
                 }
             }
             finally
@@ -125,8 +132,6 @@ namespace Atomic.Infrastructure
                     _cursor = 0;
             }
         }
-
-        protected abstract void Update(T entity, float deltaTime);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
@@ -164,7 +169,7 @@ namespace Atomic.Infrastructure
             if (_lookup.ContainsKey(entity))
                 return;
 
-            if (_entityCount >= _entities.Length) 
+            if (_entityCount >= _entities.Length)
                 Array.Resize(ref _entities, _entities.Length * 2);
 
             _entities[_entityCount] = entity;

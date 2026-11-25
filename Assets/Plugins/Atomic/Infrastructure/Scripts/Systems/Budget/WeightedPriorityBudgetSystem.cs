@@ -13,7 +13,7 @@ namespace Atomic.Infrastructure
     /// Entity system that updates entities according to dynamically assigned priorities.
     /// </summary>
     /// <typeparam name="T">Type of entity processed by the system.</typeparam>
-    public abstract class WeightedPriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
+    public class WeightedPriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 512;
         protected const float DEFAULT_PRIORITY_COOLDOWN = 0.2f;
@@ -101,6 +101,9 @@ namespace Atomic.Infrastructure
         private readonly ITracker<T>[] _trackers;
 
         public int Budget => _budget;
+        
+        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeightedPriorityBudgetSystem{T}"/> class.
@@ -110,12 +113,17 @@ namespace Atomic.Infrastructure
         /// <param name="trackers">Priority change triggers.</param>
         protected WeightedPriorityBudgetSystem(
             IReadOnlyStore<T> source,
+            IUpdateStrategy<T> updateStrategy,
+            IUpdatePriorityStrategy<T> priorityStrategy,
             Distribution distribution,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
+            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
+            
             int initialCapacity = Math.Max(16, source.Count);
             _highEntities = new T[initialCapacity];
             _midEntities = new T[initialCapacity];
@@ -146,7 +154,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
         {
-            UpdatePriority priority = this.EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
             if (_isUpdating)
             {
                 _commands.Add(new Command
@@ -368,7 +376,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    this.Update(array[cursor++], deltaTime);
+                    _updateStrategy.Update(array[cursor++], deltaTime);
                 }
 
                 _highCursor = cursor;
@@ -393,7 +401,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    this.Update(array[cursor++], deltaTime);
+                    _updateStrategy.Update(array[cursor++], deltaTime);
                 }
 
                 _midCursor = cursor;
@@ -417,7 +425,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    this.Update(array[cursor++], deltaTime);
+                    _updateStrategy.Update(array[cursor++], deltaTime);
                 }
 
                 _lowCursor = cursor;
@@ -454,14 +462,10 @@ namespace Atomic.Infrastructure
             _commands.Clear();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected abstract void Update(T entity, float deltaTime);
-
         #endregion
 
         #region Priority
 
-        protected abstract UpdatePriority EvaluatePriority(T entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriorities()
@@ -473,7 +477,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = this.EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
             if (_isUpdating)
             {
                 _commands.Add(new Command

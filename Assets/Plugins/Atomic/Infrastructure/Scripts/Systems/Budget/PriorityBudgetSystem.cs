@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class PriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
+    public class PriorityBudgetSystem<T> : SystemBase<T>, IBudgetSystem
     {
         protected const int DEFAULT_BUDGET = 512;
         protected const float DEFAULT_PRIORITY_COOLDOWN = 0.2f;
@@ -32,6 +32,8 @@ namespace Atomic.Infrastructure
 
         private readonly Dictionary<T, Entry> _lookup;
         private readonly List<Command> _commands = new(64);
+        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         public int HighCount => _highEntityCount;
         public int MidCount => _midEntityCount;
@@ -70,16 +72,19 @@ namespace Atomic.Infrastructure
 
         protected PriorityBudgetSystem(
             IReadOnlyStore<T> source,
+            IUpdateStrategy<T> updateStrategy,
+            IUpdatePriorityStrategy<T> priorityStrategy,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) :
             base(source)
         {
+            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
+
             int capacity = Math.Max(16, source.Count);
-
             _lookup = new Dictionary<T, Entry>(capacity);
-
             _highEntities = new T[capacity];
             _midEntities = new T[capacity];
             _lowEntities = new T[capacity];
@@ -138,13 +143,11 @@ namespace Atomic.Infrastructure
                     cursor = 0;
 
                 T entity = entities[cursor++];
-                this.Update(entity, deltaTime);
+                _updateStrategy.Update(entity, deltaTime);
             }
 
             return toProcess;
         }
-
-        protected abstract void Update(T entity, float deltaTime);
 
         private void UpdatePriorityCooldown(float deltaTime)
         {
@@ -167,7 +170,7 @@ namespace Atomic.Infrastructure
 
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = this.EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
 
             if (_isUpdating)
             {
@@ -183,8 +186,6 @@ namespace Atomic.Infrastructure
                 this.UpdatePriorityInternal(entity, priority);
             }
         }
-
-        protected abstract UpdatePriority EvaluatePriority(T entity);
 
         private void UpdatePriorityInternal(T entity, UpdatePriority priority)
         {
@@ -208,7 +209,7 @@ namespace Atomic.Infrastructure
             if (_lookup.ContainsKey(entity))
                 return;
 
-            UpdatePriority priority = EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
 
             if (_isUpdating)
             {

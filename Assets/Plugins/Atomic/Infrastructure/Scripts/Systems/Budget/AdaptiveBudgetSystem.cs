@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Atomic.Infrastructure
 {
+    // Decorator
     public sealed class AdaptiveBudgetSystem : ISystem
     {
         public const float DEFAULT_INTERVAL = 0.1f;

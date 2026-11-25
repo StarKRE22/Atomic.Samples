@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 
 namespace Atomic.Infrastructure
 {
-    public abstract class IntervalPrioritySystem<T> : SystemBase<T>
+    public class IntervalPrioritySystem<T> : SystemBase<T>
     {
         protected const float DEFAULT_PRIORITY_COOLDOWN = 0.2f;
 
@@ -184,15 +184,25 @@ namespace Atomic.Infrastructure
 
         #endregion
 
+        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
+
         protected IntervalPrioritySystem(
             IReadOnlyStore<T> source,
+            IUpdateStrategy<T> updateStrategy,
+            IUpdatePriorityStrategy<T> priorityStrategy,
             Intervals intervals,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
+            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
+
+
             if (intervals == null)
                 throw new ArgumentNullException(nameof(intervals));
+
 
             int capacity = Math.Max(16, source.Count);
 
@@ -218,7 +228,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected sealed override void OnAdd(T entity)
         {
-            UpdatePriority priority = this.EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
 
             if (_isUpdating)
             {
@@ -358,7 +368,7 @@ namespace Atomic.Infrastructure
                 float deltaTime = (float) (_elapsedTime - slot.LastUpdateTime);
                 slot.LastUpdateTime = _elapsedTime;
 
-                this.Update(slot.Entity, deltaTime);
+                _updateStrategy.Update(slot.Entity, deltaTime);
             }
         }
 
@@ -377,12 +387,6 @@ namespace Atomic.Infrastructure
 
             _priorityTime = _priorityCooldown;
         }
-
-        /// <summary>
-        /// Updates an entity with the accumulated delta time
-        /// since its previous update.
-        /// </summary>
-        protected abstract void Update(T entity, float deltaTime);
 
         #endregion
 
@@ -418,8 +422,6 @@ namespace Atomic.Infrastructure
 
         #region Priority
 
-        protected abstract UpdatePriority EvaluatePriority(T entity);
-
         protected void RecalculatePriorities()
         {
             foreach (T entity in _store)
@@ -429,7 +431,7 @@ namespace Atomic.Infrastructure
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected void RecalculatePriority(T entity)
         {
-            UpdatePriority priority = this.EvaluatePriority(entity);
+            UpdatePriority priority = _priorityStrategy.EvaluatePriority(entity);
 
             if (_isUpdating)
             {

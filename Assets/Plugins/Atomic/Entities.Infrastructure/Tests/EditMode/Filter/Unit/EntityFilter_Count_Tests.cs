@@ -1,15 +1,16 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void Count_Should_BeZero_WhenFilterIsEmpty()
         {
             // Arrange
-            var source = new EntityCollection();
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var source = new Store<IEntity>();
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             // Act & Assert
             Assert.AreEqual(0, filter.Count);
@@ -19,12 +20,12 @@ namespace Atomic.Entities
         public void Count_Should_ReflectEntitiesMatchingPredicate()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity1 = new Entity();
             var entity2 = new Entity();
             entity1.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             // Act
             source.Add(entity1); // подходит
@@ -38,11 +39,11 @@ namespace Atomic.Entities
         public void Count_Should_Decrease_WhenEntityRemoved()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity);
             Assert.AreEqual(1, filter.Count);
@@ -58,11 +59,11 @@ namespace Atomic.Entities
         public void Count_Should_Update_WhenPredicateChanges_ThroughSynchronize()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             source.Add(entity);
             Assert.AreEqual(1, filter.Count);
 

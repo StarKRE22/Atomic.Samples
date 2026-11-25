@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using Atomic.Entities;
-using Atomic.Events;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -32,11 +31,11 @@ namespace Game.Gameplay
             if (!entityBoard.IsFreePosition(position))
                 return false;
 
-            IMultiEntityPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
+            IMultiPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
             entity = pool.Rent(type);
             entityBoard.PlaceEntity(entity, position);
 
-            IEntityWorld<IGameEntity> entityWorld = context.GetEntityWorld();
+            IWorld<IGameEntity> entityWorld = context.GetEntityWorld();
             entityWorld.Add(entity);
 
             entity.GetRespawnAction().Invoke();
@@ -53,12 +52,12 @@ namespace Game.Gameplay
         public static bool Despawn(this IGameContext context, IGameEntity entity)
         {
             GameEntityBoard entityBoard = context.GetGameBoard();
-            IEntityWorld<IGameEntity> entityWorld = context.GetEntityWorld();
+            IWorld<IGameEntity> entityWorld = context.GetEntityWorld();
             if (!entityWorld.Remove(entity))
                 return false;
 
             entityBoard.RemoveEntity(entity);
-            IMultiEntityPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
+            IMultiPool<GameEntityType, IGameEntity> pool = context.GetEntityPool();
             pool.Return(entity);
 
             IGameEventBus eventBus = context.GetEventBus();

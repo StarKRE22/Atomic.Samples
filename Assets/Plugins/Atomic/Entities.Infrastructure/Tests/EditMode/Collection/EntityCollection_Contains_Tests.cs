@@ -1,15 +1,16 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 // ReSharper disable CollectionNeverUpdated.Local
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_Contains_Tests
+    public class Store_Contains_Tests
     {
         [Test]
         public void Contains_Should_Return_True_For_Existing_Item()
         {
             var e = new Entity();
-            var collection = new EntityCollection<Entity>(e);
+            var collection = new Store<Entity>(e);
 
             Assert.IsTrue(collection.Contains(e));
         }
@@ -17,7 +18,7 @@ namespace Atomic.Entities
         [Test]
         public void Contains_Should_Return_False_For_NonExisting_Item()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e = new Entity();
 
             Assert.IsFalse(collection.Contains(e));
@@ -26,7 +27,7 @@ namespace Atomic.Entities
         [Test]
         public void Contains_Should_Return_False_For_Null()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             Assert.IsFalse(collection.Contains(null));
         }
 
@@ -35,7 +36,7 @@ namespace Atomic.Entities
         {
             var e1 = new Entity();
             var e2 = new Entity();
-            var collection = new EntityCollection<Entity>(e1);
+            var collection = new Store<Entity>(e1);
 
             Assert.IsFalse(collection.Contains(e2));
         }
@@ -44,7 +45,7 @@ namespace Atomic.Entities
         public void Contains_Should_Return_False_After_Removal()
         {
             var e = new Entity();
-            var collection = new EntityCollection<Entity>(e);
+            var collection = new Store<Entity>(e);
 
             collection.Remove(e);
 
@@ -54,7 +55,7 @@ namespace Atomic.Entities
         [Test]
         public void Contains_Should_Work_Correctly_For_1000_Items()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var target = new Entity();
 
             for (int i = 0; i < 999; i++)
@@ -68,7 +69,7 @@ namespace Atomic.Entities
         [Test]
         public void Contains_Should_Return_False_For_Absent_Item_Among_10000()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             for (int i = 0; i < 10000; i++)
                 collection.Add(new Entity());
 

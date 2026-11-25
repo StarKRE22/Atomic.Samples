@@ -1,10 +1,11 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_OnRemoved_Tests
+    public class Store_OnRemoved_Tests
     {
-        private EntityCollection<Entity> _collection;
+        private Store<Entity> _collection;
         private Entity _entity1;
         private Entity _entity2;
         private int _callbackCount;
@@ -12,7 +13,7 @@ namespace Atomic.Entities
         [SetUp]
         public void SetUp()
         {
-            _collection = new EntityCollection<Entity>(capacity: 4);
+            _collection = new Store<Entity>(capacity: 4);
             _entity1 = new Entity();
             _entity2 = new Entity();
             _callbackCount = 0;

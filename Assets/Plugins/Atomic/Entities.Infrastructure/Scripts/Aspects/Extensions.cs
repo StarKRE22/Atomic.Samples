@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -20,7 +21,7 @@ namespace Atomic.Entities
         /// the JIT to inline the call and reduce invocation overhead.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Apply(this IEntity e, IEntityAspect entityAspect) => entityAspect.Apply(e);
+        public static void Apply(this IEntity e, IAspect<IEntity> entityAspect) => entityAspect.Apply(e);
 
         /// <summary>
         /// Applies the specified generic <see cref="IEntityAspect{E}"/> to the given entity of type <typeparamref name="E"/>.
@@ -42,7 +43,7 @@ namespace Atomic.Entities
         /// </code>
         /// </example>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Apply<E>(this E e, IEntityAspect<E> entityAspect) where E : IEntity => entityAspect.Apply(e);
+        public static void Apply<E>(this E e, IAspect<E> entityAspect) where E : IEntity => entityAspect.Apply(e);
 
         /// <summary>
         /// Discards the specified <see cref="IEntityAspect"/> from the given entity.
@@ -55,7 +56,7 @@ namespace Atomic.Entities
         /// the JIT to inline the call and reduce invocation overhead.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Discard(this IEntity e, IEntityAspect entityAspect) => entityAspect.Discard(e);
+        public static void Discard(this IEntity e, IAspect<IEntity> entityAspect) => entityAspect.Discard(e);
 
         /// <summary>
         /// Discards the specified generic <see cref="IEntityAspect{E}"/> from the given entity of type <typeparamref name="E"/>.
@@ -69,7 +70,7 @@ namespace Atomic.Entities
         /// The method is annotated with <see cref="MethodImplOptions.AggressiveInlining"/> to encourage inlining.
         /// </remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void Discard<E>(this E e, IEntityAspect<E> entityAspect) where E : IEntity =>
+        public static void Discard<E>(this E e, IAspect<E> entityAspect) where E : IEntity =>
             entityAspect.Discard(e);
     }
 }

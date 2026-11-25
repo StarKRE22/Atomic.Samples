@@ -3,16 +3,16 @@ using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_Count_Tests
+    public class Store_Count_Tests
     {
-        private EntityCollection<Entity> _collection;
+        private Store<Entity> _collection;
         private Entity _entity1;
         private Entity _entity2;
 
         [SetUp]
         public void SetUp()
         {
-            _collection = new EntityCollection<Entity>(capacity: 4);
+            _collection = new Store<Entity>(capacity: 4);
             _entity1 = new Entity();
             _entity2 = new Entity();
         }
@@ -75,7 +75,7 @@ namespace Atomic.Entities
         [Test]
         public void Count_After_AddRange_Should_Match_Number_Of_Entities()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.AddRange(new Entity(), new Entity(), new Entity(), new Entity(), new Entity());
 
             Assert.AreEqual(5, collection.Count);
@@ -84,7 +84,7 @@ namespace Atomic.Entities
         [Test]
         public void Count_Should_Not_Change_When_Removing_NonExisting_Entity()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var existing = new Entity();
             var nonExisting = new Entity();
 
@@ -97,7 +97,7 @@ namespace Atomic.Entities
         [Test]
         public void Count_Should_Reflect_ReAdding_Removed_Entity()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var entity = new Entity();
 
             collection.Add(entity);
@@ -110,7 +110,7 @@ namespace Atomic.Entities
         [Test]
         public void Count_Should_Be_Zero_After_Dispose()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
             collection.Add(new Entity());
             collection.Add(new Entity());
@@ -123,7 +123,7 @@ namespace Atomic.Entities
         [Test]
         public void Count_Should_Be_Correct_After_Interleaved_Add_Remove()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
             var e3 = new Entity();

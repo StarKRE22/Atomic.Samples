@@ -89,7 +89,6 @@ namespace Atomic.Infrastructure
 
         protected abstract void Disable(T obj);
 
-
         /// <inheritdoc/>
         public void Tick(float deltaTime)
         {
@@ -131,8 +130,7 @@ namespace Atomic.Infrastructure
         }
 
         protected abstract void LateTick(T obj, float deltaTime);
-
-
+        
         /// <summary>
         /// Enables added entity if world is enabled.
         /// </summary>

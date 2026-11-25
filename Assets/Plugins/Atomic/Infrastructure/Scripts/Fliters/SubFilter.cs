@@ -53,11 +53,7 @@ namespace Atomic.Infrastructure
         /// <param name="predicate">The predicate used to determine filter inclusion.</param>
         /// <param name="triggers">Optional triggers used to re-evaluate entities when their state changes.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
-        public SubFilter(
-            IReadOnlyStore<B> source,
-            Predicate<T> predicate,
-            params ITracker<T>[] triggers
-        )
+        public SubFilter(IReadOnlyStore<B> source, Predicate<T> predicate, params ITracker<T>[] triggers)
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
             this.predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));

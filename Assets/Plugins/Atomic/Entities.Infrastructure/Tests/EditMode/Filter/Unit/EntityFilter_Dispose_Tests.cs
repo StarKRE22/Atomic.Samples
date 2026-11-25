@@ -1,14 +1,15 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void Dispose_Should_Unobserve_AllEntities()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity1 = new Entity();
             var entity2 = new Entity();
             entity1.AddTag("Enemy");
@@ -17,7 +18,7 @@ namespace Atomic.Entities
             source.Add(entity1);
             source.Add(entity2);
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             Assert.AreEqual(2, filter.Count);
 
             // Act
@@ -31,11 +32,11 @@ namespace Atomic.Entities
         public void Dispose_Should_Unsubscribe_FromSourceEvents()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             filter.Dispose();
 
             bool wasCalled = false;
@@ -53,8 +54,8 @@ namespace Atomic.Entities
         public void Dispose_CalledTwice_Should_NotThrow()
         {
             // Arrange
-            var source = new EntityCollection();
-            var filter = new EntityFilter(source, e => true);
+            var source = new Store<IEntity>();
+            var filter = new Filter<IEntity>(source, e => true);
 
             // Act & Assert
             Assert.DoesNotThrow(() =>
@@ -71,11 +72,11 @@ namespace Atomic.Entities
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             source.Add(entity);
 
             var trigger = new EntityTrackerTestDouble();
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"), trigger);
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"), trigger);
 
             // Pre-check: tracked
             Assert.AreEqual(1, trigger.Tracked.Count);

@@ -1,9 +1,10 @@
 using System;
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void Constructor_Should_Throw_WhenSourceIsNull()
@@ -13,30 +14,30 @@ namespace Atomic.Entities
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new EntityFilter(null, predicate));
+                _ = new Filter<IEntity>(null, predicate));
         }
 
         [Test]
         public void Constructor_Should_Throw_WhenPredicateIsNull()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() =>
-                _ = new EntityFilter(source, null));
+                _ = new Filter<IEntity>(source, null));
         }
 
         [Test]
         public void Constructor_Should_CallSetAction_OnAllTriggers()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var trigger1 = new EntityTrackerTestDouble();
             var trigger2 = new EntityTrackerTestDouble();
 
             // Act
-            var filter = new EntityFilter(source, e => true, trigger1, trigger2);
+            var filter = new Filter<IEntity>(source, e => true, trigger1, trigger2);
 
             // Assert
             Assert.IsTrue(trigger1.SetActionCalled);
@@ -50,10 +51,10 @@ namespace Atomic.Entities
         {
             // Arrange
             var entity = new EntitySpy();
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             source.Add(entity);
 
-            var filter = new EntityFilter(source, e => true);
+            var filter = new Filter<IEntity>(source, e => true);
 
             // Act is constructor — Assert:
             Assert.IsTrue(filter.Contains(entity));
@@ -64,8 +65,8 @@ namespace Atomic.Entities
         public void Constructor_Should_SubscribeToSourceEvents()
         {
             // Arrange
-            var source = new EntityCollection();
-            var filter = new EntityFilter(source, e => true);
+            var source = new Store<IEntity>();
+            var filter = new Filter<IEntity>(source, e => true);
 
             IEntity entity = new EntitySpy();
             IEntity observed = null;

@@ -17,12 +17,11 @@ namespace Game.Gameplay
         public void Install(IGameContext context)
         {
             EntityWorld<IGameEntity> entityWorld = new EntityWorld<IGameEntity>();
-            context.AddInitialEntities( _initialEntities);
-            context.AddEntityWorld( entityWorld);
-            context.AddEntityPool(
-                new MultiEntityPool<GameEntityType, IGameEntity, Args<IGameContext>>(_entityCatalog,
-                    new Args<IGameContext>(context)
-                ));
+            context.AddInitialEntities(_initialEntities);
+            context.AddEntityWorld(entityWorld);
+            context.AddEntityPool(new MultiPool<GameEntityType, IGameEntity, Args<IGameContext>>(
+                _entityCatalog, new Args<IGameContext>(context)
+            ));
 
             context.WhenInit(context.SpawnInitialUnits);
             context.BindWorld(entityWorld);

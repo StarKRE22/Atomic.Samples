@@ -1,13 +1,14 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_Constructor_Tests
+    public class Store_Constructor_Tests
     {
         [Test]
         public void Constructor_With_Capacity_Should_Initialize_Empty_Collection()
         {
-            var collection = new EntityCollection<Entity>(16);
+            var collection = new Store<Entity>(16);
 
             Assert.IsNotNull(collection);
             Assert.AreEqual(0, collection.Count);
@@ -19,7 +20,7 @@ namespace Atomic.Entities
         {
             Assert.DoesNotThrow(() =>
             {
-                var collection = new EntityCollection<Entity>(0);
+                var collection = new Store<Entity>(0);
                 Assert.IsNotNull(collection);
                 Assert.AreEqual(0, collection.Count);
             });
@@ -30,7 +31,7 @@ namespace Atomic.Entities
         {
             Assert.Throws<System.ArgumentOutOfRangeException>(() =>
             {
-                _ = new EntityCollection<Entity>(-1);
+                _ = new Store<Entity>(-1);
             });
         }
     }

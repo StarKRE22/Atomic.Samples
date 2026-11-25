@@ -1,6 +1,7 @@
 using Atomic.Elements;
 using Atomic.Entities;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 
 namespace Game.Gameplay
 {
@@ -18,10 +19,10 @@ namespace Game.Gameplay
 
         public static readonly ValueKey<IGameContext, IGameEventBus> EventBus = new(nameof(EventBus));
 
-        public static readonly ValueKey<IGameContext, IMultiEntityPool<GameEntityType, IGameEntity>> EntityPool =
+        public static readonly ValueKey<IGameContext, IMultiPool<GameEntityType, IGameEntity>> EntityPool =
             new(nameof(EntityPool));
 
-        public static readonly ValueKey<IGameContext, IEntityWorld<IGameEntity>> EntityWorld =
+        public static readonly ValueKey<IGameContext, IWorld<IGameEntity>> EntityWorld =
             new(nameof(EntityWorld));
 
         public static readonly ValueKey<IGameContext, EntitySpawnInfo[]> InitialEntities =

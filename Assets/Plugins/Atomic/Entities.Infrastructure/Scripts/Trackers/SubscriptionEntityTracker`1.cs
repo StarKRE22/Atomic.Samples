@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -10,7 +11,7 @@ namespace Atomic.Entities
     /// </summary>
     /// <typeparam name="E">The type of entity implementing <see cref="IEntity"/>.</typeparam>
     /// <typeparam name="S">The type of subscription.</typeparam>
-    public abstract class SubscriptionEntityTracker<E, S> : IEntityTracker<E>
+    public abstract class SubscriptionEntityTracker<E, S> : ITracker<E>
         where E : IEntity
         where S : IDisposable
     {

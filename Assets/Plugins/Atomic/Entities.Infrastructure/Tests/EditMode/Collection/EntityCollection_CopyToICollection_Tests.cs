@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_CopyToICollection_Tests
+    public class Store_CopyToICollection_Tests
     {
         [Test]
         public void CopyTo_CopiesElementsIntoTargetCollection()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
 
@@ -26,7 +27,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_PreservesOrderOfElements()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
             var e3 = new Entity();
@@ -47,7 +48,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_AddsToExistingCollection()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
 
             collection.Add(e1);
@@ -63,7 +64,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_NullTarget_ThrowsArgumentNullException()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
 
             Assert.Throws<ArgumentNullException>(() => { collection.CopyTo(null); });
@@ -72,7 +73,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_EmptyCollection_DoesNothing()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var target = new List<Entity>();
 
             collection.CopyTo(target);

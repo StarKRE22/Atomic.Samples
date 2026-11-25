@@ -1,8 +1,9 @@
 using System;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public sealed class EntityPoolTestDouble : IEntityPool
+    public sealed class EntityPoolTestDouble : IPool<IEntity>
     {
         public Action DisposeMethod;
         public Func<IEntity> RentMethod;

@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_Clear_Tests
+    public class Store_Clear_Tests
     {
         [Test]
         public void Clear_OnEmptyCollection_DoesNothing()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
 
             // Should not throw or change state
             collection.Clear();
@@ -20,7 +21,7 @@ namespace Atomic.Entities
         [Test]
         public void Clear_RemovesAllElements()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
 
@@ -37,7 +38,7 @@ namespace Atomic.Entities
         [Test]
         public void Clear_Invokes_OnRemoved_ForEachEntity()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var removed = new List<Entity>();
 
             collection.OnRemoved += entity => removed.Add(entity);
@@ -57,7 +58,7 @@ namespace Atomic.Entities
         public void Clear_Invokes_OnStateChanged_Once()
         {
             //Arrange:
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
             collection.Add(new Entity());
 

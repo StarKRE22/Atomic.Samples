@@ -1,15 +1,16 @@
 using System;
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_CopyTo_Tests
+    public class Store_CopyTo_Tests
     {
         [Test]
         public void CopyTo_CopiesElementsInOrder()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
             var e3 = new Entity();
@@ -28,7 +29,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_WithOffset_CopiesToCorrectPosition()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
 
@@ -48,7 +49,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_NullArray_ThrowsArgumentNullException()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
 
             Assert.Throws<ArgumentNullException>(() => { collection.CopyTo(null, 0); });
@@ -57,7 +58,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_NegativeIndex_ThrowsArgumentOutOfRangeException()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
 
             var array = new Entity[1];
@@ -67,7 +68,7 @@ namespace Atomic.Entities
         [Test]
         public void CopyTo_ArrayTooSmall_ThrowsArgumentException()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
             collection.Add(new Entity());
 

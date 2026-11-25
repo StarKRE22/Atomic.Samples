@@ -1,14 +1,15 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_Dispose_Tests
+    public class Store_Dispose_Tests
     {
         [Test]
         public void Dispose_ClearsAllItems()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
             collection.Add(new Entity());
 
@@ -20,7 +21,7 @@ namespace Atomic.Entities
         [Test]
         public void Dispose_UnsubscribesAllEvents()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
 
             bool removedCalled = false;
             bool addedCalled = false;
@@ -45,7 +46,7 @@ namespace Atomic.Entities
         [Test]
         public void Dispose_CanBeCalledMultipleTimes_WithoutError()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             collection.Add(new Entity());
 
             Assert.DoesNotThrow(() =>

@@ -8,7 +8,7 @@ using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public sealed class EntityCollectionPerformance
+    public sealed class StorePerformance
     {
         private const int N = 1000;
         private Entity[] _source;
@@ -24,7 +24,7 @@ namespace Atomic.Entities
         [Test, Performance]
         public void Add()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             Measure.Method(() =>
                 {
                     for (int i = 0; i < N; i++)
@@ -33,14 +33,14 @@ namespace Atomic.Entities
                 .CleanUp(collection.Clear)
                 .WarmupCount(5)
                 .MeasurementCount(20)
-                .SampleGroup(new SampleGroup("EntityCollection.Add()", SampleUnit.Microsecond))
+                .SampleGroup(new SampleGroup("Store.Add()", SampleUnit.Microsecond))
                 .Run();
         }
 
         [Test, Performance]
         public void Contains()
         {
-            var collection = new EntityCollection<Entity>(_source);
+            var collection = new Store<Entity>(_source);
             Measure.Method(() =>
                 {
                     for (int i = 0; i < N; i++)
@@ -48,14 +48,14 @@ namespace Atomic.Entities
                 })
                 .WarmupCount(5)
                 .MeasurementCount(20)
-                .SampleGroup(new SampleGroup("EntityCollection.Contains()", SampleUnit.Microsecond))
+                .SampleGroup(new SampleGroup("Store.Contains()", SampleUnit.Microsecond))
                 .Run();
         }
 
         [Test, Performance]
         public void Remove()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             Measure.Method(() =>
                 {
                     for (int i = 0; i < N; i++)
@@ -64,14 +64,14 @@ namespace Atomic.Entities
                 .SetUp(() => collection.AddRange(_source))
                 .WarmupCount(5)
                 .MeasurementCount(20)
-                .SampleGroup(new SampleGroup("EntityCollection.Remove()", SampleUnit.Microsecond))
+                .SampleGroup(new SampleGroup("Store.Remove()", SampleUnit.Microsecond))
                 .Run();
         }
 
         [Test, Performance]
         public void Enumerator()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             for (int i = 0; i < 1000; i++)
                 collection.Add(new Entity());
 
@@ -82,7 +82,7 @@ namespace Atomic.Entities
                 })
                 .WarmupCount(5)
                 .MeasurementCount(20)
-                .SampleGroup(new SampleGroup("EntityCollection.Enumerator", SampleUnit.Microsecond))
+                .SampleGroup(new SampleGroup("Store.Enumerator", SampleUnit.Microsecond))
                 .Run();
         }
 
@@ -93,13 +93,13 @@ namespace Atomic.Entities
             for (int i = 0; i < 1000; i++)
                 entities.Add(new Entity());
 
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             Measure
                 .Method(collection.Clear)
                 .SetUp(() => collection.AddRange(entities))
                 .WarmupCount(5)
                 .MeasurementCount(20)
-                .SampleGroup(new SampleGroup("EntityCollection.Clear()", SampleUnit.Microsecond))
+                .SampleGroup(new SampleGroup("Store.Clear()", SampleUnit.Microsecond))
                 .Run();
         }
     }

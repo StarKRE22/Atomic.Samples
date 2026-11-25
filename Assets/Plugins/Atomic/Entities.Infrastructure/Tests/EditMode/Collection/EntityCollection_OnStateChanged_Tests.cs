@@ -1,16 +1,17 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_OnStateChanged_Tests
+    public class Store_OnStateChanged_Tests
     {
-        private EntityCollection<Entity> _collection;
+        private Store<Entity> _collection;
         private bool _wasCalled;
 
         [SetUp]
         public void Setup()
         {
-            _collection = new EntityCollection<Entity>();
+            _collection = new Store<Entity>();
             _wasCalled = false;
             _collection.OnStateChanged += () => _wasCalled = true;
         }

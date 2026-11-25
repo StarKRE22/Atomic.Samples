@@ -5,15 +5,15 @@ using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_OnAdded_Tests
+    public class Store_OnAdded_Tests
     {
-        private EntityCollection<Entity> _collection;
+        private Store<Entity> _collection;
         private Entity _received;
 
         [SetUp]
         public void Setup()
         {
-            _collection = new EntityCollection<Entity>();
+            _collection = new Store<Entity>();
             _received = null;
             _collection.OnAdded += e => _received = e;
         }

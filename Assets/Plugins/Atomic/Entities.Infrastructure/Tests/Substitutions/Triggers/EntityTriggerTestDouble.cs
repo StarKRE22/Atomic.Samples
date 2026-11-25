@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public class EntityTrackerTestDouble : IEntityTracker<IEntity>
+    public class EntityTrackerTestDouble : ITracker<IEntity>
     {
         public Action<IEntity> Action;
         public bool SetActionCalled;

@@ -1,19 +1,20 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void OnRemoved_Should_Fire_WhenEntityRemovedFromSource()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
             IEntity removed = null;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity); // Сначала добавим, чтобы он попал в фильтр
             filter.OnRemoved += e => removed = e;
@@ -29,11 +30,11 @@ namespace Atomic.Entities
         public void OnRemoved_Should_Fire_WhenPredicateBecomesFalse_AfterSynchronize()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity); // Сначала добавим
             IEntity removed = null;
@@ -53,10 +54,10 @@ namespace Atomic.Entities
         public void OnRemoved_Should_NotFire_WhenEntityWasNotInFilter()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity(); // нет тега "Enemy"
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity); // не попадёт в фильтр
             bool wasCalled = false;
@@ -73,11 +74,11 @@ namespace Atomic.Entities
         public void OnRemoved_Should_NotFire_WhenPredicateStillTrue_AfterSynchronize()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             source.Add(entity);
 
             bool wasCalled = false;

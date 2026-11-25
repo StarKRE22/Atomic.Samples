@@ -1,19 +1,20 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void OnAdded_Should_Fire_WhenEntityMatchesPredicate_AndAdded()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
             IEntity addedEntity = null;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             filter.OnAdded += e => addedEntity = e;
 
             // Act
@@ -27,11 +28,11 @@ namespace Atomic.Entities
         public void OnAdded_Should_NotFire_WhenEntityDoesNotMatchPredicate()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity(); // No tag "Enemy"
 
             bool wasCalled = false;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             filter.OnAdded += _ => wasCalled = true;
 
             // Act
@@ -45,10 +46,10 @@ namespace Atomic.Entities
         public void OnAdded_Should_Fire_WhenEntityMatchesPredicate_AfterSynchronize()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity(); // No tag yet
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity); // Initially doesn't match
             IEntity added = null;
@@ -68,11 +69,11 @@ namespace Atomic.Entities
         public void OnAdded_Should_NotFire_WhenEntityAlreadyPresent()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
             source.Add(entity); // First time added
 
             bool wasCalled = false;

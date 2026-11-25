@@ -1,11 +1,12 @@
 using NUnit.Framework;
 using System;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public class EntityCollection_Add_Tests
+    public class Store_Add_Tests
     {
-        private EntityCollection<Entity> _collection;
+        private Store<Entity> _collection;
         private Entity _addedEntity;
         private bool _stateChanged;
 
@@ -15,7 +16,7 @@ namespace Atomic.Entities
             _addedEntity = null;
             _stateChanged = false;
             
-            _collection = new EntityCollection<Entity>();
+            _collection = new Store<Entity>();
             _collection.OnAdded += e => _addedEntity = e;
             _collection.OnStateChanged += () => _stateChanged = true;
         }
@@ -65,7 +66,7 @@ namespace Atomic.Entities
         public void Add_1000_Entities_Successfully()
         {
             // Arrange
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
 
             // Act
             for (int i = 0; i < 1000; i++)

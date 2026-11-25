@@ -1,6 +1,8 @@
+using Atomic.Infrastructure;
+
 namespace Atomic.Entities
 {
-    public class MonoEntityAspectSpy : MonoEntityAspect
+    public class MonoEntityAspectSpy : MonoAspect<IEntity>
     {
         public bool Applied { get; private set; }
         

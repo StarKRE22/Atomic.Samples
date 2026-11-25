@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_Enumerator_Tests
+    public class Store_Enumerator_Tests
     {
         [Test]
         public void Enumerator_IteratesOverAllElementsInOrder()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
             var e3 = new Entity();
@@ -30,7 +31,7 @@ namespace Atomic.Entities
         [Test]
         public void Enumerator_MoveNext_ReturnsFalse_WhenEmpty()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             using var enumerator = collection.GetEnumerator();
             Assert.IsFalse(enumerator.MoveNext());
         }
@@ -38,7 +39,7 @@ namespace Atomic.Entities
         [Test]
         public void Enumerator_Current_Throws_NoMoveNext()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             using var enumerator = collection.GetEnumerator();
 
             // До MoveNext() – _current == default
@@ -48,7 +49,7 @@ namespace Atomic.Entities
         [Test]
         public void Enumerator_Reset_ResetsEnumeration()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
 
@@ -72,7 +73,7 @@ namespace Atomic.Entities
         [Test]
         public void Enumerator_WorksInForeach()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var e1 = new Entity();
             var e2 = new Entity();
 

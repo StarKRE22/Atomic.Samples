@@ -1,19 +1,20 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public partial class EntityFilter_Tests
+    public partial class Filter_Tests
     {
         [Test]
         public void OnStateChanged_Should_Fire_WhenEntityMatchesPredicate_AndAdded()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
             bool wasCalled = false;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             filter.OnStateChanged += () => wasCalled = true;
 
@@ -28,11 +29,11 @@ namespace Atomic.Entities
         public void OnStateChanged_Should_NotFire_WhenEntityDoesNotMatchPredicate()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
 
             bool wasCalled = false;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             filter.OnStateChanged += () => wasCalled = true;
 
@@ -47,12 +48,12 @@ namespace Atomic.Entities
         public void OnStateChanged_Should_Fire_WhenEntityRemovedFromSource()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
             bool wasCalled = false;
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
             source.Add(entity);
             filter.OnStateChanged += () => wasCalled = true;
@@ -68,11 +69,11 @@ namespace Atomic.Entities
         public void OnStateChanged_Should_Fire_WhenPredicateChanges_ThroughSynchronize()
         {
             // Arrange
-            var source = new EntityCollection();
+            var source = new Store<IEntity>();
             var entity = new Entity();
             entity.AddTag("Enemy");
 
-            var filter = new EntityFilter(source, e => e.HasTag("Enemy"));
+            var filter = new Filter<IEntity>(source, e => e.HasTag("Enemy"));
 
 
             source.Add(entity); // Initially added

@@ -1,6 +1,7 @@
 using Atomic.Elements;
 using Atomic.Entities;
 using System.Collections.Generic;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace ShooterGame.Gameplay
@@ -11,7 +12,7 @@ namespace ShooterGame.Gameplay
         public static readonly ValueKey<IGameContext, IDictionary<TeamType, IPlayerContext>> Players = new(nameof(Players));
         public static readonly ValueKey<IGameContext, IReactiveVariable<float>> GameTime = new(nameof(GameTime));
         public static readonly ValueKey<IGameContext, TeamCatalog> TeamCatalog = new(nameof(TeamCatalog));
-        public static readonly ValueKey<IGameContext, IEntityPool<IGameEntity>> BulletPool = new(nameof(BulletPool));
+        public static readonly ValueKey<IGameContext, IPool<IGameEntity>> BulletPool = new(nameof(BulletPool));
         public static readonly ValueKey<IGameContext, Transform> WorldTransform = new(nameof(WorldTransform));
         public static readonly ValueKey<IGameContext, IReactiveDictionary<TeamType, int>> Leaderboard = new(nameof(Leaderboard));
         public static readonly ValueKey<IGameContext, IEvent<KillArgs>> KillEvent = new(nameof(KillEvent));

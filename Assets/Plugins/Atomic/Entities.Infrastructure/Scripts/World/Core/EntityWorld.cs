@@ -11,7 +11,7 @@ namespace Atomic.Entities
     /// This class provides a convenient entry point for working with untyped or heterogeneous entities
     /// without requiring generic parameters.
     /// </remarks>
-    public class EntityWorld : EntityWorld<IEntity>, IEntityWorld
+    public class EntityWorld : EntityWorld<IEntity>
     {
         /// <summary>
         /// Initializes an empty <see cref="EntityWorld"/> instance with no name.

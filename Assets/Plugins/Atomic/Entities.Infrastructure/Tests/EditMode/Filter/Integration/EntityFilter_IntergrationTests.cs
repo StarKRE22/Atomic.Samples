@@ -1,8 +1,9 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
-    public class EntityFilter_IntegrationTests
+    public class Filter_IntegrationTests
     {
         private enum _TeamType
         {
@@ -30,7 +31,7 @@ namespace Atomic.Entities
             mike.AddValue("Team", _TeamType.BLUE);
 
             var world = new EntityWorld("Entity World", alex, george, ivan, mike);
-            var filter = new EntityFilter(world, this.IsBlueWarrior);
+            var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             //Assert:
             Assert.AreEqual(2, filter.Count);
@@ -63,7 +64,7 @@ namespace Atomic.Entities
             IEntity wasAddEvent = null;
 
             var world = new EntityWorld("Entity World", alex, george);
-            var filter = new EntityFilter(world, this.IsBlueWarrior);
+            var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             filter.OnAdded += e => wasAddEvent = e;
 
@@ -103,7 +104,7 @@ namespace Atomic.Entities
             ivan.AddTag("Warrior");
 
             var world = new EntityWorld("Entity World", alex, george, mike, ivan);
-            var filter = new EntityFilter(world, this.IsBlueWarrior);
+            var filter = new Filter<IEntity>(world, this.IsBlueWarrior);
 
             IEntity removedEntity = null;
             filter.OnRemoved += e => removedEntity = e;
@@ -148,7 +149,7 @@ namespace Atomic.Entities
             ivan.AddTag("Warrior");
 
             var world = new EntityWorld("Entity World", alex, george, mike, ivan);
-            var filter = new EntityFilter(world, this.IsBlueWarrior, new ValueEntityTracker());
+            var filter = new Filter<IEntity>(world, this.IsBlueWarrior, new ValueEntityTracker());
 
             IEntity addedEntity = null;
             IEntity removedEntity = null;
@@ -191,7 +192,7 @@ namespace Atomic.Entities
             alex.AddValue("Team", _TeamType.BLUE);
 
             var world = new EntityWorld("Entity World", alex, mike);
-            var filter = new EntityFilter(world, this.IsBlueWarrior, new TagEntityTracker());
+            var filter = new Filter<IEntity>(world, this.IsBlueWarrior, new TagEntityTracker());
 
             IEntity addedEntity = null;
             IEntity removedEntity = null;

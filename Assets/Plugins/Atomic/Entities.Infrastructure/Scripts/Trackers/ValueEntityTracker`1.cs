@@ -1,4 +1,5 @@
 using System;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -7,7 +8,7 @@ namespace Atomic.Entities
     /// It listens for value additions, removals, and modifications using corresponding entity events.
     /// </summary>
     /// <typeparam name="E">The type of entity to track, constrained to <see cref="IEntity"/>.</typeparam>
-    public class ValueEntityTracker<E> : IEntityTracker<E> where E : IEntity
+    public class ValueEntityTracker<E> : ITracker<E> where E : IEntity
     {
         private Action<E> _action;
         

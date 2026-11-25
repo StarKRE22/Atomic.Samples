@@ -1,4 +1,5 @@
 using System;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
@@ -6,7 +7,7 @@ namespace Atomic.Entities
     /// A trigger that responds to tag changes (added or removed) on entities of type <typeparamref name="E"/>.
     /// </summary>
     /// <typeparam name="E">The entity type, which must implement <see cref="IEntity"/>.</typeparam>
-    public class TagEntityTracker<E> : IEntityTracker<E> where E : IEntity
+    public class TagEntityTracker<E> : ITracker<E> where E : IEntity
     {
         private Action<E> _action;
         

@@ -1,14 +1,15 @@
+using Atomic.Infrastructure;
 using NUnit.Framework;
 
 namespace Atomic.Entities
 {
     [TestFixture]
-    public class EntityCollection_Remove_Tests
+    public class Store_Remove_Tests
     {
         [Test]
         public void Remove_ExistingItem_ReturnsTrueAndDecreasesCount()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var entity = new Entity();
 
             collection.Add(entity);
@@ -23,7 +24,7 @@ namespace Atomic.Entities
         [Test]
         public void Remove_NonExistentItem_ReturnsFalse()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var entity = new Entity(); // not added
 
             bool result = collection.Remove(entity);
@@ -35,7 +36,7 @@ namespace Atomic.Entities
         [Test]
         public void Remove_NullItem_ReturnsFalse()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
 
             bool result = collection.Remove(null);
 
@@ -45,7 +46,7 @@ namespace Atomic.Entities
         [Test]
         public void Remove_ItemFromMiddleOfCollection_UpdatesLinksCorrectly()
         {
-            var collection = new EntityCollection<Entity>();
+            var collection = new Store<Entity>();
             var first = new Entity();
             var middle = new Entity();
             var last = new Entity();

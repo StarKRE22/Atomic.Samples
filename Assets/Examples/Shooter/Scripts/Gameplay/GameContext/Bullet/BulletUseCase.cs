@@ -1,4 +1,4 @@
-using Atomic.Entities;
+using Atomic.Infrastructure;
 using UnityEngine;
 
 namespace ShooterGame.Gameplay
@@ -12,7 +12,7 @@ namespace ShooterGame.Gameplay
             TeamType teamType
         )
         {
-            IEntityPool<IGameEntity> bulletPool = context.GetBulletPool();
+            IPool<IGameEntity> bulletPool = context.GetBulletPool();
             IGameEntity bullet = bulletPool.Rent();
             bullet.GetPosition().Value = position;
             bullet.GetRotation().Value = rotation;
@@ -22,7 +22,7 @@ namespace ShooterGame.Gameplay
 
         public static void Despawn(IGameContext context, IGameEntity bullet)
         {
-            IEntityPool<IGameEntity> bulletPool = context.GetBulletPool();
+            IPool<IGameEntity> bulletPool = context.GetBulletPool();
             bulletPool.Return(bullet);
         }
     }

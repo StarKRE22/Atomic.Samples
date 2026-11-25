@@ -1,11 +1,12 @@
 using System.Runtime.CompilerServices;
+using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
     public partial class Extensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void BindWorld<E>(this IEntity entity, IEntityWorld<E> world) where E : IEntity
+        public static void BindWorld<E>(this IEntity entity, IWorld<E> world) where E : IEntity
         {
             entity.WhenInit(world.InitEntities);
             entity.WhenEnable(world.Enable);

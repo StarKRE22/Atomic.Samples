@@ -1,23 +1,23 @@
 using System;
 using Atomic.Elements;
 using Atomic.Entities;
+using Atomic.Infrastructure;
 
 namespace RTSGame
 {
     [Serializable]
-    public sealed class DetectTargetSystem : EntityBudgetGameSystem
+    public sealed class DetectTargetUpdater : IUpdater<IGameEntity>
     {
-        private readonly IEntityWorld<IGameEntity> _entityWorld;
         private readonly IGameContext _gameContext;
+        private readonly IWorld<IGameEntity> _entityWorld;
 
-        public DetectTargetSystem(IGameContext context, int budget = 4096) : base(new EntityFilter<IGameEntity>(context.GetEntityWorld(),
-            e => e.HasDetectorTag()), budget)
+        public DetectTargetUpdater(IGameContext gameContext)
         {
-            _gameContext = context;
-            _entityWorld = context.GetEntityWorld();
+            _gameContext = gameContext;
+            _entityWorld = gameContext.GetEntityWorld();
         }
 
-        protected override void Update(IGameEntity entity, float deltaTime)
+        void IUpdater<IGameEntity>.Update(IGameEntity entity, float deltaTime)
         {
             ICooldown cooldown = entity.GetDetectionCooldown();
             cooldown.Tick(deltaTime);
@@ -31,3 +31,4 @@ namespace RTSGame
         }
     }
 }
+

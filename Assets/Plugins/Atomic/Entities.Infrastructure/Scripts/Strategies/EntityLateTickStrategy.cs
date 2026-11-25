@@ -2,13 +2,13 @@ using Atomic.Infrastructure;
 
 namespace Atomic.Entities
 {
-    public class EntityLateTickStrategy : EntityTickStrategy<IEntity>
+    public class EntityLateTickUpdater : EntityTickUpdater<IEntity>
     {
     }
 
-    public class EntityLateTickStrategy<E> : IUpdateStrategy<E> where E : IEntity
+    public class EntityLateTickUpdater<E> : IUpdater<E> where E : IEntity
     {
-        public static readonly EntityTickStrategy<E> Default = new();
+        public static readonly EntityTickUpdater<E> Default = new();
 
         public void Update(E obj, float deltaTime) => obj.LateTick(deltaTime);
     }

@@ -57,7 +57,7 @@ namespace Atomic.Infrastructure
 
         private readonly List<Command> _commands = new();
 
-        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdater<T> updater;
 
         private bool _isUpdating;
 
@@ -66,11 +66,11 @@ namespace Atomic.Infrastructure
 
         public BudgetSystem(
             IReadOnlyStore<T> source,
-            IUpdateStrategy<T> updateStrategy,
+            IUpdater<T> updater,
             int budget = DEFAULT_BUDGET
         ) : base(source)
         {
-            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
             _budget = Math.Max(0, budget);
 
             int capacity = Math.Max(4, source.Count);
@@ -118,7 +118,7 @@ namespace Atomic.Infrastructure
                         cursor = 0;
 
                     T entity = _entities[cursor++];
-                    _updateStrategy.Update(entity, deltaTime);
+                    updater.Update(entity, deltaTime);
                 }
             }
             finally

@@ -4,11 +4,11 @@ namespace Atomic.Entities
 {
     public class EntityBudgetSystem : BudgetSystem<IEntity>
     {
-        protected EntityBudgetSystem(
+        public EntityBudgetSystem(
             IReadOnlyStore<IEntity> source,
-            IUpdateStrategy<IEntity> updateStrategy,
+            IUpdater<IEntity> updater,
             int budget = DEFAULT_BUDGET
-        ) : base(source, updateStrategy, budget)
+        ) : base(source, updater, budget)
         {
         }
     }

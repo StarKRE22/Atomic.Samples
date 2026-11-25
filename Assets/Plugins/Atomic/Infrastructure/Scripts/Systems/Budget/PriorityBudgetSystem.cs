@@ -32,7 +32,7 @@ namespace Atomic.Infrastructure
 
         private readonly Dictionary<T, Entry> _lookup;
         private readonly List<Command> _commands = new(64);
-        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdater<T> updater;
         private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         public int HighCount => _highEntityCount;
@@ -72,7 +72,7 @@ namespace Atomic.Infrastructure
 
         public PriorityBudgetSystem(
             IReadOnlyStore<T> source,
-            IUpdateStrategy<T> updateStrategy,
+            IUpdater<T> updater,
             IUpdatePriorityStrategy<T> priorityStrategy,
             int budget = DEFAULT_BUDGET,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
@@ -80,7 +80,7 @@ namespace Atomic.Infrastructure
         ) :
             base(source)
         {
-            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
 
             int capacity = Math.Max(16, source.Count);
@@ -143,7 +143,7 @@ namespace Atomic.Infrastructure
                     cursor = 0;
 
                 T entity = entities[cursor++];
-                _updateStrategy.Update(entity, deltaTime);
+                updater.Update(entity, deltaTime);
             }
 
             return toProcess;

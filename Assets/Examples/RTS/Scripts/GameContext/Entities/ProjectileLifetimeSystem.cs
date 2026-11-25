@@ -5,7 +5,7 @@ using Atomic.Entities;
 namespace RTSGame
 {
     [Serializable]
-    public sealed class ProjectileLifetimeSystem : EntityBudgetGameSystem
+    public sealed class ProjectileLifetimeSystem : GameEntityBudgetSystem
     {
         private readonly IGameContext _gameContext;
 

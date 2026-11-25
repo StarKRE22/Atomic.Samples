@@ -184,19 +184,19 @@ namespace Atomic.Infrastructure
 
         #endregion
 
-        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdater<T> updater;
         private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         public IntervalPrioritySystem(
             IReadOnlyStore<T> source,
-            IUpdateStrategy<T> updateStrategy,
+            IUpdater<T> updater,
             IUpdatePriorityStrategy<T> priorityStrategy,
             Intervals intervals,
             float priorityCooldown = DEFAULT_PRIORITY_COOLDOWN,
             params ITracker<T>[] trackers
         ) : base(source)
         {
-            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
 
 
@@ -368,7 +368,7 @@ namespace Atomic.Infrastructure
                 float deltaTime = (float) (_elapsedTime - slot.LastUpdateTime);
                 slot.LastUpdateTime = _elapsedTime;
 
-                _updateStrategy.Update(slot.Entity, deltaTime);
+                updater.Update(slot.Entity, deltaTime);
             }
         }
 

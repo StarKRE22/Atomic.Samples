@@ -102,7 +102,7 @@ namespace Atomic.Infrastructure
 
         public int Budget => _budget;
         
-        private readonly IUpdateStrategy<T> _updateStrategy;
+        private readonly IUpdater<T> updater;
         private readonly IUpdatePriorityStrategy<T> _priorityStrategy;
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Atomic.Infrastructure
         /// <param name="trackers">Priority change triggers.</param>
         public WeightedPriorityBudgetSystem(
             IReadOnlyStore<T> source,
-            IUpdateStrategy<T> updateStrategy,
+            IUpdater<T> updater,
             IUpdatePriorityStrategy<T> priorityStrategy,
             Distribution distribution,
             int budget = DEFAULT_BUDGET,
@@ -121,7 +121,7 @@ namespace Atomic.Infrastructure
             params ITracker<T>[] trackers
         ) : base(source)
         {
-            _updateStrategy = updateStrategy ?? throw new ArgumentNullException(nameof(updateStrategy));
+            this.updater = updater ?? throw new ArgumentNullException(nameof(updater));
             _priorityStrategy = priorityStrategy ?? throw new ArgumentNullException(nameof(priorityStrategy));
             
             int initialCapacity = Math.Max(16, source.Count);
@@ -376,7 +376,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    _updateStrategy.Update(array[cursor++], deltaTime);
+                    updater.Update(array[cursor++], deltaTime);
                 }
 
                 _highCursor = cursor;
@@ -401,7 +401,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    _updateStrategy.Update(array[cursor++], deltaTime);
+                    updater.Update(array[cursor++], deltaTime);
                 }
 
                 _midCursor = cursor;
@@ -425,7 +425,7 @@ namespace Atomic.Infrastructure
                     if (cursor >= count)
                         cursor = 0;
 
-                    _updateStrategy.Update(array[cursor++], deltaTime);
+                    updater.Update(array[cursor++], deltaTime);
                 }
 
                 _lowCursor = cursor;
